@@ -1,7 +1,7 @@
 {
-	"name": "ecset",
-	"private": true,
-	"dependencies": {
-		"berek": "andraaspar/berek#v1.6"
-	}
+  "name": "ecset",
+  "private": true,
+  "dependencies": {
+    "berek": "^2.0.0"
+  }
 }
