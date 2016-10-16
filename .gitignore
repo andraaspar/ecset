@@ -1,7 +1,9 @@
-/.settings/
 /.project
-/node_modules/
+/.settings/
+/.vscode
 /bower_components/
-/tmp/
 /build/
+/kapocs/tmp/
 /lib/
+/node_modules/
+/tmp/

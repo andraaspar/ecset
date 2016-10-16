@@ -1,3 +1,22 @@
+/*
+ * Copyright 2016 András Parditka.
+ *
+ * This file is part of Ecset.
+ *
+ * Ecset is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Ecset is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import { IPoint } from './Point'
 import * as Point from './Point'
 import { IPath } from './Path'
@@ -24,20 +43,20 @@ export interface ISegmentInfo {
 }
 
 export default class Renderer {
-	
+
 	private segmentCount: number
 	private segmentInfos: ISegmentInfo[]
 	private pathLength: number
 	private startColor = [255, 0, 0, 255]
 	private endColor = [0, 255, 0, 0]
-	
+
 	constructor(
 		private imageData: ImageData,
 		private path: IPath
-	) {}
+	) { }
 
 	render(): void {
-		
+
 		this.pathLength = Path.length(this.path)
 		this.segmentInfos = this.calculateSegmentInfos()
 
@@ -99,33 +118,33 @@ export default class Renderer {
 
 	protected calculateSegmentInfos(): ISegmentInfo[] {
 		let result: ISegmentInfo[] = []
-		
+
 		let prevSegment: ISegment
 		let prevSegmentInfo: ISegmentInfo
 		let prevVector: IPoint
 		for (let i = 0, n = this.segmentCount = Path.segmentCount(this.path); i < n; i++) {
 			let segment = Path.segment(this.path, i)
-			
+
 			let segmentInfo: ISegmentInfo = {
 				segment: segment,
 				length: Segment.length(segment),
-				tGain: {a: 0, b: 0},
+				tGain: { a: 0, b: 0 },
 				originDistance: 0,
-				distanceChange: {x: 0, y: 0},
+				distanceChange: { x: 0, y: 0 },
 				originT: 0,
-				tChange: {x: 0, y: 0}
+				tChange: { x: 0, y: 0 }
 			}
 			result.push(segmentInfo)
-			
+
 			let vector = Segment.toVector(segment)
 			vector = Point.toUnitVector(vector)
-			
+
 			if (prevSegmentInfo) {
 				prevVector = Point.reverseVector(prevVector)
-				
+
 				let normalVector = Point.add(prevVector, vector)
 				let normalPoint = Point.add(segment.a, normalVector)
-				
+
 				let distance = Segment.pointDistance(segment, normalPoint)
 				let t = Segment.pointT(segment, normalPoint)
 				let side = Segment.pointSide(segment, normalPoint)
@@ -133,7 +152,7 @@ export default class Renderer {
 				t *= side // On right side
 				if (distance) t *= 1 / distance // Per distance pixel
 				segmentInfo.tGain.a = t
-				
+
 				distance = Segment.pointDistance(prevSegment, normalPoint)
 				t = Segment.pointT(prevSegment, normalPoint)
 				side = Segment.pointSide(prevSegment, normalPoint)
@@ -142,27 +161,27 @@ export default class Renderer {
 				if (distance) t *= 1 / distance // Per distance pixel
 				prevSegmentInfo.tGain.b = t
 			}
-			
-			let origin: IPoint = {x: 0, y: 0}
+
+			let origin: IPoint = { x: 0, y: 0 }
 			let originDistance = Segment.pointDistance(segment, origin) * Segment.pointSide(segment, origin)
 			let originT = Segment.pointT(segment, origin)
-			
-			let xPoint: IPoint = {x: 1, y: 0}
+
+			let xPoint: IPoint = { x: 1, y: 0 }
 			let xPointDistance = Segment.pointDistance(segment, xPoint) * Segment.pointSide(segment, xPoint)
 			let xPointT = Segment.pointT(segment, xPoint)
-			
-			let yPoint: IPoint = {x: 0, y: 1}
+
+			let yPoint: IPoint = { x: 0, y: 1 }
 			let yPointDistance = Segment.pointDistance(segment, yPoint) * Segment.pointSide(segment, yPoint)
 			let yPointT = Segment.pointT(segment, yPoint)
-			
+
 			segmentInfo.originDistance = originDistance
 			segmentInfo.distanceChange.x = xPointDistance - originDistance
 			segmentInfo.distanceChange.y = yPointDistance - originDistance
-			
+
 			segmentInfo.originT = originT
 			segmentInfo.tChange.x = xPointT - originT
 			segmentInfo.tChange.y = yPointT - originT
-			
+
 			prevSegment = segment
 			prevSegmentInfo = segmentInfo
 			prevVector = vector
