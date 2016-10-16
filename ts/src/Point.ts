@@ -59,6 +59,22 @@ export function reverseVector(vector: IPoint): IPoint {
 	}
 }
 
+export function toUnitVector(vector: IPoint, multiplier = 1): IPoint {
+	let size = vectorSize(vector)
+	return {
+		x: size ? vector.x / size * multiplier : 0,
+		y: size ? vector.y / size * multiplier : 0
+	}
+}
+
+export function vectorSize(vector: IPoint): number {
+	return Math.sqrt(vector.x ** 2 + vector.y ** 2)
+}
+
 export function equals(a: IPoint, b: IPoint): boolean {
 	return a && b && a.x === b.x && a.y === b.y
+}
+
+export function angle(vector: IPoint): number {
+	return Math.atan2(vector.y, vector.x)
 }

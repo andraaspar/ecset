@@ -237,10 +237,27 @@ webpackJsonp([0],[
 	    };
 	}
 	exports.reverseVector = reverseVector;
+	function toUnitVector(vector, multiplier) {
+	    if (multiplier === void 0) { multiplier = 1; }
+	    var size = vectorSize(vector);
+	    return {
+	        x: size ? vector.x / size * multiplier : 0,
+	        y: size ? vector.y / size * multiplier : 0
+	    };
+	}
+	exports.toUnitVector = toUnitVector;
+	function vectorSize(vector) {
+	    return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+	}
+	exports.vectorSize = vectorSize;
 	function equals(a, b) {
 	    return a && b && a.x === b.x && a.y === b.y;
 	}
 	exports.equals = equals;
+	function angle(vector) {
+	    return Math.atan2(vector.y, vector.x);
+	}
+	exports.angle = angle;
 
 
 /***/ },

@@ -46,7 +46,7 @@
 
 	"use strict";
 	var Renderer = __webpack_require__(1);
-	var GLOBAL_1 = __webpack_require__(8);
+	var GLOBAL_1 = __webpack_require__(9);
 	console.log('Web worker starting...');
 	function onMessage(e) {
 	    console.log('Render starting...');
@@ -67,69 +67,54 @@
 	"use strict";
 	var Point = __webpack_require__(2);
 	var Segment = __webpack_require__(4);
-	var Path = __webpack_require__(5);
-	var Color = __webpack_require__(7);
-	function render(iData, p) {
-	    for (var i = 0, n = iData.data.length; i < n; i += 4) {
-	        var x = i / 4 % iData.width;
-	        var y = Math.floor(i / 4 / iData.width);
+	var Path = __webpack_require__(6);
+	var Color = __webpack_require__(8);
+	function render(imageData, path) {
+	    var segmentInfos = calculateSegmentInfo(path);
+	    for (var i = 0, n = imageData.data.length; i < n; i += 4) {
+	        var x = i / 4 % imageData.width;
+	        var y = Math.floor(i / 4 / imageData.width);
 	        var d = 1 / 3;
-	        var color = getColor({ x: x, y: y }, p);
+	        var color = getColor({ x: x, y: y }, path, segmentInfos);
 	        color.push(color.shift()); // ARGB to RGBA
 	        for (var j = 0; j < 4; j++) {
-	            iData.data[i + j] = color[j];
+	            imageData.data[i + j] = color[j];
 	        }
 	    }
 	}
 	exports.render = render;
-	function getColor(pt, p) {
+	function getColor(point, path, segmentInfos) {
 	    var result = [0, 0, 0, 0];
 	    var startColor = [255, 0, 0, 255];
 	    var endColor = [0, 255, 0, 0];
-	    var pathLength = Path.length(p);
+	    var pathLength = Path.length(path);
 	    var currentLength = 0;
 	    var currentT = 0;
 	    var prevT = Infinity;
 	    var closest;
 	    var closestDistance = Infinity;
 	    var closestPathT = 0;
-	    for (var i = 0, n = Path.segmentCount(p); i < n; i++) {
-	        var seg = Path.segment(p, i);
-	        var segLength = Segment.length(seg);
-	        var perp = Segment.perpendicular(seg, pt);
-	        var t = Segment.intersectionT(seg, perp);
-	        var dist = Infinity;
-	        if (t < 0) {
-	            if (prevT > 1) {
-	                dist = Point.distance(seg.a, pt);
-	                if (dist <= closestDistance) {
-	                    closest = seg.a;
-	                    closestDistance = dist;
-	                    closestPathT = currentT;
-	                }
-	            }
-	        }
-	        else if (t > 1) {
-	            var isLast = i + 1 == n;
-	            if (isLast) {
-	                dist = Point.distance(seg.b, pt);
-	                if (dist <= closestDistance) {
-	                    closest = seg.b;
-	                    closestDistance = dist;
-	                    closestPathT = (currentLength + segLength) / pathLength;
-	                }
-	            }
-	        }
-	        else {
-	            dist = Segment.pointDistance(seg, pt);
+	    for (var i = 0, n = Path.segmentCount(path); i < n; i++) {
+	        var segment = Path.segment(path, i);
+	        var segmentInfo = segmentInfos[i];
+	        var segmentLength = Segment.length(segment);
+	        var t = Segment.pointT(segment, point);
+	        var dist = Segment.pointDistance(segment, point);
+	        var side = Segment.pointSide(segment, point);
+	        var tGainA = segmentInfo.tGain.a * dist * side;
+	        var tGainB = segmentInfo.tGain.b * dist * side;
+	        var newRange = tGainA + 1 + tGainB;
+	        var tRatio = newRange ? 1 / newRange : 0;
+	        t = (t + tGainA) * tRatio;
+	        if (t >= 0 && t < 1) {
 	            if (dist <= closestDistance) {
-	                closest = seg;
+	                closest = segment;
 	                closestDistance = dist;
-	                closestPathT = (currentLength + segLength * t) / pathLength;
+	                closestPathT = (currentLength + segmentLength * t) / pathLength;
 	            }
 	        }
 	        prevT = t;
-	        currentLength += segLength;
+	        currentLength += segmentLength;
 	        currentT = currentLength / pathLength;
 	    }
 	    if (closest) {
@@ -141,18 +126,41 @@
 	exports.getColor = getColor;
 	function calculateSegmentInfo(path) {
 	    var result = [];
+	    var prevSegment;
+	    var prevSegmentInfo;
+	    var prevVector;
 	    for (var i = 0, n = Path.segmentCount(path); i < n; i++) {
-	        var prevSegment = Path.segment(path, i - 1);
 	        var segment = Path.segment(path, i);
-	        var nextSegment = Path.segment(path, i + 1);
 	        var segmentInfo = {
-	            negativeTGain: { a: 0, b: 0 },
-	            positiveTGain: { a: 0, b: 0 }
+	            tGain: { a: 0, b: 0 }
 	        };
-	        if (prevSegment) {
+	        result.push(segmentInfo);
+	        var vector = Segment.toVector(segment);
+	        vector = Point.toUnitVector(vector);
+	        if (prevSegmentInfo) {
+	            prevVector = Point.reverseVector(prevVector);
+	            var normalVector = Point.add(prevVector, vector);
+	            var normalPoint = Point.add(segment.a, normalVector);
+	            var distance = Segment.pointDistance(segment, normalPoint);
+	            var t = Segment.pointT(segment, normalPoint);
+	            var side = Segment.pointSide(segment, normalPoint);
+	            t *= -1; // Gain
+	            t *= side; // On right side
+	            if (distance)
+	                t *= 1 / distance; // Per distance pixel
+	            segmentInfo.tGain.a = t;
+	            distance = Segment.pointDistance(prevSegment, normalPoint);
+	            t = Segment.pointT(prevSegment, normalPoint);
+	            side = Segment.pointSide(prevSegment, normalPoint);
+	            t -= 1; // End
+	            t *= side; // On right side
+	            if (distance)
+	                t *= 1 / distance; // Per distance pixel
+	            prevSegmentInfo.tGain.b = t;
 	        }
-	        else {
-	        }
+	        prevSegment = segment;
+	        prevSegmentInfo = segmentInfo;
+	        prevVector = vector;
 	    }
 	    return result;
 	}
@@ -220,10 +228,27 @@
 	    };
 	}
 	exports.reverseVector = reverseVector;
+	function toUnitVector(vector, multiplier) {
+	    if (multiplier === void 0) { multiplier = 1; }
+	    var size = vectorSize(vector);
+	    return {
+	        x: size ? vector.x / size * multiplier : 0,
+	        y: size ? vector.y / size * multiplier : 0
+	    };
+	}
+	exports.toUnitVector = toUnitVector;
+	function vectorSize(vector) {
+	    return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+	}
+	exports.vectorSize = vectorSize;
 	function equals(a, b) {
 	    return a && b && a.x === b.x && a.y === b.y;
 	}
 	exports.equals = equals;
+	function angle(vector) {
+	    return Math.atan2(vector.y, vector.x);
+	}
+	exports.angle = angle;
 
 
 /***/ },
@@ -246,6 +271,7 @@
 
 	"use strict";
 	var Point = __webpack_require__(2);
+	var Angle = __webpack_require__(5);
 	function length(segment) {
 	    return Point.distance(segment.a, segment.b);
 	}
@@ -260,16 +286,16 @@
 	function pointSide(segment, point) {
 	    var segmentVector = toVector(segment);
 	    var pointVector = Point.subtract(point, segment.a);
-	    var segmentAngle = Math.atan2(segmentVector.y, segmentVector.x);
-	    var pointAngle = Math.atan2(pointVector.y, pointVector.x);
-	    if ((pointAngle <= segmentAngle && pointAngle > segmentAngle - Math.PI) || (pointAngle > segmentAngle + Math.PI && pointAngle <= segmentAngle + 2 * Math.PI)) {
-	        return 1;
-	    }
-	    else {
-	        return -1;
-	    }
+	    var segmentAngle = Point.angle(segmentVector);
+	    var pointAngle = Point.angle(pointVector);
+	    return Angle.side(segmentAngle, pointAngle);
 	}
 	exports.pointSide = pointSide;
+	function pointT(segment, point) {
+	    var perpendicularSegment = perpendicular(segment, point);
+	    return intersectionT(segment, perpendicularSegment);
+	}
+	exports.pointT = pointT;
 	function toVector(segment) {
 	    return Point.subtract(segment.b, segment.a);
 	}
@@ -294,10 +320,36 @@
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var DOUBLE_PI = Math.PI * 2;
+	function side(axis, angle) {
+	    axis = normalize(axis);
+	    angle = normalize(angle);
+	    if ((angle <= axis && angle > axis - Math.PI) || (angle > axis + Math.PI && angle <= axis + 2 * Math.PI)) {
+	        return -1;
+	    }
+	    else {
+	        return 1;
+	    }
+	}
+	exports.side = side;
+	function normalize(angle) {
+	    angle %= DOUBLE_PI;
+	    if (angle < 0)
+	        angle += DOUBLE_PI;
+	    return angle;
+	}
+	exports.normalize = normalize;
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var End_1 = __webpack_require__(6);
+	var End_1 = __webpack_require__(7);
 	var Point = __webpack_require__(2);
 	function segment(path, i) {
 	    var result = {
@@ -352,7 +404,7 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -366,7 +418,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -385,7 +437,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";

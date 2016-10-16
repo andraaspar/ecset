@@ -1,5 +1,6 @@
 import {IPoint} from './Point'
 import * as Point from './Point'
+import * as Angle from './Angle'
 
 export interface ISegment {
 	a: IPoint,
@@ -20,13 +21,14 @@ export function pointDistance(segment: ISegment, point: IPoint): number {
 export function pointSide(segment: ISegment, point: IPoint): number {
 	let segmentVector = toVector(segment)
 	let pointVector = Point.subtract(point, segment.a)
-	let segmentAngle = Math.atan2(segmentVector.y, segmentVector.x)
-	let pointAngle = Math.atan2(pointVector.y, pointVector.x)
-	if ((pointAngle <= segmentAngle && pointAngle > segmentAngle - Math.PI) || (pointAngle > segmentAngle + Math.PI && pointAngle <= segmentAngle + 2 * Math.PI)) {
-		return 1
-	} else {
-		return -1
-	}
+	let segmentAngle = Point.angle(segmentVector)
+	let pointAngle = Point.angle(pointVector)
+	return Angle.side(segmentAngle, pointAngle)
+}
+
+export function pointT(segment: ISegment, point: IPoint): number {
+	let perpendicularSegment = perpendicular(segment, point)
+	return intersectionT(segment, perpendicularSegment)
 }
 
 export function toVector(segment: ISegment): IPoint {
