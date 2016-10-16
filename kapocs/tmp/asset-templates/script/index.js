@@ -31,7 +31,7 @@ webpackJsonp([0],[
 	        handleOut: null
 	    }
 	];
-	var path = BezierPath.linearize(bezierPath, 10);
+	var path = BezierPath.linearize(bezierPath, 100);
 	m.mount(ECSET_ELEMENT, new Canvas_1["default"](1024, 768, path));
 
 

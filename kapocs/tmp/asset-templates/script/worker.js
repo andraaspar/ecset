@@ -45,14 +45,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Renderer = __webpack_require__(1);
+	var Renderer_1 = __webpack_require__(1);
 	var GLOBAL_1 = __webpack_require__(9);
 	console.log('Web worker starting...');
 	function onMessage(e) {
 	    console.log('Render starting...');
 	    var imageData = e.data.imageData;
 	    var path = e.data.path;
-	    Renderer.render(imageData, path);
+	    var renderer = new Renderer_1["default"](imageData, path);
+	    renderer.render();
 	    console.log('Render finished.');
 	    GLOBAL_1["default"].postMessage({ imageData: imageData });
 	}
@@ -69,102 +70,136 @@
 	var Segment = __webpack_require__(4);
 	var Path = __webpack_require__(6);
 	var Color = __webpack_require__(8);
-	function render(imageData, path) {
-	    var segmentInfos = calculateSegmentInfo(path);
-	    for (var i = 0, n = imageData.data.length; i < n; i += 4) {
-	        var x = i / 4 % imageData.width;
-	        var y = Math.floor(i / 4 / imageData.width);
-	        var d = 1 / 3;
-	        var color = getColor({ x: x, y: y }, path, segmentInfos);
-	        color.push(color.shift()); // ARGB to RGBA
-	        for (var j = 0; j < 4; j++) {
-	            imageData.data[i + j] = color[j];
-	        }
+	var Renderer = (function () {
+	    function Renderer(imageData, path) {
+	        this.imageData = imageData;
+	        this.path = path;
+	        this.startColor = [255, 0, 0, 255];
+	        this.endColor = [0, 255, 0, 0];
 	    }
-	}
-	exports.render = render;
-	function getColor(point, path, segmentInfos) {
-	    var result = [0, 0, 0, 0];
-	    var startColor = [255, 0, 0, 255];
-	    var endColor = [0, 255, 0, 0];
-	    var pathLength = Path.length(path);
-	    var currentLength = 0;
-	    var currentT = 0;
-	    var prevT = Infinity;
-	    var closest;
-	    var closestDistance = Infinity;
-	    var closestPathT = 0;
-	    for (var i = 0, n = Path.segmentCount(path); i < n; i++) {
-	        var segment = Path.segment(path, i);
-	        var segmentInfo = segmentInfos[i];
-	        var segmentLength = Segment.length(segment);
-	        var t = Segment.pointT(segment, point);
-	        var dist = Segment.pointDistance(segment, point);
-	        var side = Segment.pointSide(segment, point);
-	        var tGainA = segmentInfo.tGain.a * dist * side;
-	        var tGainB = segmentInfo.tGain.b * dist * side;
-	        var newRange = tGainA + 1 + tGainB;
-	        var tRatio = newRange ? 1 / newRange : 0;
-	        t = (t + tGainA) * tRatio;
-	        if (t >= 0 && t < 1) {
-	            if (dist <= closestDistance) {
-	                closest = segment;
-	                closestDistance = dist;
-	                closestPathT = (currentLength + segmentLength * t) / pathLength;
+	    Renderer.prototype.render = function () {
+	        this.pathLength = Path.length(this.path);
+	        this.segmentInfos = this.calculateSegmentInfos();
+	        for (var i = 0, n = this.imageData.data.length; i < n; i += 4) {
+	            var x = i / 4 % this.imageData.width;
+	            var y = Math.floor(i / 4 / this.imageData.width);
+	            var d = 1 / 3;
+	            var color = this.getColor(x, y);
+	            color.push(color.shift()); // ARGB to RGBA
+	            for (var j = 0, o = color.length; j < o; j++) {
+	                this.imageData.data[i + j] = color[j];
 	            }
 	        }
-	        prevT = t;
-	        currentLength += segmentLength;
-	        currentT = currentLength / pathLength;
-	    }
-	    if (closest) {
-	        result = Color.interpolate(startColor, endColor, closestPathT);
-	        result[Color.ALPHA] = 255 - closestDistance;
-	    }
-	    return result;
-	}
-	exports.getColor = getColor;
-	function calculateSegmentInfo(path) {
-	    var result = [];
-	    var prevSegment;
-	    var prevSegmentInfo;
-	    var prevVector;
-	    for (var i = 0, n = Path.segmentCount(path); i < n; i++) {
-	        var segment = Path.segment(path, i);
-	        var segmentInfo = {
-	            tGain: { a: 0, b: 0 }
-	        };
-	        result.push(segmentInfo);
-	        var vector = Segment.toVector(segment);
-	        vector = Point.toUnitVector(vector);
-	        if (prevSegmentInfo) {
-	            prevVector = Point.reverseVector(prevVector);
-	            var normalVector = Point.add(prevVector, vector);
-	            var normalPoint = Point.add(segment.a, normalVector);
-	            var distance = Segment.pointDistance(segment, normalPoint);
-	            var t = Segment.pointT(segment, normalPoint);
-	            var side = Segment.pointSide(segment, normalPoint);
-	            t *= -1; // Gain
-	            t *= side; // On right side
-	            if (distance)
-	                t *= 1 / distance; // Per distance pixel
-	            segmentInfo.tGain.a = t;
-	            distance = Segment.pointDistance(prevSegment, normalPoint);
-	            t = Segment.pointT(prevSegment, normalPoint);
-	            side = Segment.pointSide(prevSegment, normalPoint);
-	            t -= 1; // End
-	            t *= side; // On right side
-	            if (distance)
-	                t *= 1 / distance; // Per distance pixel
-	            prevSegmentInfo.tGain.b = t;
+	    };
+	    Renderer.prototype.getColor = function (x, y, force) {
+	        if (force === void 0) { force = false; }
+	        var result = [0, 0, 0, 0];
+	        var currentLength = 0;
+	        var currentT = 0;
+	        var prevT = Infinity;
+	        var closestDistance = Infinity;
+	        var closestPathT = NaN;
+	        for (var i = 0; i < this.segmentCount; i++) {
+	            var isFirst = i == 0;
+	            var isLast = i + 1 == this.segmentCount;
+	            var segmentInfo = this.segmentInfos[i];
+	            var segment = segmentInfo.segment;
+	            // let t = Segment.pointT(segment, point)
+	            // let dist = Segment.pointDistance(segment, point)
+	            // let side = Segment.pointSide(segment, point)
+	            var t = segmentInfo.originT + segmentInfo.tChange.x * x + segmentInfo.tChange.y * y;
+	            var dist = segmentInfo.originDistance + segmentInfo.distanceChange.x * x + segmentInfo.distanceChange.y * y;
+	            var side = dist >= 0 ? 1 : -1;
+	            dist = Math.abs(dist);
+	            var tGainA = segmentInfo.tGain.a * dist * side;
+	            var tGainB = segmentInfo.tGain.b * dist * side;
+	            var newRange = tGainA + 1 + tGainB;
+	            var tRatio = newRange ? 1 / newRange : 0;
+	            t = (t + tGainA) * tRatio;
+	            var isOnPath = t >= 0 && t < 1;
+	            var isBeforePath = isFirst && t < 0;
+	            var isAfterPath = isLast && t >= 1;
+	            if (isOnPath || isBeforePath || isAfterPath) {
+	                if (dist <= closestDistance) {
+	                    closestDistance = dist;
+	                    closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0;
+	                }
+	            }
+	            prevT = t;
+	            currentLength += segmentInfo.length;
+	            currentT = this.pathLength ? currentLength / this.pathLength : 0;
 	        }
-	        prevSegment = segment;
-	        prevSegmentInfo = segmentInfo;
-	        prevVector = vector;
-	    }
-	    return result;
-	}
-	exports.calculateSegmentInfo = calculateSegmentInfo;
+	        if (!isNaN(closestPathT)) {
+	            result = Color.interpolate(this.startColor, this.endColor, closestPathT);
+	            result[Color.ALPHA] = 255 - closestDistance;
+	        }
+	        return result;
+	    };
+	    Renderer.prototype.calculateSegmentInfos = function () {
+	        var result = [];
+	        var prevSegment;
+	        var prevSegmentInfo;
+	        var prevVector;
+	        for (var i = 0, n = this.segmentCount = Path.segmentCount(this.path); i < n; i++) {
+	            var segment = Path.segment(this.path, i);
+	            var segmentInfo = {
+	                segment: segment,
+	                length: Segment.length(segment),
+	                tGain: { a: 0, b: 0 },
+	                originDistance: 0,
+	                distanceChange: { x: 0, y: 0 },
+	                originT: 0,
+	                tChange: { x: 0, y: 0 }
+	            };
+	            result.push(segmentInfo);
+	            var vector = Segment.toVector(segment);
+	            vector = Point.toUnitVector(vector);
+	            if (prevSegmentInfo) {
+	                prevVector = Point.reverseVector(prevVector);
+	                var normalVector = Point.add(prevVector, vector);
+	                var normalPoint = Point.add(segment.a, normalVector);
+	                var distance = Segment.pointDistance(segment, normalPoint);
+	                var t = Segment.pointT(segment, normalPoint);
+	                var side = Segment.pointSide(segment, normalPoint);
+	                t *= -1; // Gain
+	                t *= side; // On right side
+	                if (distance)
+	                    t *= 1 / distance; // Per distance pixel
+	                segmentInfo.tGain.a = t;
+	                distance = Segment.pointDistance(prevSegment, normalPoint);
+	                t = Segment.pointT(prevSegment, normalPoint);
+	                side = Segment.pointSide(prevSegment, normalPoint);
+	                t -= 1; // End
+	                t *= side; // On right side
+	                if (distance)
+	                    t *= 1 / distance; // Per distance pixel
+	                prevSegmentInfo.tGain.b = t;
+	            }
+	            var origin = { x: 0, y: 0 };
+	            var originDistance = Segment.pointDistance(segment, origin) * Segment.pointSide(segment, origin);
+	            var originT = Segment.pointT(segment, origin);
+	            var xPoint = { x: 1, y: 0 };
+	            var xPointDistance = Segment.pointDistance(segment, xPoint) * Segment.pointSide(segment, xPoint);
+	            var xPointT = Segment.pointT(segment, xPoint);
+	            var yPoint = { x: 0, y: 1 };
+	            var yPointDistance = Segment.pointDistance(segment, yPoint) * Segment.pointSide(segment, yPoint);
+	            var yPointT = Segment.pointT(segment, yPoint);
+	            segmentInfo.originDistance = originDistance;
+	            segmentInfo.distanceChange.x = xPointDistance - originDistance;
+	            segmentInfo.distanceChange.y = yPointDistance - originDistance;
+	            segmentInfo.originT = originT;
+	            segmentInfo.tChange.x = xPointT - originT;
+	            segmentInfo.tChange.y = yPointT - originT;
+	            prevSegment = segment;
+	            prevSegmentInfo = segmentInfo;
+	            prevVector = vector;
+	        }
+	        return result;
+	    };
+	    return Renderer;
+	}());
+	exports.__esModule = true;
+	exports["default"] = Renderer;
 
 
 /***/ },

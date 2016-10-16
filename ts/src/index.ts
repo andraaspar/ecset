@@ -30,7 +30,7 @@ let bezierPath: IBezierPath = [
 	}
 ]
 
-let path = BezierPath.linearize(bezierPath, 10)
+let path = BezierPath.linearize(bezierPath, 100)
 m.mount(ECSET_ELEMENT, new Canvas(1024, 768, path))
 
 

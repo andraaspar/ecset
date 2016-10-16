@@ -14,109 +14,159 @@ export interface IGainInfo {
 }
 
 export interface ISegmentInfo {
+	segment: ISegment
+	length: number
 	tGain: IGainInfo
+	originDistance: number
+	distanceChange: IPoint
+	originT: number
+	tChange: IPoint
 }
 
-export function render(imageData: ImageData, path: IPath): void {
+export default class Renderer {
 	
-	let segmentInfos = calculateSegmentInfo(path)
+	private segmentCount: number
+	private segmentInfos: ISegmentInfo[]
+	private pathLength: number
+	private startColor = [255, 0, 0, 255]
+	private endColor = [0, 255, 0, 0]
+	
+	constructor(
+		private imageData: ImageData,
+		private path: IPath
+	) {}
 
-	for (let i = 0, n = imageData.data.length; i < n; i += 4) {
-		let x = i / 4 % imageData.width
-		let y = Math.floor(i / 4 / imageData.width)
-		let d = 1 / 3
-		let color = getColor({ x: x, y: y }, path, segmentInfos)
-		color.push(color.shift()) // ARGB to RGBA
-		for (let j = 0; j < 4; j++) {
-			imageData.data[i + j] = color[j]
-		}
-	}
-}
+	render(): void {
+		
+		this.pathLength = Path.length(this.path)
+		this.segmentInfos = this.calculateSegmentInfos()
 
-export function getColor(point: IPoint, path: IPath, segmentInfos: ISegmentInfo[]): IColor {
-	let result: IColor = [0, 0, 0, 0]
-	let startColor = [255, 0, 0, 255]
-	let endColor = [0, 255, 0, 0]
-	let pathLength = Path.length(path)
-	let currentLength = 0
-	let currentT = 0
-	let prevT: number = Infinity
-	let closest: ISegment | IPoint
-	let closestDistance: number = Infinity
-	let closestPathT: number = 0
-	for (let i = 0, n = Path.segmentCount(path); i < n; i++) {
-		let segment = Path.segment(path, i)
-		let segmentInfo = segmentInfos[i]
-		let segmentLength: number = Segment.length(segment)
-		let t = Segment.pointT(segment, point)
-		let dist = Segment.pointDistance(segment, point)
-		let side = Segment.pointSide(segment, point)
-		let tGainA = segmentInfo.tGain.a * dist * side
-		let tGainB = segmentInfo.tGain.b * dist * side
-		let newRange = tGainA + 1 + tGainB
-		let tRatio = newRange ? 1 / newRange : 0
-		t = (t + tGainA) * tRatio
-		if (t >= 0 && t < 1) {
-			if (dist <= closestDistance) {
-				closest = segment
-				closestDistance = dist
-				closestPathT = (currentLength + segmentLength * t) / pathLength
+		for (let i = 0, n = this.imageData.data.length; i < n; i += 4) {
+			let x = i / 4 % this.imageData.width
+			let y = Math.floor(i / 4 / this.imageData.width)
+			let d = 1 / 3
+			let color = this.getColor(x, y)
+			color.push(color.shift()) // ARGB to RGBA
+			for (let j = 0, o = color.length; j < o; j++) {
+				this.imageData.data[i + j] = color[j]
 			}
 		}
-		prevT = t
-		currentLength += segmentLength
-		currentT = currentLength / pathLength
 	}
-	if (closest) {
-		result = Color.interpolate(startColor, endColor, closestPathT)
-		result[Color.ALPHA] = 255 - closestDistance
-	}
-	return result
-}
 
-export function calculateSegmentInfo(path: IPath): ISegmentInfo[] {
-	let result: ISegmentInfo[] = []
-	
-	let prevSegment: ISegment
-	let prevSegmentInfo: ISegmentInfo
-	let prevVector: IPoint
-	for (let i = 0, n = Path.segmentCount(path); i < n; i++) {
-		let segment = Path.segment(path, i)
-		
-		let segmentInfo: ISegmentInfo = {
-			tGain: {a: 0, b: 0}
+	protected getColor(x: number, y: number, force = false): IColor {
+		let result: IColor = [0, 0, 0, 0]
+		let currentLength = 0
+		let currentT = 0
+		let prevT: number = Infinity
+		let closestDistance: number = Infinity
+		let closestPathT: number = NaN
+		for (let i = 0; i < this.segmentCount; i++) {
+			let isFirst = i == 0
+			let isLast = i + 1 == this.segmentCount
+			let segmentInfo = this.segmentInfos[i]
+			let segment = segmentInfo.segment
+			// let t = Segment.pointT(segment, point)
+			// let dist = Segment.pointDistance(segment, point)
+			// let side = Segment.pointSide(segment, point)
+			let t = segmentInfo.originT + segmentInfo.tChange.x * x + segmentInfo.tChange.y * y
+			let dist = segmentInfo.originDistance + segmentInfo.distanceChange.x * x + segmentInfo.distanceChange.y * y
+			let side = dist >= 0 ? 1 : -1
+			dist = Math.abs(dist)
+			let tGainA = segmentInfo.tGain.a * dist * side
+			let tGainB = segmentInfo.tGain.b * dist * side
+			let newRange = tGainA + 1 + tGainB
+			let tRatio = newRange ? 1 / newRange : 0
+			t = (t + tGainA) * tRatio
+			let isOnPath = t >= 0 && t < 1
+			let isBeforePath = isFirst && t < 0
+			let isAfterPath = isLast && t >= 1
+			if (isOnPath || isBeforePath || isAfterPath) {
+				if (dist <= closestDistance) {
+					closestDistance = dist
+					closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
+				}
+			}
+			prevT = t
+			currentLength += segmentInfo.length
+			currentT = this.pathLength ? currentLength / this.pathLength : 0
 		}
-		result.push(segmentInfo)
-		
-		let vector = Segment.toVector(segment)
-		vector = Point.toUnitVector(vector)
-		
-		if (prevSegmentInfo) {
-			prevVector = Point.reverseVector(prevVector)
-			
-			let normalVector = Point.add(prevVector, vector)
-			let normalPoint = Point.add(segment.a, normalVector)
-			
-			let distance = Segment.pointDistance(segment, normalPoint)
-			let t = Segment.pointT(segment, normalPoint)
-			let side = Segment.pointSide(segment, normalPoint)
-			t *= -1 // Gain
-			t *= side // On right side
-			if (distance) t *= 1 / distance // Per distance pixel
-			segmentInfo.tGain.a = t
-			
-			distance = Segment.pointDistance(prevSegment, normalPoint)
-			t = Segment.pointT(prevSegment, normalPoint)
-			side = Segment.pointSide(prevSegment, normalPoint)
-			t -= 1 // End
-			t *= side // On right side
-			if (distance) t *= 1 / distance // Per distance pixel
-			prevSegmentInfo.tGain.b = t
+		if (!isNaN(closestPathT)) {
+			result = Color.interpolate(this.startColor, this.endColor, closestPathT)
+			result[Color.ALPHA] = 255 - closestDistance
 		}
-		
-		prevSegment = segment
-		prevSegmentInfo = segmentInfo
-		prevVector = vector
+		return result
 	}
-	return result
+
+	protected calculateSegmentInfos(): ISegmentInfo[] {
+		let result: ISegmentInfo[] = []
+		
+		let prevSegment: ISegment
+		let prevSegmentInfo: ISegmentInfo
+		let prevVector: IPoint
+		for (let i = 0, n = this.segmentCount = Path.segmentCount(this.path); i < n; i++) {
+			let segment = Path.segment(this.path, i)
+			
+			let segmentInfo: ISegmentInfo = {
+				segment: segment,
+				length: Segment.length(segment),
+				tGain: {a: 0, b: 0},
+				originDistance: 0,
+				distanceChange: {x: 0, y: 0},
+				originT: 0,
+				tChange: {x: 0, y: 0}
+			}
+			result.push(segmentInfo)
+			
+			let vector = Segment.toVector(segment)
+			vector = Point.toUnitVector(vector)
+			
+			if (prevSegmentInfo) {
+				prevVector = Point.reverseVector(prevVector)
+				
+				let normalVector = Point.add(prevVector, vector)
+				let normalPoint = Point.add(segment.a, normalVector)
+				
+				let distance = Segment.pointDistance(segment, normalPoint)
+				let t = Segment.pointT(segment, normalPoint)
+				let side = Segment.pointSide(segment, normalPoint)
+				t *= -1 // Gain
+				t *= side // On right side
+				if (distance) t *= 1 / distance // Per distance pixel
+				segmentInfo.tGain.a = t
+				
+				distance = Segment.pointDistance(prevSegment, normalPoint)
+				t = Segment.pointT(prevSegment, normalPoint)
+				side = Segment.pointSide(prevSegment, normalPoint)
+				t -= 1 // End
+				t *= side // On right side
+				if (distance) t *= 1 / distance // Per distance pixel
+				prevSegmentInfo.tGain.b = t
+			}
+			
+			let origin: IPoint = {x: 0, y: 0}
+			let originDistance = Segment.pointDistance(segment, origin) * Segment.pointSide(segment, origin)
+			let originT = Segment.pointT(segment, origin)
+			
+			let xPoint: IPoint = {x: 1, y: 0}
+			let xPointDistance = Segment.pointDistance(segment, xPoint) * Segment.pointSide(segment, xPoint)
+			let xPointT = Segment.pointT(segment, xPoint)
+			
+			let yPoint: IPoint = {x: 0, y: 1}
+			let yPointDistance = Segment.pointDistance(segment, yPoint) * Segment.pointSide(segment, yPoint)
+			let yPointT = Segment.pointT(segment, yPoint)
+			
+			segmentInfo.originDistance = originDistance
+			segmentInfo.distanceChange.x = xPointDistance - originDistance
+			segmentInfo.distanceChange.y = yPointDistance - originDistance
+			
+			segmentInfo.originT = originT
+			segmentInfo.tChange.x = xPointT - originT
+			segmentInfo.tChange.y = yPointT - originT
+			
+			prevSegment = segment
+			prevSegmentInfo = segmentInfo
+			prevVector = vector
+		}
+		return result
+	}
 }
