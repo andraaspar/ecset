@@ -20,9 +20,7 @@
 import Axis from 'illa/Axis2D'
 
 import { IBezierPoint } from './BezierPoint'
-import {
-	calculateBezierPosition
-} from './BezierUtil'
+import * as Bezier from './Bezier'
 import { IPath } from './Path'
 import * as Point from './Point'
 
@@ -43,7 +41,7 @@ export function linearize(segment: IBezierSegment, steps: number): IPath {
 		for (let t = 0; t < pointsPerSegment; t++) {
 			let ratio = t / (pointsPerSegment - 1)
 
-			let pos = calculateBezierPosition(
+			let pos = Bezier.position(
 				[
 					Point.position(segment.a.center, axis),
 					Point.position(segment.a.handleOut, axis),
