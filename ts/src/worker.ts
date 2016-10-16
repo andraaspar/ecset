@@ -17,15 +17,17 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from './Path'
-import Renderer from './Renderer'
+import { IPath } from './renderer/Path'
+import { IBezierPath } from './renderer/BezierPath'
+import * as BezierPath from './renderer/BezierPath'
+import Renderer from './renderer/Renderer'
 import GLOBAL from 'illa/GLOBAL'
 
 console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
 	console.log('Render starting...')
 	let imageData: ImageData = e.data.imageData
-	let path: IPath = e.data.path
+	let path: IPath = BezierPath.linearize(e.data.bezierPath, 10)
 	let renderer = new Renderer(imageData, path)
 	renderer.render()
 	console.log('Render finished.')

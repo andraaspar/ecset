@@ -38,3 +38,18 @@ export function linearize(bezierPath: IBezierPath, steps: number): IPath {
 
 	return path
 }
+
+export function toSvg(bezierPath: IBezierPath): string {
+	let result = ''
+	let prevBezierPoint: IBezierPoint
+	for (let i = 0, n = bezierPath.length; i < n; i++) {
+		let bezierPoint = bezierPath[i]
+		if (i == 0) {
+			result += `M${bezierPoint.center.x},${bezierPoint.center.y}`
+		} else {
+			result += `C${prevBezierPoint.handleOut.x},${prevBezierPoint.handleOut.y} ${bezierPoint.handleIn.x},${bezierPoint.handleIn.y} ${bezierPoint.center.x},${bezierPoint.center.y}`
+		}
+		prevBezierPoint = bezierPoint
+	}
+	return result
+}
