@@ -19,7 +19,7 @@
 
 import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
-import { IBezierPath } from '../renderer/BezierPath'
+import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
@@ -36,10 +36,12 @@ export default class CanvasLayer implements Mithril.Component<any> {
 	constructor(
 		private width: number,
 		private height: number,
-		private bezierPath: IBezierPath
+		private bezierPath: IPropBezierPath
 	) { }
 
 	view() {
+		let path: IBezierPath = JSON.parse(JSON.stringify(this.bezierPath))
+		let pathD: string = BezierPath.toSvg(path)
 		return (
 			m('div', {'class': `${P}-canvas-layer`},
 				m('canvas', {
@@ -58,7 +60,7 @@ export default class CanvasLayer implements Mithril.Component<any> {
 								console.log(`Render took: ${Date.now() - this.renderStartTime} ms`)
 							}
 							this.renderStartTime = Date.now()
-							this.worker.postMessage({ imageData: this.imageData, bezierPath: this.bezierPath });
+							this.worker.postMessage({ imageData: this.imageData, bezierPath: path });
 							context.onunload = () => {
 								this.worker.terminate()
 								this.canvas = this.context = this.imageData = this.worker = null
@@ -72,14 +74,14 @@ export default class CanvasLayer implements Mithril.Component<any> {
 					'height': this.height
 					},
 					m('path', {
-						'd': BezierPath.toSvg(this.bezierPath),
+						'd': pathD,
 						'class': `${P}-path-bg`
 					}),
 					m('path', {
-						'd': BezierPath.toSvg(this.bezierPath),
+						'd': pathD,
 						'class': `${P}-path`
 					}),
-					this.bezierPath.map(bezierPoint => [
+					path.map(bezierPoint => [
 						(bezierPoint.handleIn ?
 							m('circle', {
 								'class': `${P}-point-handle`,

@@ -5,6 +5,11 @@ export interface IPoint {
 	y: number
 }
 
+export interface IPropPoint {
+	x: P<number>
+	y: P<number>
+}
+
 export function position(p: IPoint, axis: Axis): number {
 	switch (axis) {
 		case Axis.X: return p.x

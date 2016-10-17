@@ -19,39 +19,76 @@
 
 import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
-import { IBezierPath } from '../renderer/BezierPath'
+import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
+import {prop as p} from 'mithril'
 import P from './P'
 import CanvasLayer from './CanvasLayer'
 
 export default class Canvas implements Mithril.Component<any> {
 	
-	private bezierPath: IBezierPath = [
+	private bezierPath: IPropBezierPath = [
 	{
 		center: {
-			x: 255,
-			y: 255
+			x: p(255),
+			y: p(255)
 		},
-		handleIn: null,
+		handleIn: {
+			x: p(255),
+			y: p(255)
+		},
 		handleOut: {
-			x: 255,
-			y: 768 - 255
+			x: p(255),
+			y: p(768 - 255)
 		}
 	},
 	{
 		center: {
-			x: 1024 - 255,
-			y: 768 - 255
+			x: p(1024 - 255),
+			y: p(768 - 255)
 		},
 		handleIn: {
-			x: 1024 - 255,
-			y: 255
+			x: p(1024 - 255),
+			y: p(255)
 		},
-		handleOut: null
+		handleOut: {
+			x: p(1024 - 255),
+			y: p(768 - 255)
+		}
 	}
 ]
+	
+	constructor() {
+		this.replaceProps(this.bezierPath)
+	}
+	
+	replaceProps(data: {}): void {
+		switch (typeof data) {
+			case 'object':
+				if (data) {
+					for (let key of Array.isArray(data) ? data.map((item, index) => index) : Object.keys(data)) {
+						let value = data[key]
+						switch (typeof value) {
+							case 'boolean':
+							case 'number':
+							case 'string':
+								data[key] = p(value)
+								break
+							case 'object':
+								if (value) {
+									this.replaceProps(value)
+								}
+								break
+							case 'function':
+							default:
+						}
+					}
+				}
+			break
+		}
+	}
 
 	view() {
 		return (

@@ -17,12 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IBezierPoint } from './BezierPoint'
+import { IBezierPoint, IPropBezierPoint } from './BezierPoint'
 import { IPath } from './Path'
 import * as Path from './Path'
 import * as BezierSegment from './BezierSegment'
 
 export type IBezierPath = IBezierPoint[]
+export type IPropBezierPath = IPropBezierPoint[]
 
 export function linearize(bezierPath: IBezierPath, steps: number): IPath {
 	let path: IPath = []

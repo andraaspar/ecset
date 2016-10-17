@@ -856,3 +856,5 @@ declare const m: Mithril.Static;
 declare module "mithril" {
     export = m;
 }
+
+type P<T> = Mithril.Property<T>
