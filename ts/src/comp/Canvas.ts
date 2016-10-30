@@ -25,7 +25,8 @@ import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
 import {prop as p} from 'mithril'
 import P from './P'
-import CanvasLayer from './CanvasLayer'
+import PaintLayer from './PaintLayer'
+import VectorLayer from './VectorLayer'
 
 export default class Canvas implements Mithril.Component<any> {
 	
@@ -93,7 +94,8 @@ export default class Canvas implements Mithril.Component<any> {
 	view() {
 		return (
 			m('div', {'class': `${P}-canvas`},
-				new CanvasLayer(1024, 768, this.bezierPath)
+				new PaintLayer(1024, 768, this.bezierPath),
+				new VectorLayer(1024, 768, this.bezierPath)
 			)
 		)
 	}

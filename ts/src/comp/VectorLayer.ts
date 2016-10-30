@@ -20,18 +20,16 @@
 import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
 import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
+import { IPoint, IPropPoint } from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
 import P from './P'
+import VectorLayerModel from './VectorLayerModel'
 
-export default class CanvasLayer implements Mithril.Component<any> {
+export default class VectorLayer implements Mithril.Component<any> {
 
-	private canvas: HTMLCanvasElement
-	private context: CanvasRenderingContext2D
-	private imageData: ImageData
-	private worker: Worker
-	private renderStartTime: number
+	private model: VectorLayerModel
 
 	constructor(
 		private width: number,
@@ -43,31 +41,17 @@ export default class CanvasLayer implements Mithril.Component<any> {
 		let path: IBezierPath = JSON.parse(JSON.stringify(this.bezierPath))
 		let pathD: string = BezierPath.toSvg(path)
 		return (
-			m('div', {'class': `${P}-canvas-layer`},
-				m('canvas', {
-					'class': `${P}-canvas-layer-canvas`,
-					'width': this.width,
-					'height': this.height,
-					'config': (elem, inited, context, velem) => {
-						if (!inited) {
-							this.canvas = <HTMLCanvasElement>elem
-							this.context = this.canvas.getContext('2d')
-							this.imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
-							this.worker = new Worker('script/{{worker.js}}')
-							this.worker.onmessage = (e) => {
-								console.log('Outputting image data...')
-								this.context.putImageData(e.data.imageData, 0, 0)
-								console.log(`Render took: ${Date.now() - this.renderStartTime} ms`)
-							}
-							this.renderStartTime = Date.now()
-							this.worker.postMessage({ imageData: this.imageData, bezierPath: path });
-							context.onunload = () => {
-								this.worker.terminate()
-								this.canvas = this.context = this.imageData = this.worker = null
-							}
-						}
+			m('div', {
+				'class': `${P}-canvas-layer`,
+				'config': (elem, inited, context, velem) => {
+					if (!inited) {
+						this.model = context['model'] = new VectorLayerModel()
+						context.onunload = () => this.model.kill()
+					} else {
+						this.model = context['model']
 					}
-				}),
+				}
+				},
 				m('svg', {
 					'class': `${P}-canvas-layer-svg`,
 					'width': this.width,
@@ -81,13 +65,30 @@ export default class CanvasLayer implements Mithril.Component<any> {
 						'd': pathD,
 						'class': `${P}-path`
 					}),
-					path.map(bezierPoint => [
+					this.bezierPath.map((a, index) => {
+						let handlesD = `M${a.handleIn.x()},${a.handleIn.y()}L${a.center.x()},${a.center.y()}L${a.handleOut.x()},${a.handleOut.y()}`
+						return [
+							m('path', {
+								'd': handlesD,
+								'class': `${P}-path-handles-bg`
+							}),
+							m('path', {
+								'd': handlesD,
+								'class': `${P}-path-handles`
+							})
+						]
+					}),
+					this.bezierPath.map(bezierPoint => [
 						(bezierPoint.handleIn ?
 							m('circle', {
 								'class': `${P}-point-handle`,
-								'cx': bezierPoint.handleIn.x,
-								'cy': bezierPoint.handleIn.y,
-								'r': 5
+								'cx': bezierPoint.handleIn.x(),
+								'cy': bezierPoint.handleIn.y(),
+								'r': 5,
+								'onmousedown': (e) => {
+									this.model.startDrag(bezierPoint.handleIn, e)
+									m.redraw.strategy('none')
+								}
 							})
 							:
 							''
@@ -95,18 +96,26 @@ export default class CanvasLayer implements Mithril.Component<any> {
 						(bezierPoint.handleOut ?
 							m('circle', {
 								'class': `${P}-point-handle`,
-								'cx': bezierPoint.handleOut.x,
-								'cy': bezierPoint.handleOut.y,
-								'r': 5
+								'cx': bezierPoint.handleOut.x(),
+								'cy': bezierPoint.handleOut.y(),
+								'r': 5,
+								'onmousedown': (e) => {
+									this.model.startDrag(bezierPoint.handleOut, e)
+									m.redraw.strategy('none')
+								}
 							})
 							:
 							''
 						),
 						m('circle', {
 							'class': `${P}-point-center`,
-							'cx': bezierPoint.center.x,
-							'cy': bezierPoint.center.y,
-							'r': 5
+							'cx': bezierPoint.center.x(),
+							'cy': bezierPoint.center.y(),
+							'r': 5,
+							'onmousedown': (e) => {
+								this.model.startDrag(bezierPoint.center, e)
+								m.redraw.strategy('none')
+							}
 						})
 					])
 				)
