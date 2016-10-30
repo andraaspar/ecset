@@ -40,6 +40,8 @@ export interface ISegmentInfo {
 	distanceChange: IPoint
 	originT: number
 	tChange: IPoint
+	focusDistance: number
+	focusSide: number
 }
 
 export default class Renderer {
@@ -73,6 +75,9 @@ export default class Renderer {
 	}
 
 	protected getColor(x: number, y: number, force = false): IColor {
+		// if (x == 1023 && y == 0) {
+		// 	console.log('.')
+		// }
 		let result: IColor = [0, 0, 0, 0]
 		let currentLength = 0
 		let currentT = 0
@@ -91,17 +96,19 @@ export default class Renderer {
 			let dist = segmentInfo.originDistance + segmentInfo.distanceChange.x * x + segmentInfo.distanceChange.y * y
 			let side = dist >= 0 ? 1 : -1
 			dist = Math.abs(dist)
+			let isBeyondFocus = side == segmentInfo.focusSide && dist > segmentInfo.focusDistance
 			let tGainA = segmentInfo.tGain.a * dist * side
 			let tGainB = segmentInfo.tGain.b * dist * side
 			let newRange = tGainA + 1 + tGainB
 			let tRatio = newRange ? 1 / newRange : 0
 			t = (t + tGainA) * tRatio
 			let isOnPath = t >= 0 && t < 1
-			let isBeforePath = isFirst && t < 0
-			let isAfterPath = isLast && t >= 1
+			let isBeforePath = isFirst && (isBeyondFocus ? t >= 1 : t < 0)
+			let isAfterPath = isLast && (isBeyondFocus ? t < 0 : t >= 1)
 			if (isOnPath || isBeforePath || isAfterPath) {
 				if (dist <= closestDistance) {
 					closestDistance = dist
+					if (isBeyondFocus) t = -t + .5 // Flip color beyond focus
 					closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
 				}
 			}
@@ -132,7 +139,9 @@ export default class Renderer {
 				originDistance: 0,
 				distanceChange: { x: 0, y: 0 },
 				originT: 0,
-				tChange: { x: 0, y: 0 }
+				tChange: { x: 0, y: 0 },
+				focusDistance: Infinity,
+				focusSide: 0
 			}
 			result.push(segmentInfo)
 
@@ -160,6 +169,13 @@ export default class Renderer {
 				t *= side // On right side
 				if (distance) t *= 1 / distance // Per distance pixel
 				prevSegmentInfo.tGain.b = t
+				
+				this.calculateFocus(prevSegmentInfo)
+			}
+			
+			let isLast = i + 1 == n
+			if (isLast) {
+				this.calculateFocus(segmentInfo)
 			}
 
 			let origin: IPoint = { x: 0, y: 0 }
@@ -187,5 +203,15 @@ export default class Renderer {
 			prevVector = vector
 		}
 		return result
+	}
+	
+	calculateFocus(info: ISegmentInfo): void {
+		let totalTGain = info.tGain.a + info.tGain.b
+		if (totalTGain > 0) {
+			info.focusSide = -1
+		} else {
+			info.focusSide = 1
+		}
+		info.focusDistance = totalTGain ? Math.abs(1 / totalTGain) : 0
 	}
 }
