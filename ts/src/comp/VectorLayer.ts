@@ -21,6 +21,7 @@ import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
 import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
 import { IPoint, IPropPoint } from '../renderer/Point'
+import * as Point from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
@@ -80,11 +81,10 @@ export default class VectorLayer implements Mithril.Component<any> {
 					}),
 					this.bezierPath.map(bezierPoint => [
 						(bezierPoint.handleIn ?
-							m('circle', {
+							m('polygon', {
 								'class': `${P}-point-handle`,
-								'cx': bezierPoint.handleIn.x(),
-								'cy': bezierPoint.handleIn.y(),
-								'r': 5,
+								'points': `8 0, -6 -7, -6 7`,
+								'transform': this.getTriangleTransform(bezierPoint.handleIn, bezierPoint.center, false),
 								'onmousedown': (e) => {
 									this.model.startDrag(bezierPoint.handleIn, e)
 									m.redraw.strategy('none')
@@ -94,11 +94,10 @@ export default class VectorLayer implements Mithril.Component<any> {
 							''
 						),
 						(bezierPoint.handleOut ?
-							m('circle', {
+							m('polygon', {
 								'class': `${P}-point-handle`,
-								'cx': bezierPoint.handleOut.x(),
-								'cy': bezierPoint.handleOut.y(),
-								'r': 5,
+								'points': `8 0, -6 -7, -6 7`,
+								'transform': this.getTriangleTransform(bezierPoint.center, bezierPoint.handleOut, true),
 								'onmousedown': (e) => {
 									this.model.startDrag(bezierPoint.handleOut, e)
 									m.redraw.strategy('none')
@@ -121,5 +120,10 @@ export default class VectorLayer implements Mithril.Component<any> {
 				)
 			)
 		)
+	}
+	
+	getTriangleTransform(a: IPropPoint, b: IPropPoint, placeAtB: boolean): string {
+		let location = placeAtB ? b : a
+		return `rotate(${Point.angle({x: b.x() - a.x(), y: b.y() - a.y()}) / Math.PI * 180} ${location.x()} ${location.y()}) translate(${location.x()} ${location.y()})`
 	}
 }

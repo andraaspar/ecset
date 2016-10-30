@@ -29,10 +29,6 @@ export default class VectorLayerModel {
 	private startMouse: IPoint
 	private startSelection: IPoint
 
-	constructor() {
-		console.log(GLOBAL)
-	}
-
 	startDrag(point: IPropPoint, e: MouseEvent): void {
 		this.selection = point
 		this.startSelection = JSON.parse(JSON.stringify(point))

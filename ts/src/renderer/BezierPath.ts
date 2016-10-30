@@ -28,13 +28,22 @@ export type IPropBezierPath = IPropBezierPoint[]
 export function linearize(bezierPath: IBezierPath, steps: number): IPath {
 	let path: IPath = []
 
-	for (let i = 0, n = bezierPath.length - 1; i < n; i++) {
+	let n = bezierPath.length - 1
+	for (let i = 0; i < n; i++) {
 		let bezierSegment = {
 			a: bezierPath[i],
 			b: bezierPath[i + 1]
 		}
 		let segmentPath = BezierSegment.linearize(bezierSegment, steps)
 		path = Path.join(path, segmentPath)
+	}
+	
+	let isLooping = false
+	if (isLooping) {
+		
+	} else {
+		path = Path.join([{x: bezierPath[0].handleIn.x, y: bezierPath[0].handleIn.y}], path)
+		path = Path.join(path, [{x: bezierPath[n].handleOut.x, y: bezierPath[n].handleOut.y}])
 	}
 
 	return path
