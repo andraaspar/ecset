@@ -66,7 +66,7 @@ export default class VectorLayer implements Mithril.Component<any> {
 						'd': pathD,
 						'class': `${P}-path`
 					}),
-					this.bezierPath.map((bezierPoint, index) => {
+					this.bezierPath.points.map((bezierPoint, index) => {
 						let handlesD = `M${bezierPoint.handleIn.x()},${bezierPoint.handleIn.y()}L${bezierPoint.center.x()},${bezierPoint.center.y()}L${bezierPoint.handleOut.x()},${bezierPoint.handleOut.y()}`
 						return [
 							m('path', {
@@ -79,7 +79,7 @@ export default class VectorLayer implements Mithril.Component<any> {
 							})
 						]
 					}),
-					this.bezierPath.map(bezierPoint => [
+					this.bezierPath.points.map(bezierPoint => [
 						(bezierPoint.handleIn ?
 							m('polygon', {
 								'class': `${P}-point-handle`,

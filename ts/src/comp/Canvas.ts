@@ -30,36 +30,39 @@ import VectorLayer from './VectorLayer'
 
 export default class Canvas implements Mithril.Component<any> {
 	
-	private bezierPath: IPropBezierPath = [
-	{
-		center: {
-			x: p(255),
-			y: p(255)
-		},
-		handleIn: {
-			x: p(255),
-			y: p(255)
-		},
-		handleOut: {
-			x: p(255),
-			y: p(768 - 255)
-		}
-	},
-	{
-		center: {
-			x: p(1024 - 255),
-			y: p(768 - 255)
-		},
-		handleIn: {
-			x: p(1024 - 255),
-			y: p(255)
-		},
-		handleOut: {
-			x: p(1024 - 255),
-			y: p(768 - 255)
-		}
+	private bezierPath: IPropBezierPath = {
+		points: [
+			{
+				center: {
+					x: p(255),
+					y: p(255)
+				},
+				handleIn: {
+					x: p(255),
+					y: p(10)
+				},
+				handleOut: {
+					x: p(255),
+					y: p(500)
+				}
+			},
+			{
+				center: {
+					x: p(1024 - 255),
+					y: p(768 - 255)
+				},
+				handleIn: {
+					x: p(1024 - 255),
+					y: p(768 - 10)
+				},
+				handleOut: {
+					x: p(1024 - 255),
+					y: p(768 - 500)
+				}
+			}
+		],
+		isLoop: p(true)
 	}
-]
 	
 	constructor() {
 		this.replaceProps(this.bezierPath)

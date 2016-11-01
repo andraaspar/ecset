@@ -19,31 +19,45 @@
 
 import { IBezierPoint, IPropBezierPoint } from './BezierPoint'
 import { IPath } from './Path'
+import * as Point from './Point'
 import * as Path from './Path'
 import * as BezierSegment from './BezierSegment'
 
-export type IBezierPath = IBezierPoint[]
-export type IPropBezierPath = IPropBezierPoint[]
+export interface IBezierPath {
+	points: IBezierPoint[]
+	isLoop: boolean
+}
+
+export interface IPropBezierPath {
+	points: IPropBezierPoint[]
+	isLoop: P<boolean>
+}
 
 export function linearize(bezierPath: IBezierPath, steps: number): IPath {
-	let path: IPath = []
+	let path: IPath = {
+		points: [],
+		isLoop: bezierPath.isLoop
+	}
 
-	let n = bezierPath.length - 1
+	let n = bezierPath.points.length - 1
 	for (let i = 0; i < n; i++) {
 		let bezierSegment = {
-			a: bezierPath[i],
-			b: bezierPath[i + 1]
+			a: bezierPath.points[i],
+			b: bezierPath.points[i + 1]
 		}
-		let segmentPath = BezierSegment.linearize(bezierSegment, steps)
-		path = Path.join(path, segmentPath)
+		let segmentPoints = BezierSegment.linearize(bezierSegment, steps)
+		path.points = path.points.concat(segmentPoints.slice(i ? 1 : 0))
 	}
 	
-	let isLooping = false
-	if (isLooping) {
-		
+	if (bezierPath.isLoop) {
+		let bezierSegment = {
+			a: bezierPath.points[n],
+			b: bezierPath.points[0]
+		}
+		let segmentPath = BezierSegment.linearize(bezierSegment, steps)
+		path.points = path.points.concat(segmentPath.slice(1, -1))
 	} else {
-		path = Path.join([{x: bezierPath[0].handleIn.x, y: bezierPath[0].handleIn.y}], path)
-		path = Path.join(path, [{x: bezierPath[n].handleOut.x, y: bezierPath[n].handleOut.y}])
+		path.points = [{x: bezierPath.points[0].handleIn.x, y: bezierPath.points[0].handleIn.y}, ...path.points, {x: bezierPath.points[n].handleOut.x, y: bezierPath.points[n].handleOut.y}]
 	}
 
 	return path
@@ -52,14 +66,18 @@ export function linearize(bezierPath: IBezierPath, steps: number): IPath {
 export function toSvg(bezierPath: IBezierPath): string {
 	let result = ''
 	let prevBezierPoint: IBezierPoint
-	for (let i = 0, n = bezierPath.length; i < n; i++) {
-		let bezierPoint = bezierPath[i]
+	for (let i = 0, n = bezierPath.points.length; i < n; i++) {
+		let bezierPoint = bezierPath.points[i]
 		if (i == 0) {
 			result += `M${bezierPoint.center.x},${bezierPoint.center.y}`
 		} else {
 			result += `C${prevBezierPoint.handleOut.x},${prevBezierPoint.handleOut.y} ${bezierPoint.handleIn.x},${bezierPoint.handleIn.y} ${bezierPoint.center.x},${bezierPoint.center.y}`
 		}
 		prevBezierPoint = bezierPoint
+	}
+	if (bezierPath.isLoop) {
+		let bezierPoint = bezierPath.points[0]
+		result += `C${prevBezierPoint.handleOut.x},${prevBezierPoint.handleOut.y} ${bezierPoint.handleIn.x},${bezierPoint.handleIn.y} ${bezierPoint.center.x},${bezierPoint.center.y}`
 	}
 	return result
 }

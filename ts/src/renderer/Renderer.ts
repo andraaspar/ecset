@@ -103,8 +103,8 @@ export default class Renderer {
 			let tRatio = newRange ? 1 / newRange : 0
 			t = (t + tGainA) * tRatio
 			let isOnPath = t >= 0 && t < 1
-			let isBeforePath = isFirst && (isBeyondFocus ? t >= 1 : t < 0)
-			let isAfterPath = isLast && (isBeyondFocus ? t < 0 : t >= 1)
+			let isBeforePath = !this.path.isLoop && isFirst && (isBeyondFocus ? t >= 1 : t < 0)
+			let isAfterPath = !this.path.isLoop && isLast && (isBeyondFocus ? t < 0 : t >= 1)
 			if (isOnPath || isBeforePath || isAfterPath) {
 				if (dist <= closestDistance) {
 					closestDistance = dist
@@ -149,32 +149,20 @@ export default class Renderer {
 			vector = Point.toUnitVector(vector)
 
 			if (prevSegmentInfo) {
-				prevVector = Point.reverseVector(prevVector)
-
-				let normalVector = Point.add(prevVector, vector)
-				let normalPoint = Point.add(segment.a, normalVector)
-
-				let distance = Segment.pointDistance(segment, normalPoint)
-				let t = Segment.pointT(segment, normalPoint)
-				let side = Segment.pointSide(segment, normalPoint)
-				t *= -1 // Gain
-				t *= side // On right side
-				if (distance) t *= 1 / distance // Per distance pixel
-				segmentInfo.tGain.a = t
-
-				distance = Segment.pointDistance(prevSegment, normalPoint)
-				t = Segment.pointT(prevSegment, normalPoint)
-				side = Segment.pointSide(prevSegment, normalPoint)
-				t -= 1 // End
-				t *= side // On right side
-				if (distance) t *= 1 / distance // Per distance pixel
-				prevSegmentInfo.tGain.b = t
+				this.calculateGain(prevSegmentInfo, segmentInfo, prevVector, vector, prevSegment, segment)
 				
 				this.calculateFocus(prevSegmentInfo)
 			}
 			
 			let isLast = i + 1 == n
 			if (isLast) {
+				if (this.path.isLoop) {
+					let firstSegment = Path.segment(this.path, 0)
+					this.calculateGain(segmentInfo, result[0], vector, Point.toUnitVector(Segment.toVector(firstSegment)), segment, firstSegment)
+					
+					this.calculateFocus(result[0])
+				}
+				
 				this.calculateFocus(segmentInfo)
 			}
 
@@ -203,6 +191,29 @@ export default class Renderer {
 			prevVector = vector
 		}
 		return result
+	}
+	
+	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: IPoint, vector: IPoint, prevSegment: ISegment, segment: ISegment): void {
+		prevVector = Point.reverseVector(prevVector)
+
+		let normalVector = Point.add(prevVector, vector)
+		let normalPoint = Point.add(segment.a, normalVector)
+
+		let distance = Segment.pointDistance(segment, normalPoint)
+		let t = Segment.pointT(segment, normalPoint)
+		let side = Segment.pointSide(segment, normalPoint)
+		t *= -1 // Gain
+		t *= side // On right side
+		if (distance) t *= 1 / distance // Per distance pixel
+		segmentInfo.tGain.a = t
+
+		distance = Segment.pointDistance(prevSegment, normalPoint)
+		t = Segment.pointT(prevSegment, normalPoint)
+		side = Segment.pointSide(prevSegment, normalPoint)
+		t -= 1 // End
+		t *= side // On right side
+		if (distance) t *= 1 / distance // Per distance pixel
+		prevSegmentInfo.tGain.b = t
 	}
 	
 	calculateFocus(info: ISegmentInfo): void {

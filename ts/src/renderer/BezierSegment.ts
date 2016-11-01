@@ -22,6 +22,7 @@ import Axis from 'illa/Axis2D'
 import { IBezierPoint } from './BezierPoint'
 import * as Bezier from './Bezier'
 import { IPath } from './Path'
+import { IPoint } from './Point'
 import * as Point from './Point'
 
 const AXES = [Axis.X, Axis.Y]
@@ -31,8 +32,8 @@ export interface IBezierSegment {
 	b: IBezierPoint
 }
 
-export function linearize(segment: IBezierSegment, steps: number): IPath {
-	let result: IPath = []
+export function linearize(segment: IBezierSegment, steps: number): IPoint[] {
+	let result: IPoint[] = []
 	let positionsX: number[] = []
 	let pointsPerSegment = steps + 1
 
