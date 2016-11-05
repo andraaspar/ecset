@@ -63,7 +63,7 @@ export default class Canvas implements Mithril.Component<any> {
 		],
 		isLoop: p(true)
 	}*/
-	JSON.parse('{"points":[{"center":{"x":571,"y":445},"handleIn":{"x":633,"y":430},"handleOut":{"x":580,"y":386}},{"center":{"x":545,"y":481},"handleIn":{"x":509,"y":376},"handleOut":{"x":620,"y":501}}],"isLoop":false}')
+	JSON.parse('{"points":[{"center":{"x":703,"y":186},"handleIn":{"x":766,"y":388},"handleOut":{"x":453,"y":50}},{"center":{"x":181,"y":373},"handleIn":{"x":508,"y":518},"handleOut":{"x":313,"y":567}}],"isLoop":true}')
 	
 	constructor() {
 		this.replaceProps(this.bezierPath)
@@ -99,7 +99,10 @@ export default class Canvas implements Mithril.Component<any> {
 		return (
 			m('div', {'class': `${P}-canvas`},
 				new PaintLayer(1024, 768, this.bezierPath),
-				new VectorLayer(1024, 768, this.bezierPath)
+				new VectorLayer(1024, 768, this.bezierPath),
+				m('div', {'style': {marginTop: '768px'}},
+					JSON.stringify(this.bezierPath/*, undefined, '\t'*/)
+				)
 			)
 		)
 	}

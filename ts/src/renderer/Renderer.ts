@@ -53,6 +53,7 @@ export default class Renderer {
 	private endColorLeft = [255, 255, 0, 0]
 	private startColorRight = [255, 255, 255, 0]
 	private endColorRight = [255, 0, 255, 128]
+	private distanceLimit = 200
 
 	constructor(
 		private imageData: ImageData,
@@ -97,12 +98,12 @@ export default class Renderer {
 			// let dist = Segment.pointDistance(segment, point)
 			// let side = Segment.pointSide(segment, point)
 			let t = segmentInfo.originT + segmentInfo.tChange.x * x + segmentInfo.tChange.y * y
-			let dist = segmentInfo.originDistance + segmentInfo.distanceChange.x * x + segmentInfo.distanceChange.y * y
-			let side = dist >= 0 ? 1 : -1
-			dist = Math.abs(dist)
-			let isBeyondFocus = side == segmentInfo.focusSide && dist > segmentInfo.focusDistance
-			let tGainA = segmentInfo.tGain.a * dist * side
-			let tGainB = segmentInfo.tGain.b * dist * side
+			let distance = segmentInfo.originDistance + segmentInfo.distanceChange.x * x + segmentInfo.distanceChange.y * y
+			let side = distance >= 0 ? 1 : -1
+			distance = Math.abs(distance)
+			let isBeyondFocus = side == segmentInfo.focusSide && distance > segmentInfo.focusDistance
+			let tGainA = segmentInfo.tGain.a * distance * side
+			let tGainB = segmentInfo.tGain.b * distance * side
 			let newRange = tGainA + 1 + tGainB
 			let tRatio = newRange ? 1 / newRange : 0
 			t = (t + tGainA) * tRatio
@@ -110,8 +111,8 @@ export default class Renderer {
 			let isBeforePath = !this.path.isLoop && isFirst && (isBeyondFocus ? t >= 1 : t < 0)
 			let isAfterPath = !this.path.isLoop && isLast && (isBeyondFocus ? t < 0 : t >= 1)
 			if (isOnPath || isBeforePath || isAfterPath) {
-				if (dist <= closestDistance) {
-					closestDistance = dist
+				if (distance <= this.distanceLimit && distance <= closestDistance) {
+					closestDistance = distance
 					if (isBeforePath) {
 						closestPathT = 0
 					} else if (isAfterPath) {

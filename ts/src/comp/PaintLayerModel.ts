@@ -50,9 +50,10 @@ export default class PaintLayerModel {
 			this.imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
 		}
 		if (!this.worker) {
+			console.log('Creating new worker...')
 			this.worker = new Worker('script/{{worker.js}}')
 			this.worker.onmessage = (e) => {
-				console.log('Outputting image data...')
+				// console.log('Outputting image data...')
 				this.isRendering = false
 				this.context.putImageData(e.data.imageData, 0, 0)
 				console.log(`Render took: ${Date.now() - this.renderStartTime} ms`)
@@ -67,6 +68,7 @@ export default class PaintLayerModel {
 	abortRender(): void {
 		this.render.cancel()
 		if (this.worker) {
+			console.log('Terminating worker...')
 			this.worker.terminate()
 			this.worker = null
 		}

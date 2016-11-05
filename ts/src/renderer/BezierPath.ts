@@ -33,7 +33,7 @@ export interface IPropBezierPath {
 	isLoop: P<boolean>
 }
 
-export function linearize(bezierPath: IBezierPath, steps: number): IPath {
+export function linearize(bezierPath: IBezierPath, detailMultiplier: number): IPath {
 	let path: IPath = {
 		points: [],
 		isLoop: bezierPath.isLoop
@@ -45,7 +45,7 @@ export function linearize(bezierPath: IBezierPath, steps: number): IPath {
 			a: bezierPath.points[i],
 			b: bezierPath.points[i + 1]
 		}
-		let segmentPoints = BezierSegment.linearize(bezierSegment, steps)
+		let segmentPoints = BezierSegment.linearize(bezierSegment, detailMultiplier)
 		path.points = path.points.concat(segmentPoints.slice(i ? 1 : 0))
 	}
 	
@@ -54,7 +54,7 @@ export function linearize(bezierPath: IBezierPath, steps: number): IPath {
 			a: bezierPath.points[n],
 			b: bezierPath.points[0]
 		}
-		let segmentPath = BezierSegment.linearize(bezierSegment, steps)
+		let segmentPath = BezierSegment.linearize(bezierSegment, detailMultiplier)
 		path.points = path.points.concat(segmentPath.slice(1, -1))
 	} else {
 		path.points = [{x: bezierPath.points[0].handleIn.x, y: bezierPath.points[0].handleIn.y}, ...path.points, {x: bezierPath.points[n].handleOut.x, y: bezierPath.points[n].handleOut.y}]

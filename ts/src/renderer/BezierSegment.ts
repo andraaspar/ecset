@@ -26,15 +26,41 @@ import { IPoint } from './Point'
 import * as Point from './Point'
 
 const AXES = [Axis.X, Axis.Y]
+const DOUBLE_PI = Math.PI * 2
 
 export interface IBezierSegment {
 	a: IBezierPoint
 	b: IBezierPoint
 }
 
-export function linearize(segment: IBezierSegment, steps: number): IPoint[] {
+function angleDifference(a: number, b: number): number {
+	let result = a - b
+	if (result < 0) result += DOUBLE_PI // 0 -> 360
+	result -= Math.PI // -180 -> 180
+	result = Math.abs(result) // 0 -> 180
+	return result
+}
+
+export function linearize(segment: IBezierSegment, detailMultiplier: number): IPoint[] {
 	let result: IPoint[] = []
 	let positionsX: number[] = []
+	
+	let steps = Point.distance(segment.a.center, segment.a.handleOut)
+	steps += Point.distance(segment.a.handleOut, segment.b.handleIn)
+	steps += Point.distance(segment.b.handleIn, segment.b.center)
+	steps = steps * detailMultiplier
+	// console.log(`Steps: ${Math.ceil(steps)}`)
+	
+	let angleA = Point.angle(Point.subtract(segment.a.center, segment.a.handleOut))
+	let angleB = Point.angle(Point.subtract(segment.b.handleIn, segment.a.handleOut))
+	let angleAB = angleDifference(angleA, angleB)
+	let angleC = Point.angle(Point.subtract(segment.a.handleOut, segment.b.handleIn))
+	let angleD = Point.angle(Point.subtract(segment.b.center, segment.b.handleIn))
+	let angleCD = angleDifference(angleC, angleD)
+	let multiplier = (angleAB + angleCD) / DOUBLE_PI
+	steps = Math.max(1, Math.ceil(steps * multiplier))
+	// console.log(`Multiplied steps: ${steps}`)
+	
 	let pointsPerSegment = steps + 1
 
 	for (let axisID = 0; axisID < AXES.length; axisID++) {

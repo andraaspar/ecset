@@ -23,14 +23,14 @@ import * as BezierPath from './renderer/BezierPath'
 import Renderer from './renderer/Renderer'
 import GLOBAL from 'illa/GLOBAL'
 
-console.log('Web worker starting...')
+// console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
-	console.log('Render starting...')
+	// console.log('Render starting...')
 	let imageData: ImageData = e.data.imageData
-	let path: IPath = BezierPath.linearize(e.data.bezierPath, 10)
+	let path: IPath = BezierPath.linearize(e.data.bezierPath, .05)
 	let renderer = new Renderer(imageData, path)
 	renderer.render()
-	console.log('Render finished.')
+	// console.log('Render finished.')
 
 	GLOBAL.postMessage({ imageData: imageData })
 }
