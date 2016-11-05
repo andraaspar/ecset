@@ -107,12 +107,18 @@ export default class Renderer {
 			let tRatio = newRange ? 1 / newRange : 0
 			t = (t + tGainA) * tRatio
 			let isOnPath = !isBeyondFocus && t >= 0 && t < 1
-			let isBeforePath = !this.path.isLoop && isFirst && t < 0
-			let isAfterPath = !this.path.isLoop && isLast && t >= 1
+			let isBeforePath = !this.path.isLoop && isFirst && (isBeyondFocus ? t >= 1 : t < 0)
+			let isAfterPath = !this.path.isLoop && isLast && (isBeyondFocus ? t < 0 : t >= 1)
 			if (isOnPath || isBeforePath || isAfterPath) {
 				if (dist <= closestDistance) {
 					closestDistance = dist
-					closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
+					if (isBeforePath) {
+						closestPathT = 0
+					} else if (isAfterPath) {
+						closestPathT = 1
+					} else {
+						closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
+					}
 					closestPathSide = side
 					closestSegment = segment
 				}
