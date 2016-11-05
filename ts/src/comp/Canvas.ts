@@ -30,7 +30,7 @@ import VectorLayer from './VectorLayer'
 
 export default class Canvas implements Mithril.Component<any> {
 	
-	private bezierPath: IPropBezierPath = {
+	private bezierPath: IPropBezierPath = /*{
 		points: [
 			{
 				center: {
@@ -62,7 +62,8 @@ export default class Canvas implements Mithril.Component<any> {
 			}
 		],
 		isLoop: p(true)
-	}
+	}*/
+	JSON.parse('{"points":[{"center":{"x":571,"y":445},"handleIn":{"x":633,"y":430},"handleOut":{"x":580,"y":386}},{"center":{"x":545,"y":481},"handleIn":{"x":509,"y":376},"handleOut":{"x":620,"y":501}}],"isLoop":true}')
 	
 	constructor() {
 		this.replaceProps(this.bezierPath)

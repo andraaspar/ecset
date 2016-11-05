@@ -49,8 +49,10 @@ export default class Renderer {
 	private segmentCount: number
 	private segmentInfos: ISegmentInfo[]
 	private pathLength: number
-	private startColor = [255, 0, 0, 255]
-	private endColor = [0, 255, 0, 0]
+	private startColorLeft = [255, 0, 0, 255]
+	private endColorLeft = [255, 255, 0, 0]
+	private startColorRight = [255, 255, 255, 0]
+	private endColorRight = [255, 0, 255, 128]
 
 	constructor(
 		private imageData: ImageData,
@@ -84,6 +86,8 @@ export default class Renderer {
 		let prevT: number = Infinity
 		let closestDistance: number = Infinity
 		let closestPathT: number = NaN
+		let closestPathSide: number = 0
+		let closestSegment: ISegment
 		for (let i = 0; i < this.segmentCount; i++) {
 			let isFirst = i == 0
 			let isLast = i + 1 == this.segmentCount
@@ -102,14 +106,15 @@ export default class Renderer {
 			let newRange = tGainA + 1 + tGainB
 			let tRatio = newRange ? 1 / newRange : 0
 			t = (t + tGainA) * tRatio
-			let isOnPath = t >= 0 && t < 1
-			let isBeforePath = !this.path.isLoop && isFirst && (isBeyondFocus ? t >= 1 : t < 0)
-			let isAfterPath = !this.path.isLoop && isLast && (isBeyondFocus ? t < 0 : t >= 1)
+			let isOnPath = !isBeyondFocus && t >= 0 && t < 1
+			let isBeforePath = !this.path.isLoop && isFirst && t < 0
+			let isAfterPath = !this.path.isLoop && isLast && t >= 1
 			if (isOnPath || isBeforePath || isAfterPath) {
 				if (dist <= closestDistance) {
 					closestDistance = dist
-					if (isBeyondFocus) t = -t + .5 // Flip color beyond focus
 					closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
+					closestPathSide = side
+					closestSegment = segment
 				}
 			}
 			prevT = t
@@ -117,8 +122,8 @@ export default class Renderer {
 			currentT = this.pathLength ? currentLength / this.pathLength : 0
 		}
 		if (!isNaN(closestPathT)) {
-			result = Color.interpolate(this.startColor, this.endColor, closestPathT)
-			result[Color.ALPHA] = 255 - closestDistance
+			result = Color.interpolate(closestPathSide < 0 ? this.startColorLeft : this.startColorRight, closestPathSide < 0 ? this.endColorLeft : this.endColorRight, closestPathT)
+			result[Color.ALPHA] = 255 //- closestDistance
 		}
 		return result
 	}
