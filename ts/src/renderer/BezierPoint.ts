@@ -17,16 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPoint, IPropPoint } from './Point'
+import * as Point from './Point'
 
-export interface IBezierPoint {
-	center: IPoint
-	handleIn: IPoint
-	handleOut: IPoint
+export interface I {
+	center: Point.I
+	handleIn: Point.I
+	handleOut: Point.I
 }
 
-export interface IPropBezierPoint {
-	center: IPropPoint
-	handleIn: IPropPoint
-	handleOut: IPropPoint
+export interface IProp {
+	center: Point.IProp
+	handleIn: Point.IProp
+	handleOut: Point.IProp
 }

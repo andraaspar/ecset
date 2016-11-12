@@ -17,10 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
-import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
-import { IPoint, IPropPoint } from '../renderer/Point'
 import * as Point from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
@@ -35,11 +32,11 @@ export default class VectorLayer implements Mithril.Component<any> {
 	constructor(
 		private width: number,
 		private height: number,
-		private bezierPath: IPropBezierPath
+		private bezierPath: BezierPath.IProp
 	) { }
 
 	view() {
-		let path: IBezierPath = JSON.parse(JSON.stringify(this.bezierPath))
+		let path: BezierPath.I = JSON.parse(JSON.stringify(this.bezierPath))
 		let pathD: string = BezierPath.toSvg(path)
 		return (
 			m('div', {
@@ -122,7 +119,7 @@ export default class VectorLayer implements Mithril.Component<any> {
 		)
 	}
 	
-	getTriangleTransform(a: IPropPoint, b: IPropPoint, placeAtB: boolean): string {
+	getTriangleTransform(a: Point.IProp, b: Point.IProp, placeAtB: boolean): string {
 		let location = placeAtB ? b : a
 		return `rotate(${Point.angle({x: b.x() - a.x(), y: b.y() - a.y()}) / Math.PI * 180} ${location.x()} ${location.y()}) translate(${location.x()} ${location.y()})`
 	}

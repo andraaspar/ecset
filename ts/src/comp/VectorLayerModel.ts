@@ -19,17 +19,17 @@
 
 import { bind } from 'illa/FunctionUtil'
 import { GLOBAL } from 'illa/GLOBAL'
-import { IPropBezierPath } from '../renderer/BezierPath'
-import { IPropPoint, IPoint } from '../renderer/Point'
+import * as BezierPath from '../renderer/BezierPath'
+import * as Point from '../renderer/Point'
 import * as m from 'mithril'
 
 export default class VectorLayerModel {
 
-	private selection: IPropPoint
-	private startMouse: IPoint
-	private startSelection: IPoint
+	private selection: Point.IProp
+	private startMouse: Point.I
+	private startSelection: Point.I
 
-	startDrag(point: IPropPoint, e: MouseEvent): void {
+	startDrag(point: Point.IProp, e: MouseEvent): void {
 		this.selection = point
 		this.startSelection = JSON.parse(JSON.stringify(point))
 		this.startMouse = { x: e.pageX, y: e.pageY }

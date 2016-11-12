@@ -17,13 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export type IColor = number[]
+export type I = number[]
 
 export const ALPHA = 0
 
-export function interpolate(a: IColor, b: IColor, t: number): IColor {
+export function interpolate(a: I, b: I, t: number): I {
 	let length = Math.max(a.length, b.length)
-	let result: IColor = []
+	let result: I = []
 	for (let i = 0; i < length; i++) {
 		let aValue = a[i] || 0
 		let bValue = b[i] || 0
