@@ -17,10 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
-import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
-import { IPoint, IPropPoint } from '../renderer/Point'
+import * as Point from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
@@ -34,11 +32,11 @@ export default class PaintLayer implements Mithril.Component<any> {
 	constructor(
 		private width: number,
 		private height: number,
-		private bezierPath: IPropBezierPath
+		private bezierPath: BezierPath.IProp
 	) { }
 
 	view() {
-		let path: IBezierPath = JSON.parse(JSON.stringify(this.bezierPath))
+		let path: BezierPath.I = JSON.parse(JSON.stringify(this.bezierPath))
 		let pathD: string = BezierPath.toSvg(path)
 		return (
 			m('div', {'class': `${P}-canvas-layer`},

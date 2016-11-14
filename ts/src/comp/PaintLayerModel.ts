@@ -17,10 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
-import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
-import { IPoint, IPropPoint } from '../renderer/Point'
+import * as Point from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind, debounce } from 'illa/FunctionUtil'
 import * as m from 'mithril'
@@ -35,7 +33,7 @@ export default class PaintLayerModel {
 	private isRendering: boolean
 
 	constructor(
-		private bezierPath: IPropBezierPath,
+		private bezierPath: BezierPath.IProp,
 		private canvas: HTMLCanvasElement
 	) {
 		this.context = this.canvas.getContext('2d')
@@ -60,7 +58,7 @@ export default class PaintLayerModel {
 			}
 		}
 		this.renderStartTime = Date.now()
-		let path: IBezierPath = JSON.parse(JSON.stringify(this.bezierPath))
+		let path: BezierPath.I = JSON.parse(JSON.stringify(this.bezierPath))
 		this.isRendering = true
 		this.worker.postMessage({ imageData: this.imageData, bezierPath: path });
 	}

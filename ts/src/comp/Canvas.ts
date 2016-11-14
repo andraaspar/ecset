@@ -17,9 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from '../renderer/Path'
 import * as Path from '../renderer/Path'
-import { IBezierPath, IPropBezierPath } from '../renderer/BezierPath'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
@@ -30,7 +28,7 @@ import VectorLayer from './VectorLayer'
 
 export default class Canvas implements Mithril.Component<any> {
 	
-	private bezierPath: IPropBezierPath = /*{
+	private bezierPath: BezierPath.IProp = /*{
 		points: [
 			{
 				center: {

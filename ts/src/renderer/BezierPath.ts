@@ -17,24 +17,23 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IBezierPoint, IPropBezierPoint } from './BezierPoint'
-import { IPath } from './Path'
+import * as BezierPoint from './BezierPoint'
 import * as Point from './Point'
 import * as Path from './Path'
 import * as BezierSegment from './BezierSegment'
 
-export interface IBezierPath {
-	points: IBezierPoint[]
+export interface I {
+	points: BezierPoint.I[]
 	isLoop: boolean
 }
 
-export interface IPropBezierPath {
-	points: IPropBezierPoint[]
+export interface IProp {
+	points: BezierPoint.IProp[]
 	isLoop: P<boolean>
 }
 
-export function linearize(bezierPath: IBezierPath, detailMultiplier: number): IPath {
-	let path: IPath = {
+export function linearize(bezierPath: I, detailMultiplier: number): Path.I {
+	let path: Path.I = {
 		points: [],
 		isLoop: bezierPath.isLoop
 	}
@@ -63,9 +62,9 @@ export function linearize(bezierPath: IBezierPath, detailMultiplier: number): IP
 	return path
 }
 
-export function toSvg(bezierPath: IBezierPath): string {
+export function toSvg(bezierPath: I): string {
 	let result = ''
-	let prevBezierPoint: IBezierPoint
+	let prevBezierPoint: BezierPoint.I
 	for (let i = 0, n = bezierPath.points.length; i < n; i++) {
 		let bezierPoint = bezierPath.points[i]
 		if (i == 0) {
