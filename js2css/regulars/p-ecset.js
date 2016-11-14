@@ -1,6 +1,8 @@
-.#{$P}-ecset
+module.exports = () => `
+.${P}-ecset
 {
 	position: relative;
 	width: 100%;
 	height: 100%;
 }
+`

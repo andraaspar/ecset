@@ -60,17 +60,10 @@ module.exports = function (grunt) {
 				]
 			}
 		},
-		sass: {
-			options: {
-				outputStyle: 'expanded'
-			},
-			compile: {
-				files: {
-					'kapocs/tmp/asset-templates/style/index.css': 'scss/src/index.scss'
-				}
-			}
-		},
 		shell: {
+			compileCss: {
+				command: 'cd js2css && node .'
+			},
 			webpack: {
 				command: [
 					'webpack --config webpack.index.config.js',
@@ -83,14 +76,13 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean')
 	grunt.loadNpmTasks('grunt-contrib-copy')
 	grunt.loadNpmTasks('grunt-kapocs')
-	grunt.loadNpmTasks('grunt-sass')
 	grunt.loadNpmTasks('grunt-shell')
 
 	grunt.registerTask('compile', [
 		'clean:compile',
 		'shell:webpack',
+		'shell:compileCss',
 		'copy:compile',
-		'sass:compile',
 		'kapocs:compile'
 	])
 	grunt.registerTask('default', [
