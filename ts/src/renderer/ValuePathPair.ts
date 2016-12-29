@@ -17,20 +17,26 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Path from './renderer/Path'
-import * as BezierPath from './renderer/BezierPath'
-import Renderer from './renderer/Renderer'
-import GLOBAL from 'illa/GLOBAL'
-import * as View from './renderer/View'
+import * as Document from './Document'
+import * as ValuePath from './ValuePath'
 
-// console.log('Web worker starting...')
-export function onMessage(e: MessageEvent) {
-	// console.log('Render starting...')
-	let view: View.I = e.data
-	let renderer = new Renderer(view)
-	renderer.render()
-	// console.log('Render finished.')
-
-	GLOBAL.postMessage({ pixels: view.pixels })
+export interface I {
+	left: ValuePath.I
+	right: ValuePath.I
 }
-GLOBAL.onmessage = onMessage.bind(this)
+
+export interface IProp {
+	leftId: P<string>
+	rightId: P<string>
+}
+
+export function deprop(d: Document.IProp, p: IProp): I {
+	return {
+		left: ValuePath.getDepropped(d, p.leftId()),
+		right: ValuePath.getDepropped(d, p.rightId())
+	}
+}
+
+export function getDepropped(d: Document.IProp, id: string): I {
+	return deprop(d, d.valuePathPairsById[id])
+}

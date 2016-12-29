@@ -17,12 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Path from '../renderer/Path'
-import * as Point from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
+import * as BezierPoint from '../renderer/BezierPoint'
 import { bind } from 'illa/FunctionUtil'
+import * as Document from '../renderer/Document'
 import * as m from 'mithril'
 import P from './P'
+import * as Path from '../renderer/Path'
+import * as Point from '../renderer/Point'
+import * as Stroke from '../renderer/Stroke'
 import VectorLayerModel from './VectorLayerModel'
 
 export default class VectorLayer implements Mithril.Component<any> {
@@ -32,12 +35,12 @@ export default class VectorLayer implements Mithril.Component<any> {
 	constructor(
 		private width: number,
 		private height: number,
-		private bezierPath: BezierPath.IProp
+		private document: Document.IProp,
+		private stroke: Stroke.I
 	) { }
 
 	view() {
-		let path: BezierPath.I = JSON.parse(JSON.stringify(this.bezierPath))
-		let pathD: string = BezierPath.toSvg(path)
+		let pathD: string = BezierPath.toSvg(this.stroke.bezierPath)
 		return (
 			m('div', {
 				'class': `${P}-canvas-layer`,
@@ -63,8 +66,8 @@ export default class VectorLayer implements Mithril.Component<any> {
 						'd': pathD,
 						'class': `${P}-path`
 					}),
-					this.bezierPath.points.map((bezierPoint, index) => {
-						let handlesD = `M${bezierPoint.handleIn.x()},${bezierPoint.handleIn.y()}L${bezierPoint.center.x()},${bezierPoint.center.y()}L${bezierPoint.handleOut.x()},${bezierPoint.handleOut.y()}`
+					this.stroke.bezierPath.points.map((bezierPoint, index) => {
+						let handlesD = `M${bezierPoint.handleIn.x},${bezierPoint.handleIn.y}L${bezierPoint.center.x},${bezierPoint.center.y}L${bezierPoint.handleOut.x},${bezierPoint.handleOut.y}`
 						return [
 							m('path', {
 								'd': handlesD,
@@ -76,14 +79,14 @@ export default class VectorLayer implements Mithril.Component<any> {
 							})
 						]
 					}),
-					this.bezierPath.points.map(bezierPoint => [
+					this.stroke.bezierPath.points.map(bezierPoint => [
 						(bezierPoint.handleIn ?
 							m('polygon', {
 								'class': `${P}-point-handle`,
 								'points': `8 0, -6 -7, -6 7`,
 								'transform': this.getTriangleTransform(bezierPoint.handleIn, bezierPoint.center, false),
 								'onmousedown': (e) => {
-									this.model.startDrag(bezierPoint.handleIn, e)
+									this.model.startDrag(this.document.pointsById[bezierPoint.handleIn.id], e)
 									m.redraw.strategy('none')
 								}
 							})
@@ -96,7 +99,7 @@ export default class VectorLayer implements Mithril.Component<any> {
 								'points': `8 0, -6 -7, -6 7`,
 								'transform': this.getTriangleTransform(bezierPoint.center, bezierPoint.handleOut, true),
 								'onmousedown': (e) => {
-									this.model.startDrag(bezierPoint.handleOut, e)
+									this.model.startDrag(this.document.pointsById[bezierPoint.handleOut.id], e)
 									m.redraw.strategy('none')
 								}
 							})
@@ -105,11 +108,11 @@ export default class VectorLayer implements Mithril.Component<any> {
 						),
 						m('circle', {
 							'class': `${P}-point-center`,
-							'cx': bezierPoint.center.x(),
-							'cy': bezierPoint.center.y(),
+							'cx': bezierPoint.center.x,
+							'cy': bezierPoint.center.y,
 							'r': 5,
 							'onmousedown': (e) => {
-								this.model.startDrag(bezierPoint.center, e)
+								this.model.startDrag(this.document.pointsById[bezierPoint.center.id], e)
 								m.redraw.strategy('none')
 							}
 						})
@@ -119,8 +122,8 @@ export default class VectorLayer implements Mithril.Component<any> {
 		)
 	}
 	
-	getTriangleTransform(a: Point.IProp, b: Point.IProp, placeAtB: boolean): string {
+	getTriangleTransform(a: Point.I, b: Point.I, placeAtB: boolean): string {
 		let location = placeAtB ? b : a
-		return `rotate(${Point.angle({x: b.x() - a.x(), y: b.y() - a.y()}) / Math.PI * 180} ${location.x()} ${location.y()}) translate(${location.x()} ${location.y()})`
+		return `rotate(${Point.angle({x: b.x - a.x, y: b.y - a.y}) / Math.PI * 180} ${location.x} ${location.y}) translate(${location.x} ${location.y})`
 	}
 }

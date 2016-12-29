@@ -23,5 +23,3 @@ import * as m from 'mithril'
 const ECSET_ELEMENT = document.getElementById('ecset')
 
 m.mount(ECSET_ELEMENT, new Canvas())
-
-

@@ -17,31 +17,33 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import * as BezierPath from './BezierPath'
+import * as ColorPath from './ColorPath'
 import * as Document from './Document'
-import * as Point from './Point'
 
 export interface I {
-	id?: string
-	center: Point.I
-	handleIn: Point.I
-	handleOut: Point.I
+	a: ColorPath.I
+	b: ColorPath.I
+	tTweenPaths: BezierPath.I[]
+	colorTweenPaths: BezierPath.I[]
 }
 
 export interface IProp {
-	centerId: P<string>
-	handleInId: P<string>
-	handleOutId: P<string>
+	aId: P<string>
+	bId: P<string>
+	tTweenPathIds: P<string>[]
+	colorTweenPathIds: P<string>[]
 }
 
-export function deprop(d: Document.IProp, p: IProp, id: string): I {
+export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		id: id,
-		center: Point.getDepropped(d, p.centerId()),
-		handleIn: Point.getDepropped(d, p.handleInId()),
-		handleOut: Point.getDepropped(d, p.handleOutId())
+		a: ColorPath.getDepropped(d, p.aId()),
+		b: ColorPath.getDepropped(d, p.bId()),
+		colorTweenPaths: p.colorTweenPathIds.map(id => BezierPath.getDepropped(d, id())),
+		tTweenPaths: p.tTweenPathIds.map(id => BezierPath.getDepropped(d, id()))
 	}
 }
 
 export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.bezierPointsById[id], id)
+	return deprop(d, d.colorFieldsById[id])
 }

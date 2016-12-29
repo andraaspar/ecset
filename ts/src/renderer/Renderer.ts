@@ -22,6 +22,8 @@ import * as Segment from './Segment'
 import * as Path from './Path'
 import * as Color from './Color'
 import * as Angle from './Angle'
+import * as View from './View'
+import * as BezierPath from './BezierPath'
 
 export interface IGainInfo {
 	a: number
@@ -50,25 +52,27 @@ export default class Renderer {
 	private startColorRight = [255, 255, 255, 0]
 	private endColorRight = [255, 0, 255, 128]
 	private distanceLimit = 200
+	private path: Path.I
 
 	constructor(
-		private imageData: ImageData,
-		private path: Path.I
-	) { }
+		private view: View.I
+	) {
+		this.path = BezierPath.linearize(this.view.stroke.bezierPath, .05)
+	}
 
 	render(): void {
 
 		this.pathLength = Path.length(this.path)
 		this.segmentInfos = this.calculateSegmentInfos()
 
-		for (let i = 0, n = this.imageData.data.length; i < n; i += 4) {
-			let x = i / 4 % this.imageData.width
-			let y = Math.floor(i / 4 / this.imageData.width)
+		for (let i = 0, n = this.view.pixels.length; i < n; i += 4) {
+			let x = i / 4 % this.view.width
+			let y = Math.floor(i / 4 / this.view.width)
 			let d = 1 / 3
 			let color = this.getColor(x, y)
 			color.push(color.shift()) // ARGB to RGBA
 			for (let j = 0, o = color.length; j < o; j++) {
-				this.imageData.data[i + j] = color[j]
+				this.view.pixels[i + j] = color[j]
 			}
 		}
 	}

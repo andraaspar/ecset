@@ -17,7 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import * as Document from './Document'
+
 export type I = number[]
+
+export type IProp = P<number>[]
 
 export const ALPHA = 0
 
@@ -30,4 +34,12 @@ export function interpolate(a: I, b: I, t: number): I {
 		result[i] = aValue + (bValue - aValue) * t
 	}
 	return result
+}
+
+export function deprop(p: IProp): I {
+	return p.map(value => value())
+}
+
+export function getDepropped(d: Document.IProp, id: string): I {
+	return deprop(d.colorsById[id])
 }

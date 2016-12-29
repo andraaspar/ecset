@@ -1,6 +1,27 @@
+/*
+ * Copyright 2016 András Parditka.
+ *
+ * This file is part of Ecset.
+ *
+ * Ecset is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Ecset is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import Axis from 'illa/Axis2D'
+import * as Document from './Document'
 
 export interface I {
+	id?: string
 	x: number
 	y: number
 }
@@ -82,4 +103,16 @@ export function equals(a: I, b: I): boolean {
 
 export function angle(vector: I): number {
 	return Math.atan2(vector.y, vector.x)
+}
+
+export function deprop(p: IProp, id: string): I {
+	return {
+		id: id,
+		x: p.x(),
+		y: p.y()
+	}
+}
+
+export function getDepropped(d: Document.IProp, id: string): I {
+	return deprop(d.pointsById[id], id)
 }

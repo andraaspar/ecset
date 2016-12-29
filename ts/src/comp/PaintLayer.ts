@@ -17,13 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Path from '../renderer/Path'
-import * as Point from '../renderer/Point'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
 import * as m from 'mithril'
 import P from './P'
 import PaintLayerModel from './PaintLayerModel'
+import * as Path from '../renderer/Path'
+import * as Point from '../renderer/Point'
+import * as Stroke from '../renderer/Stroke'
 
 export default class PaintLayer implements Mithril.Component<any> {
 
@@ -32,12 +33,11 @@ export default class PaintLayer implements Mithril.Component<any> {
 	constructor(
 		private width: number,
 		private height: number,
-		private bezierPath: BezierPath.IProp
+		private stroke: Stroke.I
 	) { }
 
 	view() {
-		let path: BezierPath.I = JSON.parse(JSON.stringify(this.bezierPath))
-		let pathD: string = BezierPath.toSvg(path)
+		let pathD: string = BezierPath.toSvg(this.stroke.bezierPath)
 		return (
 			m('div', {'class': `${P}-canvas-layer`},
 				m('canvas', {
@@ -46,7 +46,7 @@ export default class PaintLayer implements Mithril.Component<any> {
 					'height': this.height,
 					'config': (elem, inited, context, velem) => {
 						if (!inited) {
-							this.model = context['model'] = new PaintLayerModel(this.bezierPath, <HTMLCanvasElement>elem)
+							this.model = context['model'] = new PaintLayerModel(this.stroke, <HTMLCanvasElement>elem)
 							context.onunload = () => this.model.kill()
 						} else {
 							this.model = context['model']

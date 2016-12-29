@@ -17,54 +17,39 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Path from '../renderer/Path'
 import * as BezierPath from '../renderer/BezierPath'
 import { bind } from 'illa/FunctionUtil'
+import * as Document from '../renderer/Document'
 import * as m from 'mithril'
-import {prop as p} from 'mithril'
 import P from './P'
 import PaintLayer from './PaintLayer'
+import * as Path from '../renderer/Path'
+import { prop as p } from 'mithril'
+import * as Stroke from '../renderer/Stroke'
 import VectorLayer from './VectorLayer'
 
 export default class Canvas implements Mithril.Component<any> {
 	
-	private bezierPath: BezierPath.IProp = /*{
-		points: [
-			{
-				center: {
-					x: p(255),
-					y: p(255)
-				},
-				handleIn: {
-					x: p(255),
-					y: p(10)
-				},
-				handleOut: {
-					x: p(255),
-					y: p(500)
-				}
-			},
-			{
-				center: {
-					x: p(1024 - 255),
-					y: p(768 - 255)
-				},
-				handleIn: {
-					x: p(1024 - 255),
-					y: p(768 - 10)
-				},
-				handleOut: {
-					x: p(1024 - 255),
-					y: p(768 - 500)
-				}
-			}
-		],
-		isLoop: p(true)
-	}*/
-	JSON.parse('{"points":[{"center":{"x":703,"y":186},"handleIn":{"x":766,"y":388},"handleOut":{"x":453,"y":50}},{"center":{"x":181,"y":373},"handleIn":{"x":508,"y":518},"handleOut":{"x":313,"y":567}}],"isLoop":true}')
-	
+	private document: Document.IProp = {
+		bezierPathsById: {},
+		bezierPointsById: {},
+		colorFieldsById: {},
+		colorPathsById: {},
+		colorSegmentsById: {},
+		colorStripPairsById: {},
+		colorStripsById: {},
+		colorsById: {},
+		pointsById: {},
+		strokeIds: [],
+		strokesById: {},
+		transformsById: {},
+		valuePathPairsById: {},
+		valuePathsById: {},
+		valueSegmentsById: {}
+	}	
+
 	constructor() {
-		this.replaceProps(this.bezierPath)
+		//this.replaceProps(this.bezierPath)
 	}
 	
 	replaceProps(data: {}): void {
@@ -96,10 +81,16 @@ export default class Canvas implements Mithril.Component<any> {
 	view() {
 		return (
 			m('div', {'class': `${P}-canvas`},
-				new PaintLayer(1024, 768, this.bezierPath),
-				new VectorLayer(1024, 768, this.bezierPath),
+				this.document.strokeIds.map(id => {
+					let stroke = Stroke.getDepropped(this.document, id())
+					return new PaintLayer(1024, 768, stroke)
+				}),
+				this.document.strokeIds.map(id => {
+					let stroke = Stroke.getDepropped(this.document, id())
+					return new VectorLayer(1024, 768, this.document, stroke)
+				}),
 				m('div', {'style': {marginTop: '768px'}},
-					JSON.stringify(this.bezierPath/*, undefined, '\t'*/)
+					JSON.stringify(this.document/*, undefined, '\t'*/)
 				)
 			)
 		)

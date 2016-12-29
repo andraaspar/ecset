@@ -17,20 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Path from './renderer/Path'
-import * as BezierPath from './renderer/BezierPath'
-import Renderer from './renderer/Renderer'
-import GLOBAL from 'illa/GLOBAL'
-import * as View from './renderer/View'
+import * as Stroke from './Stroke'
+import * as Transform from './Transform'
 
-// console.log('Web worker starting...')
-export function onMessage(e: MessageEvent) {
-	// console.log('Render starting...')
-	let view: View.I = e.data
-	let renderer = new Renderer(view)
-	renderer.render()
-	// console.log('Render finished.')
-
-	GLOBAL.postMessage({ pixels: view.pixels })
+export interface I {
+	stroke: Stroke.I
+	transforms: Transform.I[]
+	width: number
+	height: number
+	pixels: Uint8ClampedArray
 }
-GLOBAL.onmessage = onMessage.bind(this)
