@@ -17,10 +17,24 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import * as Document from '../renderer/Document'
 
-import { Ecset } from './comp/Ecset'
+import { IProp } from 'ts/src/renderer/BezierPath'
 
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-m.mount(ECSET_ELEMENT, new Ecset())
+export class Ecset implements Mithril.Component<any> {
+	
+	private document: Document.IProp = Document.create()
+	private renderers: Worker[] = []
+	
+	constructor() {
+		for (let i = 0; i < 4; i++) {
+			this.renderers.push(new Worker('script/{{worker.js}}'))
+		}
+	}
+	
+	view(): Mithril.VirtualElement {
+		return (
+			m('div', 'Ecset here.')
+		)
+	}
+}

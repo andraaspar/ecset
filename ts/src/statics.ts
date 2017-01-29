@@ -17,10 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import * as m from 'mithril'
 
-import { Ecset } from './comp/Ecset'
+import GLOBAL from 'illa/GLOBAL'
 
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-m.mount(ECSET_ELEMENT, new Ecset())
+GLOBAL.m = m
