@@ -39,19 +39,39 @@ export interface I {
 export interface IProp {
 	bezierPathsById: {[id: string]: BezierPath.IProp}
 	bezierPointsById: {[id: string]: BezierPoint.IProp}
-	colorsById: {[id: string]: Color.IProp}
 	colorFieldsById: {[id: string]: ColorField.IProp}
 	colorPathsById: {[id: string]: ColorPath.IProp}
+	colorsById: {[id: string]: Color.IProp}
 	colorSegmentsById: {[id: string]: ColorSegment.IProp}
-	colorStripsById: {[id: string]: ColorStrip.IProp}
 	colorStripPairsById: {[id: string]: ColorStripPair.IProp}
+	colorStripsById: {[id: string]: ColorStrip.IProp}
 	pointsById: {[id: string]: Point.IProp}
-	strokesById: {[id: string]: Stroke.IProp}
 	strokeIds: P<string>[]
+	strokesById: {[id: string]: Stroke.IProp}
 	transformsById: {[id: string]: Transform.IProp}
 	valuePathPairsById: {[id: string]: ValuePathPair.IProp}
 	valuePathsById: {[id: string]: ValuePath.IProp}
 	valueSegmentsById: {[id: string]: ValueSegment.IProp}
+}
+
+export function create(): IProp {
+	return {
+		bezierPathsById: {},
+		bezierPointsById: {},
+		colorFieldsById: {},
+		colorPathsById: {},
+		colorsById: {},
+		colorSegmentsById: {},
+		colorStripPairsById: {},
+		colorStripsById: {},
+		pointsById: {},
+		strokeIds: [],
+		strokesById: {},
+		transformsById: {},
+		valuePathPairsById: {},
+		valuePathsById: {},
+		valueSegmentsById: {}
+	}
 }
 
 export function deprop(d: IProp): I {
