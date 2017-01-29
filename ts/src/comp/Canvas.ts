@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -18,15 +18,16 @@
  */
 
 import * as BezierPath from '../renderer/BezierPath'
-import { bind } from 'illa/FunctionUtil'
 import * as Document from '../renderer/Document'
+import * as Path from '../renderer/Path'
+import * as Stroke from '../renderer/Stroke'
 import * as m from 'mithril'
+
 import P from './P'
 import PaintLayer from './PaintLayer'
-import * as Path from '../renderer/Path'
-import { prop as p } from 'mithril'
-import * as Stroke from '../renderer/Stroke'
 import VectorLayer from './VectorLayer'
+import { bind } from 'illa/FunctionUtil'
+import { prop as p } from 'mithril'
 
 export default class Canvas implements Mithril.Component<any> {
 	

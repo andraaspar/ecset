@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,13 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import * as Angle from './Angle'
+import * as BezierPath from './BezierPath'
+import * as Color from './Color'
+import * as Path from './Path'
 import * as Point from './Point'
 import * as Segment from './Segment'
-import * as Path from './Path'
-import * as Color from './Color'
-import * as Angle from './Angle'
 import * as View from './View'
-import * as BezierPath from './BezierPath'
 
 export interface IGainInfo {
 	a: number

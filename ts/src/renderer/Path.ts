@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,11 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Axis from 'illa/Axis2D'
-import End from 'illa/End'
-
 import * as Point from './Point'
 import * as Segment from './Segment'
+
+import Axis from 'illa/Axis2D'
+import End from 'illa/End'
 
 export interface I {
 	points: Point.I[]

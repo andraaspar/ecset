@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,14 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import * as BezierPath from '../renderer/BezierPath'
 import * as Path from '../renderer/Path'
 import * as Point from '../renderer/Point'
-import * as BezierPath from '../renderer/BezierPath'
-import { bind, debounce } from 'illa/FunctionUtil'
-import * as m from 'mithril'
-import P from './P'
 import * as Stroke from '../renderer/Stroke'
 import * as View from '../renderer/View'
+import * as m from 'mithril'
+
+import { bind, debounce } from 'illa/FunctionUtil'
+
+import P from './P'
 
 export default class PaintLayerModel {
 

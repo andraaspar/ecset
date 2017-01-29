@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,11 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { bind } from 'illa/FunctionUtil'
-import { GLOBAL } from 'illa/GLOBAL'
 import * as BezierPath from '../renderer/BezierPath'
 import * as Point from '../renderer/Point'
 import * as m from 'mithril'
+
+import { GLOBAL } from 'illa/GLOBAL'
+import { bind } from 'illa/FunctionUtil'
 
 export default class VectorLayerModel {
 

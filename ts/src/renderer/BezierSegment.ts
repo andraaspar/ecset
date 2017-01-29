@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,12 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Axis from 'illa/Axis2D'
-
-import * as BezierPoint from './BezierPoint'
 import * as Bezier from './Bezier'
+import * as BezierPoint from './BezierPoint'
 import * as Path from './Path'
 import * as Point from './Point'
+
+import Axis from 'illa/Axis2D'
 
 const AXES = [Axis.X, Axis.Y]
 const DOUBLE_PI = Math.PI * 2

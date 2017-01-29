@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,8 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Point from './Point'
 import * as Angle from './Angle'
+import * as Point from './Point'
 
 export interface I {
 	a: Point.I,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 András Parditka.
+ * Copyright 2017 András Parditka.
  *
  * This file is part of Ecset.
  *
@@ -17,11 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Path from './renderer/Path'
 import * as BezierPath from './renderer/BezierPath'
-import Renderer from './renderer/Renderer'
-import GLOBAL from 'illa/GLOBAL'
+import * as Path from './renderer/Path'
 import * as View from './renderer/View'
+
+import GLOBAL from 'illa/GLOBAL'
+import Renderer from './renderer/Renderer'
 
 // console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
