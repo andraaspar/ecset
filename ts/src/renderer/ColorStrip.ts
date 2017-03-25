@@ -26,14 +26,14 @@ export interface I {
 }
 
 export interface IProp {
-	colorFieldIds: P<string>[]
-	colorFieldTs: P<number>[]
+	colorFieldIds: string[]
+	colorFieldTs: number[]
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		colorFieldTs: p.colorFieldTs.map(t => t()),
-		colorFields: p.colorFieldIds.map(id => ColorField.getDepropped(d, id()))
+		colorFieldTs: p.colorFieldTs.slice(0),
+		colorFields: p.colorFieldIds.map(id => ColorField.getDepropped(d, id))
 	}
 }
 

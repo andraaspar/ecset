@@ -1,15 +1,17 @@
 {
 	"compilerOptions": {
+		"target": "es5",
+		"module": "es6",
+		"moduleResolution": "node",
+		"lib": [
+			"dom",
+			"es5",
+			"es2015.promise"
+		],
 		"baseUrl": ".",
-		"paths": {
-			"*": [
-				"bower_components/*",
-				"*"
-			]
-		},
-		"typeRoots": [
-			"ts/static-lib"
-		]
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true
 	},
 	"exclude": [
 		"bower_components",

@@ -27,6 +27,7 @@ import * as m from 'mithril'
 import { bind, debounce } from 'illa/FunctionUtil'
 
 import P from './P'
+import jQuery from 'jquery-ts'
 
 export default class PaintLayerModel {
 
@@ -35,11 +36,13 @@ export default class PaintLayerModel {
 	private worker: Worker
 	private renderStartTime: number
 	private isRendering: boolean
+	private canvas: HTMLCanvasElement
 
 	constructor(
 		private stroke: Stroke.I,
-		private canvas: HTMLCanvasElement
+		canvasContainer: HTMLDivElement
 	) {
+		this.canvas = <HTMLCanvasElement>jQuery(canvasContainer).find('canvas')[0]
 		this.context = this.canvas.getContext('2d')
 	}
 

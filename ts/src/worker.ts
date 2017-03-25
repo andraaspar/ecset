@@ -21,7 +21,7 @@ import * as BezierPath from './renderer/BezierPath'
 import * as Path from './renderer/Path'
 import * as View from './renderer/View'
 
-import GLOBAL from 'illa/GLOBAL'
+import { GLOBAL } from 'illa/GLOBAL'
 import Renderer from './renderer/Renderer'
 
 // console.log('Web worker starting...')
@@ -34,4 +34,4 @@ export function onMessage(e: MessageEvent) {
 
 	GLOBAL.postMessage({ pixels: view.pixels })
 }
-GLOBAL.onmessage = onMessage.bind(this)
+GLOBAL.onmessage = onMessage

@@ -34,22 +34,22 @@ export interface I {
 }
 
 export interface IProp {
-	stripPairId: P<string>
-	bezierPathId: P<string>
-	thicknessPairId: P<string>
-	cutoffPairId: P<string>
-	childIds: P<string>[]
-	transformId: P<string>
+	stripPairId: string
+	bezierPathId: string
+	thicknessPairId: string
+	cutoffPairId: string
+	childIds: string[]
+	transformId: string
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		bezierPath: BezierPath.getDepropped(d, p.bezierPathId()),
-		stripPair: ColorStripPair.getDepropped(d, p.stripPairId()),
-		thicknessPair: ValuePathPair.getDepropped(d, p.thicknessPairId()),
-		cutoffPair: ValuePathPair.getDepropped(d, p.cutoffPairId()),
-		children: p.childIds.map(id => getDepropped(d, id())),
-		transform: Transform.getDepropped(d, p.transformId())
+		bezierPath: BezierPath.getDepropped(d, p.bezierPathId),
+		stripPair: ColorStripPair.getDepropped(d, p.stripPairId),
+		thicknessPair: ValuePathPair.getDepropped(d, p.thicknessPairId),
+		cutoffPair: ValuePathPair.getDepropped(d, p.cutoffPairId),
+		children: p.childIds.map(id => getDepropped(d, id)),
+		transform: Transform.getDepropped(d, p.transformId)
 	}
 }
 

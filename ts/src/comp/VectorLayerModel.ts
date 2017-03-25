@@ -47,10 +47,9 @@ export default class VectorLayerModel {
 
 	onMouseMovedBound = bind(this.onMouseMoved, this)
 	onMouseMoved(e: MouseEvent): void {
-		m.startComputation()
-		this.selection.x(this.startSelection.x + e.pageX - this.startMouse.x)
-		this.selection.y(this.startSelection.y + e.pageY - this.startMouse.y)
-		m.endComputation()
+		this.selection.x = this.startSelection.x + e.pageX - this.startMouse.x
+		this.selection.y = this.startSelection.y + e.pageY - this.startMouse.y
+		m.redraw()
 	}
 
 	kill(): void {

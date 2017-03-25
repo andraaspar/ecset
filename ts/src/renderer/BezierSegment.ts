@@ -22,9 +22,9 @@ import * as BezierPoint from './BezierPoint'
 import * as Path from './Path'
 import * as Point from './Point'
 
-import Axis from 'illa/Axis2D'
+import { Axis2D } from 'illa/Axis2D'
 
-const AXES = [Axis.X, Axis.Y]
+const AXES = [Axis2D.X, Axis2D.Y]
 const DOUBLE_PI = Math.PI * 2
 
 export interface I {
@@ -77,7 +77,7 @@ export function linearize(segment: I, detailMultiplier: number): Point.I[] {
 				ratio
 			)
 
-			if (axis == Axis.X) {
+			if (axis == Axis2D.X) {
 				positionsX.push(pos[0])
 			} else {
 				result.push({

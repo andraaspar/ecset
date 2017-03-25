@@ -1,21 +1,22 @@
-var webpack = require("webpack");
+const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
 	entry: {
 		index: './ts/src/index.ts',
-		vendor: ['jquery-ts', 'mithril/mithril']
+		vendor: ['jquery-ts', 'mithril']
 	},
 	resolve: {
-		extensions: ['', '.js', '.jsx', '.ts', '.tsx'],
-		modulesDirectories: [
-			'bower_components',
+		extensions: ['.ts', '.js'],
+		modules: [
 			'node_modules',
+			'.'
 		],
 	},
 	module: {
 		loaders: [
 			{
-				test: /\.tsx?$/,
+				test: /\.ts$/,
 				loader: 'awesome-typescript-loader'
 			},
 		]
@@ -37,7 +38,7 @@ module.exports = {
 	externals: {
 	},
 	output: {
-		path: './kapocs/tmp/asset-templates/script',
+		path: path.resolve(__dirname, './kapocs/tmp/asset-templates/script'),
 		filename: '[name].js'
 	}
-};
+}

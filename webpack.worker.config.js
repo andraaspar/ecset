@@ -1,20 +1,22 @@
-var webpack = require("webpack");
+const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
 	entry: {
 		worker: './ts/src/worker.ts'
 	},
 	resolve: {
-		extensions: ['', '.js', '.jsx', '.ts', '.tsx'],
-		modulesDirectories: [
+		extensions: ['.ts', '.js'],
+		modules: [
 			'bower_components',
 			'node_modules',
+			'.'
 		],
 	},
 	module: {
 		loaders: [
 			{
-				test: /\.tsx?$/,
+				test: /\.ts?$/,
 				loader: 'awesome-typescript-loader'
 			},
 		]
@@ -33,8 +35,8 @@ module.exports = {
 	externals: {
 	},
 	output: {
-		path: './kapocs/tmp/asset-templates/script',
+		path: path.resolve(__dirname, './kapocs/tmp/asset-templates/script'),
 		filename: '[name].js'
 	},
 	target: 'webworker'
-};
+}

@@ -29,8 +29,8 @@ export interface I {
 }
 
 export interface IProp {
-	pointIds: P<string>[]
-	isLoop: P<boolean>
+	pointIds: string[]
+	isLoop: boolean
 }
 
 export function linearize(bezierPath: I, detailMultiplier: number): Path.I {
@@ -84,8 +84,8 @@ export function toSvg(bezierPath: I): string {
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		points: p.pointIds.map(id => BezierPoint.getDepropped(d, id())),
-		isLoop: p.isLoop()
+		points: p.pointIds.map(id => BezierPoint.getDepropped(d, id)),
+		isLoop: p.isLoop
 	}
 }
 

@@ -19,6 +19,4 @@
 
 import * as m from 'mithril'
 
-import GLOBAL from 'illa/GLOBAL'
-
-GLOBAL.m = m
+import { GLOBAL } from 'illa/GLOBAL'

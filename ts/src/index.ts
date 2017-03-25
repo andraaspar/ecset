@@ -19,8 +19,10 @@
 
 import './statics.ts'
 
+import * as m from 'mithril'
+
 import { Ecset } from './comp/Ecset'
 
 const ECSET_ELEMENT = document.getElementById('ecset')
 
-m.mount(ECSET_ELEMENT, new Ecset())
+m.mount(ECSET_ELEMENT, Ecset)

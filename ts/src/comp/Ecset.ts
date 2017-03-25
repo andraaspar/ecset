@@ -18,23 +18,39 @@
  */
 
 import * as Document from '../renderer/Document'
+import * as m from 'mithril'
 
 import { IProp } from 'ts/src/renderer/BezierPath'
 
-export class Ecset implements Mithril.Component<any> {
+export declare namespace Ecset {
+	interface Attrs {}
+	interface State {
+		document?: Document.IProp
+		renderers?: Worker[]
+	}
+}
+type Vnode = m.Vnode<Ecset.Attrs, Ecset.State>
+type VnodeDOM = m.VnodeDOM<Ecset.Attrs, Ecset.State>
+
+export const Ecset: m.Comp<Ecset.Attrs, Ecset.State> = {
 	
-	private document: Document.IProp = Document.create()
-	private renderers: Worker[] = []
-	
-	constructor() {
+	oninit(v) {
+		v.state.document = Document.create()
+		v.state.renderers = []
 		for (let i = 0; i < 4; i++) {
-			this.renderers.push(new Worker('script/{{worker.js}}'))
+			v.state.renderers.push(new Worker('script/{{worker.js}}'))
 		}
-	}
-	
-	view(): Mithril.VirtualElement {
+	},
+	// onbeforeupdate(v, o) {},
+	view(v) {
 		return (
-			m('div', 'Ecset here.')
+			m('div',
+				'Ecset here.'
+			)
 		)
-	}
+	},
+	// oncreate(v) {},
+	// onupdate(v) {},
+	// onbeforeremove(v) {},
+	// onremove(v) {}
 }

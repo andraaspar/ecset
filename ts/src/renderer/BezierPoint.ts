@@ -28,17 +28,17 @@ export interface I {
 }
 
 export interface IProp {
-	centerId: P<string>
-	handleInId: P<string>
-	handleOutId: P<string>
+	centerId: string
+	handleInId: string
+	handleOutId: string
 }
 
 export function deprop(d: Document.IProp, p: IProp, id: string): I {
 	return {
 		id: id,
-		center: Point.getDepropped(d, p.centerId()),
-		handleIn: Point.getDepropped(d, p.handleInId()),
-		handleOut: Point.getDepropped(d, p.handleOutId())
+		center: Point.getDepropped(d, p.centerId),
+		handleIn: Point.getDepropped(d, p.handleInId),
+		handleOut: Point.getDepropped(d, p.handleOutId)
 	}
 }
 

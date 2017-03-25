@@ -26,14 +26,14 @@ export interface I {
 }
 
 export interface IProp {
-	leftId: P<string>
-	rightId: P<string>
+	leftId: string
+	rightId: string
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		left: ValuePath.getDepropped(d, p.leftId()),
-		right: ValuePath.getDepropped(d, p.rightId())
+		left: ValuePath.getDepropped(d, p.leftId),
+		right: ValuePath.getDepropped(d, p.rightId)
 	}
 }
 

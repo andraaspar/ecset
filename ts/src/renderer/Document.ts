@@ -46,7 +46,7 @@ export interface IProp {
 	colorStripPairsById: {[id: string]: ColorStripPair.IProp}
 	colorStripsById: {[id: string]: ColorStrip.IProp}
 	pointsById: {[id: string]: Point.IProp}
-	strokeIds: P<string>[]
+	strokeIds: string[]
 	strokesById: {[id: string]: Stroke.IProp}
 	transformsById: {[id: string]: Transform.IProp}
 	valuePathPairsById: {[id: string]: ValuePathPair.IProp}
@@ -76,6 +76,6 @@ export function create(): IProp {
 
 export function deprop(d: IProp): I {
 	return {
-		strokes: d.strokeIds.map(id => Stroke.getDepropped(d, id()))
+		strokes: d.strokeIds.map(id => Stroke.getDepropped(d, id))
 	}
 }

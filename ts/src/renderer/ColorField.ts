@@ -29,18 +29,18 @@ export interface I {
 }
 
 export interface IProp {
-	aId: P<string>
-	bId: P<string>
-	tTweenPathIds: P<string>[]
-	colorTweenPathIds: P<string>[]
+	aId: string
+	bId: string
+	tTweenPathIds: string[]
+	colorTweenPathIds: string[]
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		a: ColorPath.getDepropped(d, p.aId()),
-		b: ColorPath.getDepropped(d, p.bId()),
-		colorTweenPaths: p.colorTweenPathIds.map(id => BezierPath.getDepropped(d, id())),
-		tTweenPaths: p.tTweenPathIds.map(id => BezierPath.getDepropped(d, id()))
+		a: ColorPath.getDepropped(d, p.aId),
+		b: ColorPath.getDepropped(d, p.bId),
+		colorTweenPaths: p.colorTweenPathIds.map(id => BezierPath.getDepropped(d, id)),
+		tTweenPaths: p.tTweenPathIds.map(id => BezierPath.getDepropped(d, id))
 	}
 }
 

@@ -28,18 +28,18 @@ export interface I {
 }
 
 export interface IProp {
-	offsetId: P<string>
-	scale: P<number>
-	rotation: P<number>
-	pivotId: P<string>
+	offsetId: string
+	scale: number
+	rotation: number
+	pivotId: string
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		offset: Point.getDepropped(d, p.offsetId()),
-		pivot: Point.getDepropped(d, p.pivotId()),
-		rotation: p.rotation(),
-		scale: p.scale(),
+		offset: Point.getDepropped(d, p.offsetId),
+		pivot: Point.getDepropped(d, p.pivotId),
+		rotation: p.rotation,
+		scale: p.scale,
 	}
 }
 

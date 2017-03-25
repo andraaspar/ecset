@@ -20,8 +20,8 @@
 import * as Point from './Point'
 import * as Segment from './Segment'
 
-import Axis from 'illa/Axis2D'
-import End from 'illa/End'
+import { Axis2D } from 'illa/Axis2D'
+import { End } from 'illa/End'
 
 export interface I {
 	points: Point.I[]
@@ -41,11 +41,11 @@ export function segmentCount(path: I): number {
 	return path.points.length - (path.isLoop ? 0 : 1)
 }
 
-export function size(path: I, axis: Axis): number {
+export function size(path: I, axis: Axis2D): number {
 	return position(path, axis, End.MAX) - position(path, axis, End.MIN)
 }
 
-export function position(path: I, axis: Axis, end: End): number {
+export function position(path: I, axis: Axis2D, end: End): number {
 	let result = end == End.MIN ? Infinity : -Infinity
 	let test = end == End.MIN ? Math.min : Math.max
 

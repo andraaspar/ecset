@@ -27,16 +27,16 @@ export interface I {
 }
 
 export interface IProp {
-	a: P<number>
-	b: P<number>
-	tweenPathId: P<string>
+	a: number
+	b: number
+	tweenPathId: string
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		a: p.a(),
-		b: p.b(),
-		tweenPath: BezierPath.getDepropped(d, p.tweenPathId()) 
+		a: p.a,
+		b: p.b,
+		tweenPath: BezierPath.getDepropped(d, p.tweenPathId) 
 	}
 }
 

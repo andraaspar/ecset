@@ -21,7 +21,7 @@ import * as Document from './Document'
 
 export type I = number[]
 
-export type IProp = P<number>[]
+export type IProp = number[]
 
 export const ALPHA = 0
 
@@ -37,7 +37,7 @@ export function interpolate(a: I, b: I, t: number): I {
 }
 
 export function deprop(p: IProp): I {
-	return p.map(value => value())
+	return p.slice(0)
 }
 
 export function getDepropped(d: Document.IProp, id: string): I {

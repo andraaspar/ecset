@@ -19,7 +19,7 @@
 
 import * as Document from './Document'
 
-import Axis from 'illa/Axis2D'
+import { Axis2D } from 'illa/Axis2D'
 
 export interface I {
 	id?: string
@@ -28,14 +28,14 @@ export interface I {
 }
 
 export interface IProp {
-	x: P<number>
-	y: P<number>
+	x: number
+	y: number
 }
 
-export function position(p: I, axis: Axis): number {
+export function position(p: I, axis: Axis2D): number {
 	switch (axis) {
-		case Axis.X: return p.x
-		case Axis.Y: return p.y
+		case Axis2D.X: return p.x
+		case Axis2D.Y: return p.y
 	}
 }
 
@@ -109,8 +109,8 @@ export function angle(vector: I): number {
 export function deprop(p: IProp, id: string): I {
 	return {
 		id: id,
-		x: p.x(),
-		y: p.y()
+		x: p.x,
+		y: p.y
 	}
 }
 

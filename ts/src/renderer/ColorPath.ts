@@ -26,14 +26,14 @@ export interface I {
 }
 
 export interface IProp {
-	segmentIds: P<string>[]
-	segmentEndTs: P<number>[]
+	segmentIds: string[]
+	segmentEndTs: number[]
 }
 
 export function deprop(d: Documemt.IProp, p: IProp): I {
 	return {
-		segments: p.segmentIds.map(id => ColorSegment.getDepropped(d, id())),
-		segmentEndTs: p.segmentEndTs.map(t => t())
+		segments: p.segmentIds.map(id => ColorSegment.getDepropped(d, id)),
+		segmentEndTs: p.segmentEndTs.slice(0)
 	}
 }
 

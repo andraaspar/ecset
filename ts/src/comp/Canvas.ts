@@ -17,83 +17,55 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as BezierPath from '../renderer/BezierPath'
 import * as Document from '../renderer/Document'
-import * as Path from '../renderer/Path'
 import * as Stroke from '../renderer/Stroke'
 import * as m from 'mithril'
 
 import P from './P'
-import PaintLayer from './PaintLayer'
-import VectorLayer from './VectorLayer'
-import { bind } from 'illa/FunctionUtil'
-import { prop as p } from 'mithril'
+import { PaintLayer } from './PaintLayer'
+import { VectorLayer } from './VectorLayer'
 
-export default class Canvas implements Mithril.Component<any> {
-	
-	private document: Document.IProp = {
-		bezierPathsById: {},
-		bezierPointsById: {},
-		colorFieldsById: {},
-		colorPathsById: {},
-		colorSegmentsById: {},
-		colorStripPairsById: {},
-		colorStripsById: {},
-		colorsById: {},
-		pointsById: {},
-		strokeIds: [],
-		strokesById: {},
-		transformsById: {},
-		valuePathPairsById: {},
-		valuePathsById: {},
-		valueSegmentsById: {}
-	}	
-
-	constructor() {
-		//this.replaceProps(this.bezierPath)
+export declare namespace Canvas {
+	interface Attrs {
+		document: Document.IProp
 	}
-	
-	replaceProps(data: {}): void {
-		switch (typeof data) {
-			case 'object':
-				if (data) {
-					for (let key of Array.isArray(data) ? data.map((item, index) => index) : Object.keys(data)) {
-						let value = data[key]
-						switch (typeof value) {
-							case 'boolean':
-							case 'number':
-							case 'string':
-								data[key] = p(value)
-								break
-							case 'object':
-								if (value) {
-									this.replaceProps(value)
-								}
-								break
-							case 'function':
-							default:
-						}
-					}
-				}
-			break
-		}
-	}
+	interface State {}
+}
+type Vnode = m.Vnode<Canvas.Attrs, Canvas.State>
+type VnodeDOM = m.VnodeDOM<Canvas.Attrs, Canvas.State>
 
-	view() {
+export const Canvas: m.Comp<Canvas.Attrs, Canvas.State> = {
+	
+	// oninit(v) {},
+	// onbeforeupdate(v, o) {},
+	view(v) {
 		return (
 			m('div', {'class': `${P}-canvas`},
-				this.document.strokeIds.map(id => {
-					let stroke = Stroke.getDepropped(this.document, id())
-					return new PaintLayer(1024, 768, stroke)
+				v.attrs.document.strokeIds.map(id => {
+					let stroke = Stroke.getDepropped(v.attrs.document, id)
+					return m(PaintLayer, {
+						'width': 1024,
+						'height': 768,
+						'stroke': stroke,
+					})
 				}),
-				this.document.strokeIds.map(id => {
-					let stroke = Stroke.getDepropped(this.document, id())
-					return new VectorLayer(1024, 768, this.document, stroke)
+				v.attrs.document.strokeIds.map(id => {
+					let stroke = Stroke.getDepropped(v.attrs.document, id)
+					return m(VectorLayer, {
+						'width': 1024,
+						'height': 768,
+						'document': v.attrs.document,
+						'stroke': stroke,
+					})
 				}),
 				m('div', {'style': {marginTop: '768px'}},
-					JSON.stringify(this.document/*, undefined, '\t'*/)
+					JSON.stringify(v.attrs.document/*, undefined, '\t'*/)
 				)
 			)
 		)
-	}
+	},
+	// oncreate(v) {},
+	// onupdate(v) {},
+	// onbeforeremove(v) {},
+	// onremove(v) {}
 }

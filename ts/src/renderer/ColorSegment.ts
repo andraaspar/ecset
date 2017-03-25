@@ -28,16 +28,16 @@ export interface I {
 }
 
 export interface IProp {
-	aId: P<string>
-	bId: P<string>
-	tweenPathId: P<string>
+	aId: string
+	bId: string
+	tweenPathId: string
 }
 
 export function deprop(d: Document.IProp, p: IProp): I {
 	return {
-		a: Color.getDepropped(d, p.aId()),
-		b: Color.getDepropped(d, p.bId()),
-		tweenPath: BezierPath.getDepropped(d, p.tweenPathId())
+		a: Color.getDepropped(d, p.aId),
+		b: Color.getDepropped(d, p.bId),
+		tweenPath: BezierPath.getDepropped(d, p.tweenPathId)
 	}
 }
 

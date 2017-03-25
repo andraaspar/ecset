@@ -21,7 +21,7 @@ let out = ``
 
 let imports = [
 	'./vars',
-	'../bower_components/normalize-css/normalize.css',
+	'../node_modules/normalize.css/normalize.css',
 	'./elems',
 	'./regulars/p-canvas',
 	'./regulars/p-ecset',

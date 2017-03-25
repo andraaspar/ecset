@@ -27,35 +27,44 @@ import P from './P'
 import PaintLayerModel from './PaintLayerModel'
 import { bind } from 'illa/FunctionUtil'
 
-export default class PaintLayer implements Mithril.Component<any> {
+export declare namespace PaintLayer {
+	interface Attrs {
+		width: number
+		height: number
+		stroke: Stroke.I
+	}
+	interface State {
+		model?: PaintLayerModel
+	}
+}
+type Vnode = m.Vnode<PaintLayer.Attrs, PaintLayer.State>
+type VnodeDOM = m.VnodeDOM<PaintLayer.Attrs, PaintLayer.State>
 
-	private model: PaintLayerModel
-
-	constructor(
-		private width: number,
-		private height: number,
-		private stroke: Stroke.I
-	) { }
-
-	view() {
-		let pathD: string = BezierPath.toSvg(this.stroke.bezierPath)
+export const PaintLayer: m.Comp<PaintLayer.Attrs, PaintLayer.State> = {
+	
+	// oninit(v) {},
+	// onbeforeupdate(v, o) {},
+	view(v) {
+		let pathD: string = BezierPath.toSvg(v.attrs.stroke.bezierPath)
 		return (
 			m('div', {'class': `${P}-canvas-layer`},
 				m('canvas', {
 					'class': `${P}-canvas-layer-canvas`,
-					'width': this.width,
-					'height': this.height,
-					'config': (elem, inited, context, velem) => {
-						if (!inited) {
-							this.model = context['model'] = new PaintLayerModel(this.stroke, <HTMLCanvasElement>elem)
-							context.onunload = () => this.model.kill()
-						} else {
-							this.model = context['model']
-						}
-						this.model.render()
-					}
+					'width': v.attrs.width,
+					'height': v.attrs.height,
 				})
 			)
 		)
+	},
+	oncreate(v) {
+		v.state.model = new PaintLayerModel(v.attrs.stroke, <HTMLDivElement>v.dom)
+		v.state.model.render()
+	},
+	onupdate(v) {
+		v.state.model.render()
+	},
+	// onbeforeremove(v) {},
+	onremove(v) {
+		v.state.model.kill()
 	}
 }

@@ -1,8 +1,0 @@
-{
-  "name": "ecset",
-  "private": true,
-  "dependencies": {
-    "berek": "^2.0.0",
-    "normalize-css": "5.0.0"
-  }
-}
