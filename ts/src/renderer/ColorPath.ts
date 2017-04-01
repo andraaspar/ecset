@@ -20,23 +20,23 @@
 import * as ColorSegment from './ColorSegment'
 import * as Documemt from './Document'
 
-export interface I {
-	segments: ColorSegment.I[]
+export interface IRender {
+	segments: ColorSegment.IRender[]
 	segmentEndTs: number[]
 }
 
-export interface IProp {
+export interface IView {
 	segmentIds: string[]
 	segmentEndTs: number[]
 }
 
-export function deprop(d: Documemt.IProp, p: IProp): I {
+export function iRenderify(d: Documemt.IView, p: IView): IRender {
 	return {
-		segments: p.segmentIds.map(id => ColorSegment.getDepropped(d, id)),
+		segments: p.segmentIds.map(id => ColorSegment.getIRender(d, id)),
 		segmentEndTs: p.segmentEndTs.slice(0)
 	}
 }
 
-export function getDepropped(d: Documemt.IProp, id: string): I {
-	return deprop(d, d.colorPathsById[id])
+export function getIRender(d: Documemt.IView, id: string): IRender {
+	return iRenderify(d, d.colorPathsById[id])
 }

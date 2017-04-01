@@ -31,13 +31,13 @@ export interface IGainInfo {
 }
 
 export interface ISegmentInfo {
-	segment: Segment.I
+	segment: Segment.IRender
 	length: number
 	tGain: IGainInfo
 	originDistance: number
-	distanceChange: Point.I
+	distanceChange: Point.IRender
 	originT: number
-	tChange: Point.I
+	tChange: Point.IRender
 	focusDistance: number
 	focusSide: number
 }
@@ -52,10 +52,10 @@ export default class Renderer {
 	private startColorRight = [255, 255, 255, 0]
 	private endColorRight = [255, 0, 255, 128]
 	private distanceLimit = 200
-	private path: Path.I
+	private path: Path.IRender
 
 	constructor(
-		private view: View.I
+		private view: View.IRender
 	) {
 		this.path = BezierPath.linearize(this.view.stroke.bezierPath, .05)
 	}
@@ -77,18 +77,18 @@ export default class Renderer {
 		}
 	}
 
-	protected getColor(x: number, y: number, force = false): Color.I {
+	protected getColor(x: number, y: number, force = false): Color.IRender {
 		// if (x == 1023 && y == 0) {
 		// 	console.log('.')
 		// }
-		let result: Color.I = [0, 0, 0, 0]
+		let result: Color.IRender = [0, 0, 0, 0]
 		let currentLength = 0
 		let currentT = 0
 		let prevT: number = Infinity
 		let closestDistance: number = Infinity
 		let closestPathT: number = NaN
 		let closestPathSide: number = 0
-		let closestSegment: Segment.I
+		let closestSegment: Segment.IRender
 		for (let i = 0; i < this.segmentCount; i++) {
 			let isFirst = i == 0
 			let isLast = i + 1 == this.segmentCount
@@ -138,9 +138,9 @@ export default class Renderer {
 	protected calculateSegmentInfos(): ISegmentInfo[] {
 		let result: ISegmentInfo[] = []
 
-		let prevSegment: Segment.I
+		let prevSegment: Segment.IRender
 		let prevSegmentInfo: ISegmentInfo
-		let prevVector: Point.I
+		let prevVector: Point.IRender
 		for (let i = 0, n = this.segmentCount = Path.segmentCount(this.path); i < n; i++) {
 			let segment = Path.segment(this.path, i)
 
@@ -178,15 +178,15 @@ export default class Renderer {
 				this.calculateFocus(segmentInfo)
 			}
 
-			let origin: Point.I = { x: 0, y: 0 }
+			let origin: Point.IRender = { x: 0, y: 0 }
 			let originDistance = Segment.pointDistance(segment, origin) * Segment.pointSide(segment, origin)
 			let originT = Segment.pointT(segment, origin)
 
-			let xPoint: Point.I = { x: 1, y: 0 }
+			let xPoint: Point.IRender = { x: 1, y: 0 }
 			let xPointDistance = Segment.pointDistance(segment, xPoint) * Segment.pointSide(segment, xPoint)
 			let xPointT = Segment.pointT(segment, xPoint)
 
-			let yPoint: Point.I = { x: 0, y: 1 }
+			let yPoint: Point.IRender = { x: 0, y: 1 }
 			let yPointDistance = Segment.pointDistance(segment, yPoint) * Segment.pointSide(segment, yPoint)
 			let yPointT = Segment.pointT(segment, yPoint)
 
@@ -205,7 +205,7 @@ export default class Renderer {
 		return result
 	}
 	
-	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: Point.I, vector: Point.I, prevSegment: Segment.I, segment: Segment.I): void {
+	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: Point.IRender, vector: Point.IRender, prevSegment: Segment.IRender, segment: Segment.IRender): void {
 		prevVector = Point.reverseVector(prevVector)
 
 		let normalVector = Point.add(prevVector, vector)

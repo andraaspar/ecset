@@ -20,23 +20,23 @@
 import * as Document from './Document'
 import * as ValuePath from './ValuePath'
 
-export interface I {
-	left: ValuePath.I
-	right: ValuePath.I
+export interface IRender {
+	left: ValuePath.IRender
+	right: ValuePath.IRender
 }
 
-export interface IProp {
+export interface IView {
 	leftId: string
 	rightId: string
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		left: ValuePath.getDepropped(d, p.leftId),
-		right: ValuePath.getDepropped(d, p.rightId)
+		left: ValuePath.getIRender(d, p.leftId),
+		right: ValuePath.getIRender(d, p.rightId)
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.valuePathPairsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.valuePathPairsById[id])
 }

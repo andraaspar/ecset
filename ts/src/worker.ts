@@ -27,7 +27,7 @@ import Renderer from './renderer/Renderer'
 // console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
 	// console.log('Render starting...')
-	let view: View.I = e.data
+	let view: View.IRender = e.data
 	let renderer = new Renderer(view)
 	renderer.render()
 	// console.log('Render finished.')

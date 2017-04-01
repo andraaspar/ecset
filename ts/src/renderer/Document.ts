@@ -32,29 +32,29 @@ import * as ValuePath from './ValuePath'
 import * as ValuePathPair from './ValuePathPair'
 import * as ValueSegment from './ValueSegment'
 
-export interface I {
-	strokes: Stroke.I[]
+export interface IRender {
+	strokes: Stroke.IRender[]
 }
 
-export interface IProp {
-	bezierPathsById: {[id: string]: BezierPath.IProp}
-	bezierPointsById: {[id: string]: BezierPoint.IProp}
-	colorFieldsById: {[id: string]: ColorField.IProp}
-	colorPathsById: {[id: string]: ColorPath.IProp}
-	colorsById: {[id: string]: Color.IProp}
-	colorSegmentsById: {[id: string]: ColorSegment.IProp}
-	colorStripPairsById: {[id: string]: ColorStripPair.IProp}
-	colorStripsById: {[id: string]: ColorStrip.IProp}
-	pointsById: {[id: string]: Point.IProp}
+export interface IView {
+	bezierPathsById: {[id: string]: BezierPath.IView}
+	bezierPointsById: {[id: string]: BezierPoint.IView}
+	colorFieldsById: {[id: string]: ColorField.IView}
+	colorPathsById: {[id: string]: ColorPath.IView}
+	colorsById: {[id: string]: Color.IView}
+	colorSegmentsById: {[id: string]: ColorSegment.IView}
+	colorStripPairsById: {[id: string]: ColorStripPair.IView}
+	colorStripsById: {[id: string]: ColorStrip.IView}
+	pointsById: {[id: string]: Point.IView}
 	strokeIds: string[]
-	strokesById: {[id: string]: Stroke.IProp}
-	transformsById: {[id: string]: Transform.IProp}
-	valuePathPairsById: {[id: string]: ValuePathPair.IProp}
-	valuePathsById: {[id: string]: ValuePath.IProp}
-	valueSegmentsById: {[id: string]: ValueSegment.IProp}
+	strokesById: {[id: string]: Stroke.IView}
+	transformsById: {[id: string]: Transform.IView}
+	valuePathPairsById: {[id: string]: ValuePathPair.IView}
+	valuePathsById: {[id: string]: ValuePath.IView}
+	valueSegmentsById: {[id: string]: ValueSegment.IView}
 }
 
-export function create(): IProp {
+export function create(): IView {
 	return {
 		bezierPathsById: {},
 		bezierPointsById: {},
@@ -74,8 +74,8 @@ export function create(): IProp {
 	}
 }
 
-export function deprop(d: IProp): I {
+export function iRenderify(d: IView): IRender {
 	return {
-		strokes: d.strokeIds.map(id => Stroke.getDepropped(d, id))
+		strokes: d.strokeIds.map(id => Stroke.getIRender(d, id))
 	}
 }

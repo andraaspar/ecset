@@ -39,7 +39,7 @@ export default class PaintLayerModel {
 	private canvas: HTMLCanvasElement
 
 	constructor(
-		private stroke: Stroke.I,
+		private stroke: Stroke.IRender,
 		canvasContainer: HTMLDivElement
 	) {
 		this.canvas = <HTMLCanvasElement>jQuery(canvasContainer).find('canvas')[0]
@@ -66,7 +66,7 @@ export default class PaintLayerModel {
 		}
 		this.renderStartTime = Date.now()
 		this.isRendering = true
-		let view: View.I = {
+		let view: View.IRender = {
 			height: this.imageData.height,
 			pixels: this.imageData.data,
 			stroke: this.stroke,

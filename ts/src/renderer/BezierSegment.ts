@@ -27,9 +27,9 @@ import { Axis2D } from 'illa/Axis2D'
 const AXES = [Axis2D.X, Axis2D.Y]
 const DOUBLE_PI = Math.PI * 2
 
-export interface I {
-	a: BezierPoint.I
-	b: BezierPoint.I
+export interface IRender {
+	a: BezierPoint.IRender
+	b: BezierPoint.IRender
 }
 
 function angleDifference(a: number, b: number): number {
@@ -40,8 +40,8 @@ function angleDifference(a: number, b: number): number {
 	return result
 }
 
-export function linearize(segment: I, detailMultiplier: number): Point.I[] {
-	let result: Point.I[] = []
+export function linearize(segment: IRender, detailMultiplier: number): Point.IRender[] {
+	let result: Point.IRender[] = []
 	let positionsX: number[] = []
 	
 	let steps = Point.distance(segment.a.center, segment.a.handleOut)

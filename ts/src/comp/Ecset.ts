@@ -20,12 +20,12 @@
 import * as Document from '../renderer/Document'
 import * as m from 'mithril'
 
-import { IProp } from 'ts/src/renderer/BezierPath'
+import { IView } from 'ts/src/renderer/BezierPath'
 
 export declare namespace Ecset {
 	interface Attrs {}
 	interface State {
-		document?: Document.IProp
+		document?: Document.IView
 		renderers?: Worker[]
 	}
 }

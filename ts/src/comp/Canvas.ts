@@ -27,7 +27,7 @@ import { VectorLayer } from './VectorLayer'
 
 export declare namespace Canvas {
 	interface Attrs {
-		document: Document.IProp
+		document: Document.IView
 	}
 	interface State {}
 }
@@ -42,7 +42,7 @@ export const Canvas: m.Comp<Canvas.Attrs, Canvas.State> = {
 		return (
 			m('div', {'class': `${P}-canvas`},
 				v.attrs.document.strokeIds.map(id => {
-					let stroke = Stroke.getDepropped(v.attrs.document, id)
+					let stroke = Stroke.getIRender(v.attrs.document, id)
 					return m(PaintLayer, {
 						'width': 1024,
 						'height': 768,
@@ -50,7 +50,7 @@ export const Canvas: m.Comp<Canvas.Attrs, Canvas.State> = {
 					})
 				}),
 				v.attrs.document.strokeIds.map(id => {
-					let stroke = Stroke.getDepropped(v.attrs.document, id)
+					let stroke = Stroke.getIRender(v.attrs.document, id)
 					return m(VectorLayer, {
 						'width': 1024,
 						'height': 768,

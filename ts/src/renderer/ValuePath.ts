@@ -20,23 +20,23 @@
 import * as Document from './Document'
 import * as ValueSegment from './ValueSegment'
 
-export interface I {
-	segments: ValueSegment.I[]
+export interface IRender {
+	segments: ValueSegment.IRender[]
 	segmentTs: number[]
 }
 
-export interface IProp {
+export interface IView {
 	segmentIds: string[]
 	segmentTs: number[]
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		segments: p.segmentIds.map(id => ValueSegment.getDepropped(d, id)),
+		segments: p.segmentIds.map(id => ValueSegment.getIRender(d, id)),
 		segmentTs: p.segmentTs.slice(0)
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.valuePathsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.valuePathsById[id])
 }

@@ -20,26 +20,26 @@
 import * as BezierPath from './BezierPath'
 import * as Document from './Document'
 
-export interface I {
+export interface IRender {
 	a: number
 	b: number
-	tweenPath: BezierPath.I
+	tweenPath: BezierPath.IRender
 }
 
-export interface IProp {
+export interface IView {
 	a: number
 	b: number
 	tweenPathId: string
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
 		a: p.a,
 		b: p.b,
-		tweenPath: BezierPath.getDepropped(d, p.tweenPathId) 
+		tweenPath: BezierPath.getIRender(d, p.tweenPathId) 
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.valueSegmentsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.valueSegmentsById[id])
 }

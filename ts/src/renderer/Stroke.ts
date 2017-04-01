@@ -24,16 +24,16 @@ import * as Point from './Point'
 import * as Transform from './Transform'
 import * as ValuePathPair from './ValuePathPair'
 
-export interface I {
-	stripPair: ColorStripPair.I
-	bezierPath: BezierPath.I
-	thicknessPair: ValuePathPair.I
-	cutoffPair: ValuePathPair.I
-	children: I[]
-	transform: Transform.I
+export interface IRender {
+	stripPair: ColorStripPair.IRender
+	bezierPath: BezierPath.IRender
+	thicknessPair: ValuePathPair.IRender
+	cutoffPair: ValuePathPair.IRender
+	children: IRender[]
+	transform: Transform.IRender
 }
 
-export interface IProp {
+export interface IView {
 	stripPairId: string
 	bezierPathId: string
 	thicknessPairId: string
@@ -42,17 +42,17 @@ export interface IProp {
 	transformId: string
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		bezierPath: BezierPath.getDepropped(d, p.bezierPathId),
-		stripPair: ColorStripPair.getDepropped(d, p.stripPairId),
-		thicknessPair: ValuePathPair.getDepropped(d, p.thicknessPairId),
-		cutoffPair: ValuePathPair.getDepropped(d, p.cutoffPairId),
-		children: p.childIds.map(id => getDepropped(d, id)),
-		transform: Transform.getDepropped(d, p.transformId)
+		bezierPath: BezierPath.getIRender(d, p.bezierPathId),
+		stripPair: ColorStripPair.getIRender(d, p.stripPairId),
+		thicknessPair: ValuePathPair.getIRender(d, p.thicknessPairId),
+		cutoffPair: ValuePathPair.getIRender(d, p.cutoffPairId),
+		children: p.childIds.map(id => getIRender(d, id)),
+		transform: Transform.getIRender(d, p.transformId)
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.strokesById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.strokesById[id])
 }

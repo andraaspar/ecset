@@ -20,23 +20,23 @@
 import * as ColorField from './ColorField'
 import * as Document from './Document'
 
-export interface I {
-	colorFields: ColorField.I[]
+export interface IRender {
+	colorFields: ColorField.IRender[]
 	colorFieldTs: number[]
 }
 
-export interface IProp {
+export interface IView {
 	colorFieldIds: string[]
 	colorFieldTs: number[]
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
 		colorFieldTs: p.colorFieldTs.slice(0),
-		colorFields: p.colorFieldIds.map(id => ColorField.getDepropped(d, id))
+		colorFields: p.colorFieldIds.map(id => ColorField.getIRender(d, id))
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.colorStripsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.colorStripsById[id])
 }

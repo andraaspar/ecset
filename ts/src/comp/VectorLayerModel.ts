@@ -26,11 +26,11 @@ import { bind } from 'illa/FunctionUtil'
 
 export default class VectorLayerModel {
 
-	private selection: Point.IProp
-	private startMouse: Point.I
-	private startSelection: Point.I
+	private selection: Point.IView
+	private startMouse: Point.IRender
+	private startSelection: Point.IRender
 
-	startDrag(point: Point.IProp, e: MouseEvent): void {
+	startDrag(point: Point.IView, e: MouseEvent): void {
 		this.selection = point
 		this.startSelection = JSON.parse(JSON.stringify(point))
 		this.startMouse = { x: e.pageX, y: e.pageY }

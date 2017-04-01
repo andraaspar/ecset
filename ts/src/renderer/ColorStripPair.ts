@@ -20,23 +20,23 @@
 import * as ColorStrip from './ColorStrip'
 import * as Document from './Document'
 
-export interface I {
-	left: ColorStrip.I
-	right: ColorStrip.I
+export interface IRender {
+	left: ColorStrip.IRender
+	right: ColorStrip.IRender
 }
 
-export interface IProp {
+export interface IView {
 	leftId: string
 	rightId: string
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		left: ColorStrip.getDepropped(d, p.leftId),
-		right: ColorStrip.getDepropped(d, p.rightId)
+		left: ColorStrip.getIRender(d, p.leftId),
+		right: ColorStrip.getIRender(d, p.rightId)
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.colorStripPairsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.colorStripPairsById[id])
 }

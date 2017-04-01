@@ -21,29 +21,29 @@ import * as BezierPath from './BezierPath'
 import * as ColorPath from './ColorPath'
 import * as Document from './Document'
 
-export interface I {
-	a: ColorPath.I
-	b: ColorPath.I
-	tTweenPaths: BezierPath.I[]
-	colorTweenPaths: BezierPath.I[]
+export interface IRender {
+	a: ColorPath.IRender
+	b: ColorPath.IRender
+	tTweenPaths: BezierPath.IRender[]
+	colorTweenPaths: BezierPath.IRender[]
 }
 
-export interface IProp {
+export interface IView {
 	aId: string
 	bId: string
 	tTweenPathIds: string[]
 	colorTweenPathIds: string[]
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		a: ColorPath.getDepropped(d, p.aId),
-		b: ColorPath.getDepropped(d, p.bId),
-		colorTweenPaths: p.colorTweenPathIds.map(id => BezierPath.getDepropped(d, id)),
-		tTweenPaths: p.tTweenPathIds.map(id => BezierPath.getDepropped(d, id))
+		a: ColorPath.getIRender(d, p.aId),
+		b: ColorPath.getIRender(d, p.bId),
+		colorTweenPaths: p.colorTweenPathIds.map(id => BezierPath.getIRender(d, id)),
+		tTweenPaths: p.tTweenPathIds.map(id => BezierPath.getIRender(d, id))
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.colorFieldsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.colorFieldsById[id])
 }

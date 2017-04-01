@@ -20,9 +20,9 @@
 import * as Stroke from './Stroke'
 import * as Transform from './Transform'
 
-export interface I {
-	stroke: Stroke.I
-	transforms: Transform.I[]
+export interface IRender {
+	stroke: Stroke.IRender
+	transforms: Transform.IRender[]
 	width: number
 	height: number
 	pixels: Uint8ClampedArray

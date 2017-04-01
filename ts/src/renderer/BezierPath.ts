@@ -23,18 +23,18 @@ import * as Document from './Document'
 import * as Path from './Path'
 import * as Point from './Point'
 
-export interface I {
-	points: BezierPoint.I[]
+export interface IRender {
+	points: BezierPoint.IRender[]
 	isLoop: boolean
 }
 
-export interface IProp {
+export interface IView {
 	pointIds: string[]
 	isLoop: boolean
 }
 
-export function linearize(bezierPath: I, detailMultiplier: number): Path.I {
-	let path: Path.I = {
+export function linearize(bezierPath: IRender, detailMultiplier: number): Path.IRender {
+	let path: Path.IRender = {
 		points: [],
 		isLoop: bezierPath.isLoop
 	}
@@ -63,9 +63,9 @@ export function linearize(bezierPath: I, detailMultiplier: number): Path.I {
 	return path
 }
 
-export function toSvg(bezierPath: I): string {
+export function toSvg(bezierPath: IRender): string {
 	let result = ''
-	let prevBezierPoint: BezierPoint.I
+	let prevBezierPoint: BezierPoint.IRender
 	for (let i = 0, n = bezierPath.points.length; i < n; i++) {
 		let bezierPoint = bezierPath.points[i]
 		if (i == 0) {
@@ -82,13 +82,13 @@ export function toSvg(bezierPath: I): string {
 	return result
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		points: p.pointIds.map(id => BezierPoint.getDepropped(d, id)),
+		points: p.pointIds.map(id => BezierPoint.getIRender(d, id)),
 		isLoop: p.isLoop
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string ): I {
-	return deprop(d, d.bezierPathsById[id])
+export function getIRender(d: Document.IView, id: string ): IRender {
+	return iRenderify(d, d.bezierPathsById[id])
 }

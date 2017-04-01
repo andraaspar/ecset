@@ -19,15 +19,15 @@
 
 import * as Document from './Document'
 
-export type I = number[]
+export type IRender = number[]
 
-export type IProp = number[]
+export type IView = number[]
 
 export const ALPHA = 0
 
-export function interpolate(a: I, b: I, t: number): I {
+export function interpolate(a: IRender, b: IRender, t: number): IRender {
 	let length = Math.max(a.length, b.length)
-	let result: I = []
+	let result: IRender = []
 	for (let i = 0; i < length; i++) {
 		let aValue = a[i] || 0
 		let bValue = b[i] || 0
@@ -36,10 +36,10 @@ export function interpolate(a: I, b: I, t: number): I {
 	return result
 }
 
-export function deprop(p: IProp): I {
+export function iRenderify(p: IView): IRender {
 	return p.slice(0)
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d.colorsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d.colorsById[id])
 }

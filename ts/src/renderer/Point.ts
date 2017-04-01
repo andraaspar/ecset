@@ -21,50 +21,50 @@ import * as Document from './Document'
 
 import { Axis2D } from 'illa/Axis2D'
 
-export interface I {
+export interface IRender {
 	id?: string
 	x: number
 	y: number
 }
 
-export interface IProp {
+export interface IView {
 	x: number
 	y: number
 }
 
-export function position(p: I, axis: Axis2D): number {
+export function position(p: IRender, axis: Axis2D): number {
 	switch (axis) {
 		case Axis2D.X: return p.x
 		case Axis2D.Y: return p.y
 	}
 }
 
-export function distance(a: I, b: I): number {
+export function distance(a: IRender, b: IRender): number {
 	return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2))
 }
 
-export function add(a: I, b: I): I {
-	let result: I = {
+export function add(a: IRender, b: IRender): IRender {
+	let result: IRender = {
 		x: a.x + b.x,
 		y: a.y + b.y
 	}
 	return result
 }
 
-export function subtract(a: I, b: I): I {
-	let result: I = {
+export function subtract(a: IRender, b: IRender): IRender {
+	let result: IRender = {
 		x: a.x - b.x,
 		y: a.y - b.y
 	}
 	return result
 }
 
-export function perpProduct(a: I, b: I): number {
+export function perpProduct(a: IRender, b: IRender): number {
 	return a.x * b.y - a.y * b.x
 }
 
-export function perpendicularVector(vector: I, clockwise?: boolean): I {
-	let result: I
+export function perpendicularVector(vector: IRender, clockwise?: boolean): IRender {
+	let result: IRender
 	if (clockwise) {
 		result = {
 			x: vector.y,
@@ -79,14 +79,14 @@ export function perpendicularVector(vector: I, clockwise?: boolean): I {
 	return result
 }
 
-export function reverseVector(vector: I): I {
+export function reverseVector(vector: IRender): IRender {
 	return {
 		x: -vector.x,
 		y: -vector.y
 	}
 }
 
-export function toUnitVector(vector: I, multiplier = 1): I {
+export function toUnitVector(vector: IRender, multiplier = 1): IRender {
 	let size = vectorSize(vector)
 	return {
 		x: size ? vector.x / size * multiplier : 0,
@@ -94,19 +94,19 @@ export function toUnitVector(vector: I, multiplier = 1): I {
 	}
 }
 
-export function vectorSize(vector: I): number {
+export function vectorSize(vector: IRender): number {
 	return Math.sqrt(vector.x ** 2 + vector.y ** 2)
 }
 
-export function equals(a: I, b: I): boolean {
+export function equals(a: IRender, b: IRender): boolean {
 	return a && b && a.x === b.x && a.y === b.y
 }
 
-export function angle(vector: I): number {
+export function angle(vector: IRender): number {
 	return Math.atan2(vector.y, vector.x)
 }
 
-export function deprop(p: IProp, id: string): I {
+export function iRenderify(p: IView, id: string): IRender {
 	return {
 		id: id,
 		x: p.x,
@@ -114,6 +114,6 @@ export function deprop(p: IProp, id: string): I {
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d.pointsById[id], id)
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d.pointsById[id], id)
 }

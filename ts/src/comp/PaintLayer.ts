@@ -31,7 +31,7 @@ export declare namespace PaintLayer {
 	interface Attrs {
 		width: number
 		height: number
-		stroke: Stroke.I
+		stroke: Stroke.IRender
 	}
 	interface State {
 		model?: PaintLayerModel

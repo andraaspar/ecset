@@ -20,28 +20,28 @@
 import * as Document from './Document'
 import * as Point from './Point'
 
-export interface I {
+export interface IRender {
 	id?: string
-	center: Point.I
-	handleIn: Point.I
-	handleOut: Point.I
+	center: Point.IRender
+	handleIn: Point.IRender
+	handleOut: Point.IRender
 }
 
-export interface IProp {
+export interface IView {
 	centerId: string
 	handleInId: string
 	handleOutId: string
 }
 
-export function deprop(d: Document.IProp, p: IProp, id: string): I {
+export function iRenderify(d: Document.IView, p: IView, id: string): IRender {
 	return {
 		id: id,
-		center: Point.getDepropped(d, p.centerId),
-		handleIn: Point.getDepropped(d, p.handleInId),
-		handleOut: Point.getDepropped(d, p.handleOutId)
+		center: Point.getIRender(d, p.centerId),
+		handleIn: Point.getIRender(d, p.handleInId),
+		handleOut: Point.getIRender(d, p.handleOutId)
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.bezierPointsById[id], id)
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.bezierPointsById[id], id)
 }

@@ -33,8 +33,8 @@ export declare namespace VectorLayer {
 	interface Attrs {
 		width: number
 		height: number
-		document: Document.IProp
-		stroke: Stroke.I
+		document: Document.IView
+		stroke: Stroke.IRender
 	}
 	interface State {
 		model?: VectorLayerModel
@@ -128,7 +128,7 @@ export const VectorLayer: m.Comp<VectorLayer.Attrs, VectorLayer.State> = {
 	}
 }
 
-function getTriangleTransform(a: Point.I, b: Point.I, placeAtB: boolean): string {
+function getTriangleTransform(a: Point.IRender, b: Point.IRender, placeAtB: boolean): string {
 	let location = placeAtB ? b : a
 	return `rotate(${Point.angle({ x: b.x - a.x, y: b.y - a.y }) / Math.PI * 180} ${location.x} ${location.y}) translate(${location.x} ${location.y})`
 }

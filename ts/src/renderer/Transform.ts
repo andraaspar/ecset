@@ -20,29 +20,29 @@
 import * as Document from './Document'
 import * as Point from './Point'
 
-export interface I {
-	offset: Point.I
+export interface IRender {
+	offset: Point.IRender
 	scale: number
 	rotation: number
-	pivot: Point.I
+	pivot: Point.IRender
 }
 
-export interface IProp {
+export interface IView {
 	offsetId: string
 	scale: number
 	rotation: number
 	pivotId: string
 }
 
-export function deprop(d: Document.IProp, p: IProp): I {
+export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		offset: Point.getDepropped(d, p.offsetId),
-		pivot: Point.getDepropped(d, p.pivotId),
+		offset: Point.getIRender(d, p.offsetId),
+		pivot: Point.getIRender(d, p.pivotId),
 		rotation: p.rotation,
 		scale: p.scale,
 	}
 }
 
-export function getDepropped(d: Document.IProp, id: string): I {
-	return deprop(d, d.transformsById[id])
+export function getIRender(d: Document.IView, id: string): IRender {
+	return iRenderify(d, d.transformsById[id])
 }
