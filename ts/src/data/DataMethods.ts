@@ -17,30 +17,10 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as m from 'mithril'
+import { data } from './data'
 
-import { data } from '../data/data'
-
-export declare namespace Ecset {
-	interface Attrs {}
-	interface State {}
-}
-type Vnode = m.Vnode<Ecset.Attrs, Ecset.State>
-type VnodeDOM = m.VnodeDOM<Ecset.Attrs, Ecset.State>
-
-export const Ecset: m.Comp<Ecset.Attrs, Ecset.State> = {
-	
-	// oninit(v) {},
-	// onbeforeupdate(v, o) {},
-	view(v) {
-		return (
-			m('div',
-				'Ecset here.'
-			)
-		)
-	},
-	// oncreate(v) {},
-	// onupdate(v) {},
-	// onbeforeremove(v) {},
-	// onremove(v) {}
+export function createWorkers() {
+	for (let i = 0; i < 4; i++) {
+		data.renderers.push(new Worker('script/{{worker.js}}'))
+	}
 }
