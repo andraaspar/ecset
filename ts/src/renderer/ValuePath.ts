@@ -21,19 +21,22 @@ import * as Document from './Document'
 import * as ValueSegment from './ValueSegment'
 
 export interface IRender {
+	id: string
 	segments: ValueSegment.IRender[]
 	segmentTs: number[]
 }
 
 export interface IView {
+	id: string
 	segmentIds: string[]
-	segmentTs: number[]
+	segmentEndTs: number[]
 }
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		segments: p.segmentIds.map(id => ValueSegment.getIRender(d, id)),
-		segmentTs: p.segmentTs.slice(0)
+		segmentTs: p.segmentEndTs.slice(0)
 	}
 }
 

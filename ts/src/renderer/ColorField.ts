@@ -22,6 +22,7 @@ import * as ColorPath from './ColorPath'
 import * as Document from './Document'
 
 export interface IRender {
+	id: string
 	a: ColorPath.IRender
 	b: ColorPath.IRender
 	tTweenPaths: BezierPath.IRender[]
@@ -29,6 +30,7 @@ export interface IRender {
 }
 
 export interface IView {
+	id: string
 	aId: string
 	bId: string
 	tTweenPathIds: string[]
@@ -37,6 +39,7 @@ export interface IView {
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		a: ColorPath.getIRender(d, p.aId),
 		b: ColorPath.getIRender(d, p.bId),
 		colorTweenPaths: p.colorTweenPathIds.map(id => BezierPath.getIRender(d, id)),

@@ -21,17 +21,20 @@ import * as ColorSegment from './ColorSegment'
 import * as Documemt from './Document'
 
 export interface IRender {
+	id: string
 	segments: ColorSegment.IRender[]
 	segmentEndTs: number[]
 }
 
 export interface IView {
+	id: string
 	segmentIds: string[]
 	segmentEndTs: number[]
 }
 
 export function iRenderify(d: Documemt.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		segments: p.segmentIds.map(id => ColorSegment.getIRender(d, id)),
 		segmentEndTs: p.segmentEndTs.slice(0)
 	}

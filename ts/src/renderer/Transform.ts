@@ -21,6 +21,7 @@ import * as Document from './Document'
 import * as Point from './Point'
 
 export interface IRender {
+	id: string
 	offset: Point.IRender
 	scale: number
 	rotation: number
@@ -28,6 +29,7 @@ export interface IRender {
 }
 
 export interface IView {
+	id: string
 	offsetId: string
 	scale: number
 	rotation: number
@@ -36,6 +38,7 @@ export interface IView {
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		offset: Point.getIRender(d, p.offsetId),
 		pivot: Point.getIRender(d, p.pivotId),
 		rotation: p.rotation,

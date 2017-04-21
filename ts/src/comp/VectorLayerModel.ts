@@ -33,7 +33,7 @@ export default class VectorLayerModel {
 	startDrag(point: Point.IView, e: MouseEvent): void {
 		this.selection = point
 		this.startSelection = JSON.parse(JSON.stringify(point))
-		this.startMouse = { x: e.pageX, y: e.pageY }
+		this.startMouse = { id: undefined, x: e.pageX, y: e.pageY }
 		document.addEventListener('mouseup', this.stopDragBound)
 		document.addEventListener('mousemove', this.onMouseMovedBound)
 	}

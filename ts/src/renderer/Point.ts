@@ -22,12 +22,13 @@ import * as Document from './Document'
 import { Axis2D } from 'illa/Axis2D'
 
 export interface IRender {
-	id?: string
+	id: string
 	x: number
 	y: number
 }
 
 export interface IView {
+	id: string
 	x: number
 	y: number
 }
@@ -45,6 +46,7 @@ export function distance(a: IRender, b: IRender): number {
 
 export function add(a: IRender, b: IRender): IRender {
 	let result: IRender = {
+		id: undefined,
 		x: a.x + b.x,
 		y: a.y + b.y
 	}
@@ -53,6 +55,7 @@ export function add(a: IRender, b: IRender): IRender {
 
 export function subtract(a: IRender, b: IRender): IRender {
 	let result: IRender = {
+		id: undefined,
 		x: a.x - b.x,
 		y: a.y - b.y
 	}
@@ -67,11 +70,13 @@ export function perpendicularVector(vector: IRender, clockwise?: boolean): IRend
 	let result: IRender
 	if (clockwise) {
 		result = {
+			id: undefined,
 			x: vector.y,
 			y: -vector.x
 		}
 	} else {
 		result = {
+			id: undefined,
 			x: -vector.y,
 			y: vector.x
 		}
@@ -81,6 +86,7 @@ export function perpendicularVector(vector: IRender, clockwise?: boolean): IRend
 
 export function reverseVector(vector: IRender): IRender {
 	return {
+		id: undefined,
 		x: -vector.x,
 		y: -vector.y
 	}
@@ -89,6 +95,7 @@ export function reverseVector(vector: IRender): IRender {
 export function toUnitVector(vector: IRender, multiplier = 1): IRender {
 	let size = vectorSize(vector)
 	return {
+		id: undefined,
 		x: size ? vector.x / size * multiplier : 0,
 		y: size ? vector.y / size * multiplier : 0
 	}

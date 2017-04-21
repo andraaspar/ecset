@@ -17,10 +17,205 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { data } from './data'
+import * as BezierPath from '../renderer/BezierPath'
+import * as BezierPoint from '../renderer/BezierPoint'
+import * as Color from '../renderer/Color'
+import * as ColorSegment from '../renderer/ColorSegment'
+import * as Document from '../renderer/Document'
+import * as Stroke from '../renderer/Stroke'
+import * as Transform from '../renderer/Transform'
+import * as View from '../renderer/View'
+import * as m from 'mithril'
 
-export function createWorkers() {
-	for (let i = 0; i < 4; i++) {
+import { data, setData } from './data'
+
+import { RendererState } from './RendererState'
+import { uuid } from 'illa/StringUtil'
+
+export function createData() {
+	setData({
+		document: Document.create(),
+		renderers: [],
+		rendererStates: [],
+		maxRenderers: navigator.hardwareConcurrency || 1,
+		pixelsByStrokeId: {},
+	})
+
+	let blackId = uuid()
+	let whiteId = uuid()
+	data.document.colorsById[blackId] = Color.createGray(255, 0)
+	data.document.colorsById[whiteId] = Color.createGray(255, 255)
+
+	let pointZeroId = uuid()
+	data.document.pointsById[pointZeroId] = {
+		id: pointZeroId,
+		x: 0,
+		y: 0,
+	}
+	let pointOneId = uuid()
+	data.document.pointsById[pointOneId] = {
+		id: pointOneId,
+		x: 1,
+		y: 1,
+	}
+	let bezierPointZeroId = uuid()
+	data.document.bezierPointsById[bezierPointZeroId] = {
+		id: bezierPointZeroId,
+		centerId: pointZeroId,
+		handleInId: pointZeroId,
+		handleOutId: pointZeroId,
+	}
+	let bezierPointOneId = uuid()
+	data.document.bezierPointsById[bezierPointOneId] = {
+		id: bezierPointOneId,
+		centerId: pointOneId,
+		handleInId: pointOneId,
+		handleOutId: pointOneId,
+	}
+	let linearPathId = uuid()
+	data.document.bezierPathsById[linearPathId] = {
+		id: linearPathId,
+		pointIds: [bezierPointZeroId, bezierPointOneId],
+		isLoop: false,
+	}
+
+	let colorSegmentBlackToWhiteId = uuid()
+	data.document.colorSegmentsById[colorSegmentBlackToWhiteId] = {
+		id: colorSegmentBlackToWhiteId,
+		aId: blackId,
+		bId: whiteId,
+		tweenPathId: linearPathId,
+	}
+	let colorPathBlackToWhiteId = uuid()
+	data.document.colorPathsById[colorPathBlackToWhiteId] = {
+		id: colorPathBlackToWhiteId,
+		segmentIds: [colorSegmentBlackToWhiteId],
+		segmentEndTs: [1],
+	}
+	let colorFieldId = uuid()
+	data.document.colorFieldsById[colorFieldId] = {
+		id: colorFieldId,
+		aId: colorPathBlackToWhiteId,
+		bId: colorPathBlackToWhiteId,
+		tTweenPathIds: [linearPathId],
+		colorTweenPathIds: [linearPathId],
+	}
+	let colorStripId = uuid()
+	data.document.colorStripsById[colorStripId] = {
+		id: colorStripId,
+		colorFieldIds: [colorFieldId],
+		colorFieldEndTs: [1],
+	}
+	let colorStripPairId = uuid()
+	data.document.colorStripPairsById[colorStripPairId] = {
+		id: colorStripPairId,
+		leftId: colorStripId,
+		rightId: colorStripId,
+	}
+
+	let valueSegmentId = uuid()
+	data.document.valueSegmentsById[valueSegmentId] = {
+		id: valueSegmentId,
+		a: 255,
+		b: 255,
+		tweenPathId: linearPathId,
+	}
+	let valuePathId = uuid()
+	data.document.valuePathsById[valuePathId] = {
+		id: valuePathId,
+		segmentIds: [valueSegmentId],
+		segmentEndTs: [1],
+	}
+	let valuePathPairId = uuid()
+	data.document.valuePathPairsById[valuePathPairId] = {
+		id: valuePathPairId,
+		leftId: valuePathId,
+		rightId: valuePathId,
+	}
+
+	let transformId = uuid()
+	data.document.transformsById[transformId] = {
+		id: transformId,
+		offsetId: pointZeroId,
+		scale: 1,
+		rotation: 0,
+		pivotId: pointZeroId,
+	}
+
+	let strokeId = uuid()
+	data.document.strokesById[strokeId] = {
+		id: strokeId,
+		stripPairId: colorStripPairId,
+		bezierPathId: linearPathId,
+		thicknessPairId: valuePathPairId,
+		cutoffPairId: valuePathPairId,
+		childIds: [],
+		transformId: transformId,
+	}
+}
+
+export function render() {
+	let renderDocument = Document.iRenderify(data.document)
+	let [strokes, transformLists] = flattenStokes(renderDocument.strokes)
+	let renderersNeeded = Math.min(data.maxRenderers, strokes.length)
+	terminateBusyRenderers()
+	createRenderers(renderersNeeded)
+
+	data.renderers.forEach((renderer, index) => {
+		startRender(renderer, index, strokes, transformLists)
+	})
+	m.redraw()
+}
+
+function terminateBusyRenderers() {
+	for (let index = data.rendererStates.length - 1; index >= 0; index--) {
+		if (data.rendererStates[index] == RendererState.BUSY) {
+			data.renderers[index].terminate()
+			data.renderers.splice(index, 1)
+			data.rendererStates.splice(index, 1)
+		}
+	}
+}
+
+function createRenderers(count: number) {
+	while (data.renderers.length < count) {
 		data.renderers.push(new Worker('script/{{worker.js}}'))
+	}
+}
+
+function flattenStokes(strokes: Stroke.IRender[], transforms: Transform.IRender[] = []): [Stroke.IRender[], Transform.IRender[][]] {
+	let allStrokes: Stroke.IRender[] = []
+	let allTransformLists: Transform.IRender[][] = []
+	for (let stroke of strokes) {
+		allStrokes.push(stroke)
+		let transformList = transforms.concat([stroke.transform])
+		allTransformLists.push(transformList)
+		let [childStrokes, childTransformLists] = flattenStokes(stroke.children, transformList)
+		allStrokes = allStrokes.concat(childStrokes)
+		allTransformLists = allTransformLists.concat(childTransformLists)
+	}
+	return [allStrokes, allTransformLists]
+}
+
+function startRender(renderer: Worker, index: number, strokes: Stroke.IRender[], transformLists: Transform.IRender[][], ) {
+	let stroke = strokes.pop()
+	let transformList = transformLists.pop()
+	if (stroke) {
+		let pixels = data.pixelsByStrokeId[stroke.id] || new Uint8ClampedArray(data.document.width * data.document.height)
+		let view: View.IRender = {
+			height: data.document.height,
+			pixels: pixels,
+			stroke: stroke,
+			transforms: transformList,
+			width: data.document.width,
+		}
+		data.rendererStates[index] = RendererState.BUSY
+		renderer.postMessage(view)
+		renderer.onmessage = (e) => {
+			data.rendererStates[index] = RendererState.IDLE
+			data.pixelsByStrokeId[stroke.id] = e.data.pixels
+			startRender(renderer, index, strokes, transformLists)
+			m.redraw()
+		}
 	}
 }

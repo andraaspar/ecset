@@ -130,5 +130,5 @@ export const VectorLayer: m.Comp<VectorLayer.Attrs, VectorLayer.State> = {
 
 function getTriangleTransform(a: Point.IRender, b: Point.IRender, placeAtB: boolean): string {
 	let location = placeAtB ? b : a
-	return `rotate(${Point.angle({ x: b.x - a.x, y: b.y - a.y }) / Math.PI * 180} ${location.x} ${location.y}) translate(${location.x} ${location.y})`
+	return `rotate(${Point.angle({ id: undefined, x: b.x - a.x, y: b.y - a.y }) / Math.PI * 180} ${location.x} ${location.y}) translate(${location.x} ${location.y})`
 }

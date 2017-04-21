@@ -21,17 +21,20 @@ import * as ColorStrip from './ColorStrip'
 import * as Document from './Document'
 
 export interface IRender {
+	id: string
 	left: ColorStrip.IRender
 	right: ColorStrip.IRender
 }
 
 export interface IView {
+	id: string
 	leftId: string
 	rightId: string
 }
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		left: ColorStrip.getIRender(d, p.leftId),
 		right: ColorStrip.getIRender(d, p.rightId)
 	}

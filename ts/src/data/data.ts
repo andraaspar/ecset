@@ -19,10 +19,17 @@
 
 import * as Document from '../renderer/Document'
 
-export const data: {
+import { RendererState } from './RendererState'
+
+export let data: {
 	document: Document.IView
 	renderers: Worker[]
-} = {
-	document: Document.create(),
-	renderers: [],
+	rendererStates: RendererState[]
+	maxRenderers: number
+	pixelsByStrokeId: {[_: string]: Uint8ClampedArray}
+}
+
+export function setData(v: typeof data) {
+	if (data) throw 'oor9sa'
+	data = v
 }

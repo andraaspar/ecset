@@ -19,6 +19,8 @@
 
 import * as Document from './Document'
 
+import { data } from '../data/data'
+
 export type IRender = number[]
 
 export type IView = number[]
@@ -42,4 +44,18 @@ export function iRenderify(p: IView): IRender {
 
 export function getIRender(d: Document.IView, id: string): IRender {
 	return iRenderify(d.colorsById[id])
+}
+
+export function create(alphaValue: number, ...values: number[]): IView {
+	let result = [alphaValue].concat(values).map(value => Math.max(0, Math.min(255, Math.floor(value)) || 0))
+	if (data.document.channelCount != result.length) throw 'oorba3'
+	return result
+}
+
+export function createGray(alphaValue: number, value: number): IView {
+	let values: number[] = [alphaValue]
+	for (let i = 1; i < data.document.channelCount; i++) {
+		values.push(value)
+	}
+	return create.apply(undefined, values)
 }

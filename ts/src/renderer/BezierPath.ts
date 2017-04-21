@@ -24,11 +24,13 @@ import * as Path from './Path'
 import * as Point from './Point'
 
 export interface IRender {
+	id: string
 	points: BezierPoint.IRender[]
 	isLoop: boolean
 }
 
 export interface IView {
+	id: string
 	pointIds: string[]
 	isLoop: boolean
 }
@@ -57,7 +59,7 @@ export function linearize(bezierPath: IRender, detailMultiplier: number): Path.I
 		let segmentPath = BezierSegment.linearize(bezierSegment, detailMultiplier)
 		path.points = path.points.concat(segmentPath.slice(1, -1))
 	} else {
-		path.points = [{x: bezierPath.points[0].handleIn.x, y: bezierPath.points[0].handleIn.y}, ...path.points, {x: bezierPath.points[n].handleOut.x, y: bezierPath.points[n].handleOut.y}]
+		path.points = [{id: undefined, x: bezierPath.points[0].handleIn.x, y: bezierPath.points[0].handleIn.y}, ...path.points, {id: undefined, x: bezierPath.points[n].handleOut.x, y: bezierPath.points[n].handleOut.y}]
 	}
 
 	return path
@@ -84,6 +86,7 @@ export function toSvg(bezierPath: IRender): string {
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		points: p.pointIds.map(id => BezierPoint.getIRender(d, id)),
 		isLoop: p.isLoop
 	}

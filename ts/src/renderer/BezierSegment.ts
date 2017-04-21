@@ -81,6 +81,7 @@ export function linearize(segment: IRender, detailMultiplier: number): Point.IRe
 				positionsX.push(pos[0])
 			} else {
 				result.push({
+					id: undefined,
 					x: positionsX[t],
 					y: pos[0]
 				})

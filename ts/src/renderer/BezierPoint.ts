@@ -21,13 +21,14 @@ import * as Document from './Document'
 import * as Point from './Point'
 
 export interface IRender {
-	id?: string
+	id: string
 	center: Point.IRender
 	handleIn: Point.IRender
 	handleOut: Point.IRender
 }
 
 export interface IView {
+	id: string
 	centerId: string
 	handleInId: string
 	handleOutId: string

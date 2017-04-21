@@ -25,6 +25,7 @@ import * as Transform from './Transform'
 import * as ValuePathPair from './ValuePathPair'
 
 export interface IRender {
+	id: string
 	stripPair: ColorStripPair.IRender
 	bezierPath: BezierPath.IRender
 	thicknessPair: ValuePathPair.IRender
@@ -34,6 +35,7 @@ export interface IRender {
 }
 
 export interface IView {
+	id: string
 	stripPairId: string
 	bezierPathId: string
 	thicknessPairId: string
@@ -44,6 +46,7 @@ export interface IView {
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		bezierPath: BezierPath.getIRender(d, p.bezierPathId),
 		stripPair: ColorStripPair.getIRender(d, p.stripPairId),
 		thicknessPair: ValuePathPair.getIRender(d, p.thicknessPairId),

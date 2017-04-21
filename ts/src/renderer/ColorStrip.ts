@@ -21,18 +21,21 @@ import * as ColorField from './ColorField'
 import * as Document from './Document'
 
 export interface IRender {
+	id: string
 	colorFields: ColorField.IRender[]
-	colorFieldTs: number[]
+	colorFieldEndTs: number[]
 }
 
 export interface IView {
+	id: string
 	colorFieldIds: string[]
-	colorFieldTs: number[]
+	colorFieldEndTs: number[]
 }
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
-		colorFieldTs: p.colorFieldTs.slice(0),
+		id: p.id,
+		colorFieldEndTs: p.colorFieldEndTs.slice(0),
 		colorFields: p.colorFieldIds.map(id => ColorField.getIRender(d, id))
 	}
 }

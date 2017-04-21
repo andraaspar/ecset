@@ -21,12 +21,14 @@ import * as BezierPath from './BezierPath'
 import * as Document from './Document'
 
 export interface IRender {
+	id: string
 	a: number
 	b: number
 	tweenPath: BezierPath.IRender
 }
 
 export interface IView {
+	id: string
 	a: number
 	b: number
 	tweenPathId: string
@@ -34,6 +36,7 @@ export interface IView {
 
 export function iRenderify(d: Document.IView, p: IView): IRender {
 	return {
+		id: p.id,
 		a: p.a,
 		b: p.b,
 		tweenPath: BezierPath.getIRender(d, p.tweenPathId) 

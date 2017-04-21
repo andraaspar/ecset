@@ -149,9 +149,9 @@ export default class Renderer {
 				length: Segment.length(segment),
 				tGain: { a: 0, b: 0 },
 				originDistance: 0,
-				distanceChange: { x: 0, y: 0 },
+				distanceChange: { id: undefined, x: 0, y: 0 },
 				originT: 0,
-				tChange: { x: 0, y: 0 },
+				tChange: { id: undefined, x: 0, y: 0 },
 				focusDistance: Infinity,
 				focusSide: 0
 			}
@@ -178,15 +178,15 @@ export default class Renderer {
 				this.calculateFocus(segmentInfo)
 			}
 
-			let origin: Point.IRender = { x: 0, y: 0 }
+			let origin: Point.IRender = { id: undefined, x: 0, y: 0 }
 			let originDistance = Segment.pointDistance(segment, origin) * Segment.pointSide(segment, origin)
 			let originT = Segment.pointT(segment, origin)
 
-			let xPoint: Point.IRender = { x: 1, y: 0 }
+			let xPoint: Point.IRender = { id: undefined, x: 1, y: 0 }
 			let xPointDistance = Segment.pointDistance(segment, xPoint) * Segment.pointSide(segment, xPoint)
 			let xPointT = Segment.pointT(segment, xPoint)
 
-			let yPoint: Point.IRender = { x: 0, y: 1 }
+			let yPoint: Point.IRender = { id: undefined, x: 0, y: 1 }
 			let yPointDistance = Segment.pointDistance(segment, yPoint) * Segment.pointSide(segment, yPoint)
 			let yPointT = Segment.pointT(segment, yPoint)
 

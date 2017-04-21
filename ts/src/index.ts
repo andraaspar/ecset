@@ -22,10 +22,14 @@ import './statics.ts'
 import * as DataMethods from './data/DataMethods'
 import * as m from 'mithril'
 
+import { createData, render } from './data/DataMethods'
+
 import { Ecset } from './comp/Ecset'
 
 const ECSET_ELEMENT = document.getElementById('ecset')
 
-DataMethods.createWorkers()
+createData()
 
 m.mount(ECSET_ELEMENT, Ecset)
+
+render()

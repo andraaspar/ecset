@@ -39,12 +39,14 @@ export interface IRender {
 export interface IView {
 	bezierPathsById: {[id: string]: BezierPath.IView}
 	bezierPointsById: {[id: string]: BezierPoint.IView}
+	channelCount: number
 	colorFieldsById: {[id: string]: ColorField.IView}
 	colorPathsById: {[id: string]: ColorPath.IView}
 	colorsById: {[id: string]: Color.IView}
 	colorSegmentsById: {[id: string]: ColorSegment.IView}
 	colorStripPairsById: {[id: string]: ColorStripPair.IView}
 	colorStripsById: {[id: string]: ColorStrip.IView}
+	height: number
 	pointsById: {[id: string]: Point.IView}
 	strokeIds: string[]
 	strokesById: {[id: string]: Stroke.IView}
@@ -52,25 +54,29 @@ export interface IView {
 	valuePathPairsById: {[id: string]: ValuePathPair.IView}
 	valuePathsById: {[id: string]: ValuePath.IView}
 	valueSegmentsById: {[id: string]: ValueSegment.IView}
+	width: number
 }
 
 export function create(): IView {
 	return {
 		bezierPathsById: {},
 		bezierPointsById: {},
+		channelCount: 4,
 		colorFieldsById: {},
 		colorPathsById: {},
 		colorsById: {},
 		colorSegmentsById: {},
 		colorStripPairsById: {},
 		colorStripsById: {},
+		height: 1000,
 		pointsById: {},
 		strokeIds: [],
 		strokesById: {},
 		transformsById: {},
 		valuePathPairsById: {},
 		valuePathsById: {},
-		valueSegmentsById: {}
+		valueSegmentsById: {},
+		width: 1000,
 	}
 }
 

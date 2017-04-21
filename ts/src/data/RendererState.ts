@@ -17,29 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as Document from './Document'
-import * as ValuePath from './ValuePath'
-
-export interface IRender {
-	id: string
-	left: ValuePath.IRender
-	right: ValuePath.IRender
-}
-
-export interface IView {
-	id: string
-	leftId: string
-	rightId: string
-}
-
-export function iRenderify(d: Document.IView, p: IView): IRender {
-	return {
-		id: p.id,
-		left: ValuePath.getIRender(d, p.leftId),
-		right: ValuePath.getIRender(d, p.rightId)
-	}
-}
-
-export function getIRender(d: Document.IView, id: string): IRender {
-	return iRenderify(d, d.valuePathPairsById[id])
+export enum RendererState {
+	IDLE,
+	BUSY,
 }
