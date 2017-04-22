@@ -66,8 +66,8 @@ module.exports = function (grunt) {
 			},
 			webpack: {
 				command: [
-					'webpack --config webpack.index.config.js',
-					'webpack --config webpack.worker.config.js',
+					'webpack --config webpack.index.config.js',// --display-chunks --display-reasons',
+					'webpack --config webpack.worker.config.js',// --display-chunks --display-reasons',
 				].join('&&')
 			}
 		}

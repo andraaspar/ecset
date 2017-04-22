@@ -20,16 +20,15 @@
 import * as m from 'mithril'
 
 import { IRenderStroke } from '../data/IRenderStroke'
+import { IViewStroke } from '../data/IViewStroke'
 import { P } from '../statics'
 import { PaintLayerModel } from './PaintLayerModel'
-import { bezierPathToSvg } from '../data/BezierPathMethods'
-import { bind } from 'illa/FunctionUtil'
 
 export declare namespace PaintLayerComp {
 	interface Attrs {
 		width: number
 		height: number
-		stroke: IRenderStroke
+		strokeId: string
 	}
 	interface State {
 		model?: PaintLayerModel
@@ -43,7 +42,6 @@ export const PaintLayerComp: m.Comp<PaintLayerComp.Attrs, PaintLayerComp.State> 
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		let pathD: string = bezierPathToSvg(v.attrs.stroke.bezierPath)
 		return (
 			m('div', {'class': `${P}-canvas-layer`},
 				m('canvas', {
@@ -55,14 +53,12 @@ export const PaintLayerComp: m.Comp<PaintLayerComp.Attrs, PaintLayerComp.State> 
 		)
 	},
 	oncreate(v) {
-		v.state.model = new PaintLayerModel(v.attrs.stroke, <HTMLDivElement>v.dom)
-		v.state.model.render()
+		v.state.model = new PaintLayerModel(v.dom)
+		v.state.model.update(v.attrs.strokeId)
 	},
 	onupdate(v) {
-		v.state.model.render()
+		v.state.model.update(v.attrs.strokeId)
 	},
 	// onbeforeremove(v) {},
-	onremove(v) {
-		v.state.model.kill()
-	}
+	// onremove(v) {}
 }

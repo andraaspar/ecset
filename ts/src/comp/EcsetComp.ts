@@ -19,23 +19,23 @@
 
 import * as m from 'mithril'
 
+import { CanvasComp } from './CanvasComp'
+
 export declare namespace EcsetComp {
-	interface Attrs {}
-	interface State {}
+	interface Attrs { }
+	interface State { }
 }
 type Vnode = m.Vnode<EcsetComp.Attrs, EcsetComp.State>
 type VnodeDOM = m.VnodeDOM<EcsetComp.Attrs, EcsetComp.State>
 
 export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
-	
+
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		return (
-			m('div',
-				'Ecset here.'
-			)
-		)
+		return [
+			m(CanvasComp)
+		]
 	},
 	// oncreate(v) {},
 	// onupdate(v) {},

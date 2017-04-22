@@ -23,65 +23,29 @@ import { bind, debounce } from 'illa/FunctionUtil'
 
 import { IRenderStroke } from '../data/IRenderStroke'
 import { IRenderView } from '../data/IRenderView'
+import { IViewStroke } from '../data/IViewStroke'
+import { data } from '../data/DataMethods'
 import jQuery from 'jquery-ts'
 
 export class PaintLayerModel {
 
+	private canvas: HTMLCanvasElement
 	private context: CanvasRenderingContext2D
 	private imageData: ImageData
-	private worker: Worker
-	private renderStartTime: number
-	private isRendering: boolean
-	private canvas: HTMLCanvasElement
 
 	constructor(
-		private stroke: IRenderStroke,
-		canvasContainer: HTMLDivElement
+		canvasContainer: Element,
 	) {
 		this.canvas = <HTMLCanvasElement>jQuery(canvasContainer).find('canvas')[0]
 		this.context = this.canvas.getContext('2d')
+		this.imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
 	}
 
-	render = debounce(this.renderInternal, this, 400)
-	protected renderInternal() {
-		if (this.isRendering) {
-			this.abortRender()
+	update(strokeId: string) {
+		let pixels = data.pixelsByStrokeId[strokeId]
+		if (pixels) {
+			this.imageData.data.set(pixels)
+			this.context.putImageData(this.imageData, 0, 0)
 		}
-		if (!this.imageData) {
-			this.imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
-		}
-		if (!this.worker) {
-			console.log('Creating new worker...')
-			this.worker = new Worker('script/{{worker.js}}')
-			this.worker.onmessage = (e) => {
-				// console.log('Outputting image data...')
-				this.isRendering = false
-				this.context.putImageData(e.data.pixels, 0, 0)
-				console.log(`Render took: ${Date.now() - this.renderStartTime} ms`)
-			}
-		}
-		this.renderStartTime = Date.now()
-		this.isRendering = true
-		let view: IRenderView = {
-			height: this.imageData.height,
-			pixels: this.imageData.data,
-			stroke: this.stroke,
-			transforms: [],
-			width: this.imageData.width
-		}
-		this.worker.postMessage(view);
-	}
-	
-	abortRender(): void {
-		this.render.cancel()
-		if (this.worker) {
-			console.log('Terminating worker...')
-			this.worker.terminate()
-			this.worker = null
-		}
-	}
-
-	kill(): void {
-		this.abortRender()
 	}
 }

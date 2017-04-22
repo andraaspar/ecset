@@ -37,10 +37,22 @@ export class Renderer {
 	private segmentCount: number
 	private segmentInfos: ISegmentInfo[]
 	private pathLength: number
-	private startColorLeft = createViewColor(undefined, 255, 0, 0, 255)
-	private endColorLeft = createViewColor(undefined, 255, 255, 0, 0)
-	private startColorRight = createViewColor(undefined, 255, 255, 255, 0)
-	private endColorRight = createViewColor(undefined, 255, 0, 255, 128)
+	private startColorLeft: IRenderColor = {
+		id: undefined,
+		channelValues: [255, 0, 0, 255],
+	}
+	private endColorLeft: IRenderColor = {
+		id: undefined,
+		channelValues: [255, 255, 0, 0],
+	}
+	private startColorRight: IRenderColor = {
+		id: undefined,
+		channelValues: [255, 255, 255, 0],
+	}
+	private endColorRight: IRenderColor = {
+		id: undefined,
+		channelValues: [255, 0, 255, 128],
+	}
 	private distanceLimit = 200
 	private path: IPath
 
@@ -71,7 +83,9 @@ export class Renderer {
 		// if (x == 1023 && y == 0) {
 		// 	console.log('.')
 		// }
-		let result: IColor = createGrayViewColor(undefined, 0, 0)
+		let result: IColor = {
+			channelValues: [0, 0, 0, 0],
+		}
 		let currentLength = 0
 		let currentT = 0
 		let prevT: number = Infinity

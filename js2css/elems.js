@@ -29,5 +29,7 @@ body
 {
 	background: ${GRAY_7};
 	color: white;
+	height: 100%;
+	margin: 0;
 }
 `

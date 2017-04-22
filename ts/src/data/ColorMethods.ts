@@ -59,7 +59,7 @@ export function createViewColor(id: string, alphaValue: number, ...values: numbe
 }
 
 export function createGrayViewColor(id: string, alphaValue: number, value: number) {
-	let values: number[] = [alphaValue]
+	let values: number[] = []
 	for (let i = 1; i < data.document.channelCount; i++) {
 		values.push(value)
 	}

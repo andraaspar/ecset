@@ -17,16 +17,9 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as m from 'mithril'
-
-import { createViewDocument, viewDocumentToRenderDocument } from './DocumentMethods'
-
 import { IData } from './IData'
-import { IRenderStroke } from './IRenderStroke'
-import { IRenderTransform } from './IRenderTransform'
-import { IRenderView } from './IRenderView'
-import { RendererState } from './RendererState'
 import { createGrayViewColor } from './ColorMethods'
+import { createViewDocument } from './DocumentMethods'
 import { uuid } from 'illa/StringUtil'
 
 export let data: IData
@@ -44,7 +37,7 @@ export function createData() {
 		maxRenderers: navigator.hardwareConcurrency || 1,
 		pixelsByStrokeId: {},
 	})
-
+	
 	let blackId = uuid()
 	let whiteId = uuid()
 	data.document.colorsById[blackId] = createGrayViewColor(blackId, 255, 0)
@@ -62,24 +55,82 @@ export function createData() {
 		x: 1,
 		y: 1,
 	}
+	let pointAId = uuid()
+	data.document.pointsById[pointAId] = {
+		id: pointAId,
+		x: 100,
+		y: 100,
+	}
+	let pointBId = uuid()
+	data.document.pointsById[pointBId] = {
+		id: pointBId,
+		x: 300,
+		y: 80,
+	}
+	let pointCId = uuid()
+	data.document.pointsById[pointCId] = {
+		id: pointCId,
+		x: 400,
+		y: 100,
+	}
+	let pointDId = uuid()
+	data.document.pointsById[pointDId] = {
+		id: pointDId,
+		x: 600,
+		y: 900,
+	}
+	let pointEId = uuid()
+	data.document.pointsById[pointEId] = {
+		id: pointEId,
+		x: 700,
+		y: 920,
+	}
+	let pointFId = uuid()
+	data.document.pointsById[pointFId] = {
+		id: pointFId,
+		x: 900,
+		y: 900,
+	}
+	
 	let bezierPointZeroId = uuid()
 	data.document.bezierPointsById[bezierPointZeroId] = {
 		id: bezierPointZeroId,
-		centerId: pointZeroId,
 		handleInId: pointZeroId,
+		centerId: pointZeroId,
 		handleOutId: pointZeroId,
 	}
 	let bezierPointOneId = uuid()
 	data.document.bezierPointsById[bezierPointOneId] = {
 		id: bezierPointOneId,
-		centerId: pointOneId,
 		handleInId: pointOneId,
+		centerId: pointOneId,
 		handleOutId: pointOneId,
 	}
+	let bezierPointAId = uuid()
+	data.document.bezierPointsById[bezierPointAId] = {
+		id: bezierPointAId,
+		handleInId: pointAId,
+		centerId: pointBId,
+		handleOutId: pointCId,
+	}
+	let bezierPointBId = uuid()
+	data.document.bezierPointsById[bezierPointBId] = {
+		id: bezierPointBId,
+		handleInId: pointDId,
+		centerId: pointEId,
+		handleOutId: pointFId,
+	}
+	
 	let linearPathId = uuid()
 	data.document.bezierPathsById[linearPathId] = {
 		id: linearPathId,
 		pointIds: [bezierPointZeroId, bezierPointOneId],
+		isLoop: false,
+	}
+	let curvePathId = uuid()
+	data.document.bezierPathsById[curvePathId] = {
+		id: curvePathId,
+		pointIds: [bezierPointAId, bezierPointBId],
 		isLoop: false,
 	}
 
@@ -150,76 +201,12 @@ export function createData() {
 	data.document.strokesById[strokeId] = {
 		id: strokeId,
 		stripPairId: colorStripPairId,
-		bezierPathId: linearPathId,
+		bezierPathId: curvePathId,
 		thicknessPairId: valuePathPairId,
 		cutoffPairId: valuePathPairId,
 		childIds: [],
 		transformId: transformId,
 	}
-}
-
-export function render() {
-	let renderDocument = viewDocumentToRenderDocument(data.document)
-	let [strokes, transformLists] = flattenStokes(renderDocument.strokes)
-	let renderersNeeded = Math.min(data.maxRenderers, strokes.length)
-	terminateBusyRenderers()
-	createRenderers(renderersNeeded)
-
-	data.renderers.forEach((renderer, index) => {
-		startRender(renderer, index, strokes, transformLists)
-	})
-	m.redraw()
-}
-
-function terminateBusyRenderers() {
-	for (let index = data.rendererStates.length - 1; index >= 0; index--) {
-		if (data.rendererStates[index] == RendererState.BUSY) {
-			data.renderers[index].terminate()
-			data.renderers.splice(index, 1)
-			data.rendererStates.splice(index, 1)
-		}
-	}
-}
-
-function createRenderers(count: number) {
-	while (data.renderers.length < count) {
-		data.renderers.push(new Worker('script/{{worker.js}}'))
-	}
-}
-
-function flattenStokes(strokes: IRenderStroke[], transforms: IRenderTransform[] = []): [IRenderStroke[], IRenderTransform[][]] {
-	let allStrokes: IRenderStroke[] = []
-	let allTransformLists: IRenderTransform[][] = []
-	for (let stroke of strokes) {
-		allStrokes.push(stroke)
-		let transformList = transforms.concat([stroke.transform])
-		allTransformLists.push(transformList)
-		let [childStrokes, childTransformLists] = flattenStokes(stroke.children, transformList)
-		allStrokes = allStrokes.concat(childStrokes)
-		allTransformLists = allTransformLists.concat(childTransformLists)
-	}
-	return [allStrokes, allTransformLists]
-}
-
-function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], transformLists: IRenderTransform[][], ) {
-	let stroke = strokes.pop()
-	let transformList = transformLists.pop()
-	if (stroke) {
-		let pixels = data.pixelsByStrokeId[stroke.id] || new Uint8ClampedArray(data.document.width * data.document.height * data.document.channelCount)
-		let view: IRenderView = {
-			height: data.document.height,
-			pixels: pixels,
-			stroke: stroke,
-			transforms: transformList,
-			width: data.document.width,
-		}
-		data.rendererStates[index] = RendererState.BUSY
-		renderer.postMessage(view)
-		renderer.onmessage = (e) => {
-			data.rendererStates[index] = RendererState.IDLE
-			data.pixelsByStrokeId[stroke.id] = e.data.pixels
-			startRender(renderer, index, strokes, transformLists)
-			m.redraw()
-		}
-	}
+	
+	data.document.strokeIds.push(strokeId)
 }

@@ -23,6 +23,7 @@ import { GLOBAL } from 'illa/GLOBAL'
 import { IRenderPoint } from '../data/IRenderPoint'
 import { IViewPoint } from '../data/IViewPoint'
 import { bind } from 'illa/FunctionUtil'
+import { render } from '../data/RenderMethods'
 
 export class VectorLayerModel {
 
@@ -43,6 +44,7 @@ export class VectorLayerModel {
 		this.selection = null
 		document.removeEventListener('mouseup', this.stopDragBound)
 		document.removeEventListener('mousemove', this.onMouseMovedBound)
+		render()
 	}
 
 	onMouseMovedBound = bind(this.onMouseMoved, this)

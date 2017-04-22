@@ -8,7 +8,6 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts', '.js'],
 		modules: [
-			'bower_components',
 			'node_modules',
 			'.'
 		],

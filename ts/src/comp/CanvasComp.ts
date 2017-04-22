@@ -23,44 +23,38 @@ import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
 import { VectorLayerComp } from './VectorLayerComp'
+import { data } from '../data/DataMethods'
 import { getRenderStroke } from '../data/StrokeMethods'
 
 export declare namespace CanvasComp {
-	interface Attrs {
-		document: IViewDocument
-	}
-	interface State {}
+	interface Attrs { }
+	interface State { }
 }
 type Vnode = m.Vnode<CanvasComp.Attrs, CanvasComp.State>
 type VnodeDOM = m.VnodeDOM<CanvasComp.Attrs, CanvasComp.State>
 
 export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
-	
+
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return (
-			m('div', {'class': `${P}-canvas`},
-				v.attrs.document.strokeIds.map(id => {
-					let stroke = getRenderStroke(v.attrs.document, id)
-					return m(PaintLayerComp, {
-						'width': 1024,
-						'height': 768,
-						'stroke': stroke,
+			m('div', { 'class': `${P}-canvas` },
+				data.document.strokeIds.map(id => (
+					m(PaintLayerComp, {
+						'width': data.document.width,
+						'height': data.document.height,
+						'strokeId': id,
 					})
-				}),
-				v.attrs.document.strokeIds.map(id => {
-					let stroke = getRenderStroke(v.attrs.document, id)
-					return m(VectorLayerComp, {
-						'width': 1024,
-						'height': 768,
-						'document': v.attrs.document,
-						'stroke': stroke,
+				)),
+				data.document.strokeIds.map(id => (
+					m(VectorLayerComp, {
+						'width': data.document.width,
+						'height': data.document.height,
+						'document': data.document,
+						'stroke': getRenderStroke(data.document, id),
 					})
-				}),
-				m('div', {'style': {marginTop: '768px'}},
-					JSON.stringify(v.attrs.document/*, undefined, '\t'*/)
-				)
+				))
 			)
 		)
 	},

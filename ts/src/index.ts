@@ -21,9 +21,9 @@ import './statics.ts'
 
 import * as m from 'mithril'
 
-import { createData, render } from './data/DataMethods'
-
 import { EcsetComp } from './comp/EcsetComp'
+import { createData } from './data/DataMethods'
+import { render } from './data/RenderMethods'
 
 const ECSET_ELEMENT = document.getElementById('ecset')
 
