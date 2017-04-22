@@ -17,18 +17,28 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
-
 import * as m from 'mithril'
 
-import { createData, render } from './data/DataMethods'
+export declare namespace EcsetComp {
+	interface Attrs {}
+	interface State {}
+}
+type Vnode = m.Vnode<EcsetComp.Attrs, EcsetComp.State>
+type VnodeDOM = m.VnodeDOM<EcsetComp.Attrs, EcsetComp.State>
 
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
+	
+	// oninit(v) {},
+	// onbeforeupdate(v, o) {},
+	view(v) {
+		return (
+			m('div',
+				'Ecset here.'
+			)
+		)
+	},
+	// oncreate(v) {},
+	// onupdate(v) {},
+	// onbeforeremove(v) {},
+	// onremove(v) {}
+}

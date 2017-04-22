@@ -17,18 +17,20 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderColorPath } from './IRenderColorPath'
+import { IRenderColorSegment } from './IRenderColorSegment'
+import { IViewColorPath } from './IViewColorPath'
+import { IViewDocument } from './IViewDocument'
+import { getRenderColorSegment } from './ColorSegmentMethods'
 
-import * as m from 'mithril'
+export function viewColorPathToRenderColorPath(d: IViewDocument, p: IViewColorPath): IRenderColorPath {
+	return {
+		id: p.id,
+		segments: p.segmentIds.map(id => getRenderColorSegment(d, id)),
+		segmentEndTs: p.segmentEndTs.slice(0)
+	}
+}
 
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function getRenderColorPath(d: IViewDocument, id: string): IRenderColorPath {
+	return viewColorPathToRenderColorPath(d, d.colorPathsById[id])
+}

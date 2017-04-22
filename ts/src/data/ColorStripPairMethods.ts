@@ -17,18 +17,19 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderColorStripPair } from './IRenderColorStripPair'
+import { IViewColorStripPair } from './IViewColorStripPair'
+import { IViewDocument } from './IViewDocument'
+import { getRenderColorStrip } from './ColorStripMethods'
 
-import * as m from 'mithril'
+export function viewColorStripPairToRenderColorStripPair(d: IViewDocument, p: IViewColorStripPair): IRenderColorStripPair {
+	return {
+		id: p.id,
+		left: getRenderColorStrip(d, p.leftId),
+		right: getRenderColorStrip(d, p.rightId)
+	}
+}
 
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function getRenderColorStripPair(d: IViewDocument, id: string): IRenderColorStripPair {
+	return viewColorStripPairToRenderColorStripPair(d, d.colorStripPairsById[id])
+}

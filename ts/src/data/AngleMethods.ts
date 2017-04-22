@@ -17,18 +17,28 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+const DOUBLE_PI = Math.PI * 2
 
-import * as m from 'mithril'
+export function angleSide(axis: number, angle: number): number {
+	axis = normalizeAngle(axis)
+	angle = normalizeAngle(angle)
+	if ((angle <= axis && angle > axis - Math.PI) || (angle > axis + Math.PI && angle <= axis + 2 * Math.PI)) {
+		return -1
+	} else {
+		return 1
+	}
+}
 
-import { createData, render } from './data/DataMethods'
+export function normalizeAngle(angle: number): number {
+	angle %= DOUBLE_PI
+	if (angle < 0) angle += DOUBLE_PI
+	return angle
+}
 
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function angleDifference(a: number, b: number): number {
+	let result = a - b
+	if (result < 0) result += DOUBLE_PI // 0 -> 360
+	result -= Math.PI // -180 -> 180
+	result = Math.abs(result) // 0 -> 180
+	return result
+}

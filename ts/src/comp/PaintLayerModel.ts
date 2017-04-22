@@ -17,19 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as BezierPath from '../renderer/BezierPath'
-import * as Path from '../renderer/Path'
-import * as Point from '../renderer/Point'
-import * as Stroke from '../renderer/Stroke'
-import * as View from '../renderer/View'
 import * as m from 'mithril'
 
 import { bind, debounce } from 'illa/FunctionUtil'
 
-import P from './P'
+import { IRenderStroke } from '../data/IRenderStroke'
+import { IRenderView } from '../data/IRenderView'
 import jQuery from 'jquery-ts'
 
-export default class PaintLayerModel {
+export class PaintLayerModel {
 
 	private context: CanvasRenderingContext2D
 	private imageData: ImageData
@@ -39,7 +35,7 @@ export default class PaintLayerModel {
 	private canvas: HTMLCanvasElement
 
 	constructor(
-		private stroke: Stroke.IRender,
+		private stroke: IRenderStroke,
 		canvasContainer: HTMLDivElement
 	) {
 		this.canvas = <HTMLCanvasElement>jQuery(canvasContainer).find('canvas')[0]
@@ -66,7 +62,7 @@ export default class PaintLayerModel {
 		}
 		this.renderStartTime = Date.now()
 		this.isRendering = true
-		let view: View.IRender = {
+		let view: IRenderView = {
 			height: this.imageData.height,
 			pixels: this.imageData.data,
 			stroke: this.stroke,

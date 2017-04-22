@@ -17,18 +17,17 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderBezierPath } from './IRenderBezierPath'
+import { IRenderColorStripPair } from './IRenderColorStripPair'
+import { IRenderTransform } from './IRenderTransform'
+import { IRenderValuePathPair } from './IRenderValuePathPair'
 
-import * as m from 'mithril'
-
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export interface IRenderStroke {
+	id: string
+	stripPair: IRenderColorStripPair
+	bezierPath: IRenderBezierPath
+	thicknessPair: IRenderValuePathPair
+	cutoffPair: IRenderValuePathPair
+	children: IRenderStroke[]
+	transform: IRenderTransform
+}

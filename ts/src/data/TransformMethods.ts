@@ -17,18 +17,22 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderPoint } from './IRenderPoint'
+import { IRenderTransform } from './IRenderTransform'
+import { IViewDocument } from './IViewDocument'
+import { IViewTransform } from './IViewTransform'
+import { getRenderPoint } from './PointMethods'
 
-import * as m from 'mithril'
+export function viewTransformToRenderTransform(d: IViewDocument, p: IViewTransform): IRenderTransform {
+	return {
+		id: p.id,
+		offset: getRenderPoint(d, p.offsetId),
+		pivot: getRenderPoint(d, p.pivotId),
+		rotation: p.rotation,
+		scale: p.scale,
+	}
+}
 
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function getRenderTransform(d: IViewDocument, id: string): IRenderTransform {
+	return viewTransformToRenderTransform(d, d.transformsById[id])
+}

@@ -17,18 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderBezierPath } from './IRenderBezierPath'
+import { IRenderColor } from './IRenderColor'
 
-import * as m from 'mithril'
-
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export interface IRenderColorSegment {
+	id: string
+	a: IRenderColor
+	b: IRenderColor
+	tweenPath: IRenderBezierPath
+}

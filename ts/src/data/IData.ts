@@ -17,18 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IViewDocument } from './IViewDocument'
+import { RendererState } from './RendererState'
 
-import * as m from 'mithril'
-
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export interface IData {
+	document: IViewDocument
+	renderers: Worker[]
+	rendererStates: RendererState[]
+	maxRenderers: number
+	pixelsByStrokeId: {[_: string]: Uint8ClampedArray}
+}

@@ -17,18 +17,20 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderBezierPoint } from './IRenderBezierPoint'
+import { IViewBezierPoint } from './IViewBezierPoint'
+import { IViewDocument } from './IViewDocument'
+import { getRenderPoint } from './PointMethods'
 
-import * as m from 'mithril'
+export function viewBezierPointToRenderBezierPoint(d: IViewDocument, p: IViewBezierPoint, id: string): IRenderBezierPoint {
+	return {
+		id: id,
+		center: getRenderPoint(d, p.centerId),
+		handleIn: getRenderPoint(d, p.handleInId),
+		handleOut: getRenderPoint(d, p.handleOutId)
+	}
+}
 
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function getRenderBezierPoint(d: IViewDocument, id: string): IRenderBezierPoint {
+	return viewBezierPointToRenderBezierPoint(d, d.bezierPointsById[id], id)
+}

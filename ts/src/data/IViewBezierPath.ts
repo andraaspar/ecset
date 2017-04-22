@@ -17,18 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
-
-import * as m from 'mithril'
-
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export interface IViewBezierPath {
+	id: string
+	pointIds: string[]
+	isLoop: boolean
+}

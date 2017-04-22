@@ -17,24 +17,28 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as BezierPath from '../renderer/BezierPath'
-import * as BezierPoint from '../renderer/BezierPoint'
-import * as Color from '../renderer/Color'
-import * as ColorSegment from '../renderer/ColorSegment'
-import * as Document from '../renderer/Document'
-import * as Stroke from '../renderer/Stroke'
-import * as Transform from '../renderer/Transform'
-import * as View from '../renderer/View'
 import * as m from 'mithril'
 
-import { data, setData } from './data'
+import { createViewDocument, viewDocumentToRenderDocument } from './DocumentMethods'
 
+import { IData } from './IData'
+import { IRenderStroke } from './IRenderStroke'
+import { IRenderTransform } from './IRenderTransform'
+import { IRenderView } from './IRenderView'
 import { RendererState } from './RendererState'
+import { createGrayViewColor } from './ColorMethods'
 import { uuid } from 'illa/StringUtil'
+
+export let data: IData
+
+export function setData(v: IData) {
+	if (data) throw 'oor9sa'
+	data = v
+}
 
 export function createData() {
 	setData({
-		document: Document.create(),
+		document: createViewDocument(),
 		renderers: [],
 		rendererStates: [],
 		maxRenderers: navigator.hardwareConcurrency || 1,
@@ -43,8 +47,8 @@ export function createData() {
 
 	let blackId = uuid()
 	let whiteId = uuid()
-	data.document.colorsById[blackId] = Color.createGray(255, 0)
-	data.document.colorsById[whiteId] = Color.createGray(255, 255)
+	data.document.colorsById[blackId] = createGrayViewColor(blackId, 255, 0)
+	data.document.colorsById[whiteId] = createGrayViewColor(whiteId, 255, 255)
 
 	let pointZeroId = uuid()
 	data.document.pointsById[pointZeroId] = {
@@ -155,7 +159,7 @@ export function createData() {
 }
 
 export function render() {
-	let renderDocument = Document.iRenderify(data.document)
+	let renderDocument = viewDocumentToRenderDocument(data.document)
 	let [strokes, transformLists] = flattenStokes(renderDocument.strokes)
 	let renderersNeeded = Math.min(data.maxRenderers, strokes.length)
 	terminateBusyRenderers()
@@ -183,9 +187,9 @@ function createRenderers(count: number) {
 	}
 }
 
-function flattenStokes(strokes: Stroke.IRender[], transforms: Transform.IRender[] = []): [Stroke.IRender[], Transform.IRender[][]] {
-	let allStrokes: Stroke.IRender[] = []
-	let allTransformLists: Transform.IRender[][] = []
+function flattenStokes(strokes: IRenderStroke[], transforms: IRenderTransform[] = []): [IRenderStroke[], IRenderTransform[][]] {
+	let allStrokes: IRenderStroke[] = []
+	let allTransformLists: IRenderTransform[][] = []
 	for (let stroke of strokes) {
 		allStrokes.push(stroke)
 		let transformList = transforms.concat([stroke.transform])
@@ -197,12 +201,12 @@ function flattenStokes(strokes: Stroke.IRender[], transforms: Transform.IRender[
 	return [allStrokes, allTransformLists]
 }
 
-function startRender(renderer: Worker, index: number, strokes: Stroke.IRender[], transformLists: Transform.IRender[][], ) {
+function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], transformLists: IRenderTransform[][], ) {
 	let stroke = strokes.pop()
 	let transformList = transformLists.pop()
 	if (stroke) {
-		let pixels = data.pixelsByStrokeId[stroke.id] || new Uint8ClampedArray(data.document.width * data.document.height)
-		let view: View.IRender = {
+		let pixels = data.pixelsByStrokeId[stroke.id] || new Uint8ClampedArray(data.document.width * data.document.height * data.document.channelCount)
+		let view: IRenderView = {
 			height: data.document.height,
 			pixels: pixels,
 			stroke: stroke,

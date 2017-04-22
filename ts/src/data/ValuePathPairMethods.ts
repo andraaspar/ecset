@@ -17,18 +17,19 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderValuePathPair } from './IRenderValuePathPair'
+import { IViewDocument } from './IViewDocument'
+import { IViewValuePathPair } from './IViewValuePathPair'
+import { getRenderValuePath } from './ValuePathMethods'
 
-import * as m from 'mithril'
+export function viewValuePathPairToRenderValuePathPair(d: IViewDocument, p: IViewValuePathPair): IRenderValuePathPair {
+	return {
+		id: p.id,
+		left: getRenderValuePath(d, p.leftId),
+		right: getRenderValuePath(d, p.rightId)
+	}
+}
 
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function getRenderValuePathPair(d: IViewDocument, id: string): IRenderValuePathPair {
+	return viewValuePathPairToRenderValuePathPair(d, d.valuePathPairsById[id])
+}

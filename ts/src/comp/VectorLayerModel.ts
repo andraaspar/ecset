@@ -17,20 +17,20 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as BezierPath from '../renderer/BezierPath'
-import * as Point from '../renderer/Point'
 import * as m from 'mithril'
 
 import { GLOBAL } from 'illa/GLOBAL'
+import { IRenderPoint } from '../data/IRenderPoint'
+import { IViewPoint } from '../data/IViewPoint'
 import { bind } from 'illa/FunctionUtil'
 
-export default class VectorLayerModel {
+export class VectorLayerModel {
 
-	private selection: Point.IView
-	private startMouse: Point.IRender
-	private startSelection: Point.IRender
+	private selection: IViewPoint
+	private startMouse: IRenderPoint
+	private startSelection: IRenderPoint
 
-	startDrag(point: Point.IView, e: MouseEvent): void {
+	startDrag(point: IViewPoint, e: MouseEvent): void {
 		this.selection = point
 		this.startSelection = JSON.parse(JSON.stringify(point))
 		this.startMouse = { id: undefined, x: e.pageX, y: e.pageY }

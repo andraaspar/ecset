@@ -17,18 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { IRenderBezierPath } from './IRenderBezierPath'
+import { IRenderValueSegment } from './IRenderValueSegment'
+import { IViewDocument } from './IViewDocument'
+import { IViewValueSegment } from './IViewValueSegment'
+import { getRenderBezierPath } from './BezierPathMethods'
 
-import * as m from 'mithril'
+export function viewValueSegmentToRenderValueSegment(d: IViewDocument, p: IViewValueSegment): IRenderValueSegment {
+	return {
+		id: p.id,
+		a: p.a,
+		b: p.b,
+		tweenPath: getRenderBezierPath(d, p.tweenPathId) 
+	}
+}
 
-import { createData, render } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()
+export function getRenderValueSegment(d: IViewDocument, id: string): IRenderValueSegment {
+	return viewValueSegmentToRenderValueSegment(d, d.valueSegmentsById[id])
+}

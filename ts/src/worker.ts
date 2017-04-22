@@ -17,17 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as BezierPath from './renderer/BezierPath'
-import * as Path from './renderer/Path'
-import * as View from './renderer/View'
-
 import { GLOBAL } from 'illa/GLOBAL'
-import Renderer from './renderer/Renderer'
+import { IRenderView } from './data/IRenderView'
+import { Renderer } from './renderer/Renderer'
 
 // console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
 	// console.log('Render starting...')
-	let view: View.IRender = e.data
+	let view: IRenderView = e.data
 	let renderer = new Renderer(view)
 	renderer.render()
 	// console.log('Render finished.')
