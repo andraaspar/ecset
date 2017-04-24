@@ -17,22 +17,18 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = () => `
-.${P}-canvas
-{
-	position: relative;
-	background: ${GRAY_7} url('image/{{checkers-10.svg}}');
-	overflow: auto;
-	height: 100%;
+import { getRenderColor, sanitizeChannelValue, viewColorToRenderColor } from './ColorMethods'
+
+import { IRenderColor } from './IRenderColor'
+import { IViewAlphaMultiplier } from './IViewAlphaMultiplier'
+import { IViewDocument } from './IViewDocument'
+
+export function viewAlphaMultiplierToRenderColor(d: IViewDocument, p: IViewAlphaMultiplier): IRenderColor {
+	let result = getRenderColor(d, p.colorId)
+	result.channelValues[0] = sanitizeChannelValue(result.channelValues[0] * p.alphaMultiplier)
+	return result
 }
 
-.${P}-canvas-layer,
-.${P}-canvas-layer-canvas,
-.${P}-canvas-layer-svg
-{
-	position: absolute;
-	top: 0;
-	left: 0;
+export function getRenderColorFromAplhaMultiplier(d: IViewDocument, id: string): IRenderColor {
+	return viewAlphaMultiplierToRenderColor(d, d.aplhaMultipliersById[id])
 }
-`
-

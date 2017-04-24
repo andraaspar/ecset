@@ -21,13 +21,17 @@ import './statics.ts'
 
 import * as m from 'mithril'
 
+import { createData, data } from './data/DataMethods'
+
 import { EcsetComp } from './comp/EcsetComp'
-import { createData } from './data/DataMethods'
+import { GLOBAL } from 'illa/GLOBAL'
 import { render } from './data/RenderMethods'
 
 const ECSET_ELEMENT = document.getElementById('ecset')
 
 createData()
+
+GLOBAL.data = data
 
 m.mount(ECSET_ELEMENT, EcsetComp)
 

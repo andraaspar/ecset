@@ -42,6 +42,31 @@ export function createData() {
 	let whiteId = uuid()
 	data.document.colorsById[blackId] = createGrayViewColor(blackId, 255, 0)
 	data.document.colorsById[whiteId] = createGrayViewColor(whiteId, 255, 255)
+	
+	let black100Id = uuid()
+	data.document.aplhaMultipliersById[black100Id] = {
+		id: black100Id,
+		colorId: blackId,
+		alphaMultiplier: 1,
+	}
+	let black0Id = uuid()
+	data.document.aplhaMultipliersById[black0Id] = {
+		id: black0Id,
+		colorId: blackId,
+		alphaMultiplier: 0,
+	}
+	let white100Id = uuid()
+	data.document.aplhaMultipliersById[white100Id] = {
+		id: white100Id,
+		colorId: whiteId,
+		alphaMultiplier: 1,
+	}
+	let white0Id = uuid()
+	data.document.aplhaMultipliersById[white0Id] = {
+		id: white0Id,
+		colorId: whiteId,
+		alphaMultiplier: 0,
+	}
 
 	let pointZeroId = uuid()
 	data.document.pointsById[pointZeroId] = {
@@ -134,24 +159,39 @@ export function createData() {
 		isLoop: false,
 	}
 
-	let colorSegmentBlackToWhiteId = uuid()
-	data.document.colorSegmentsById[colorSegmentBlackToWhiteId] = {
-		id: colorSegmentBlackToWhiteId,
-		aId: blackId,
-		bId: whiteId,
+	let colorSegmentBlack100ToWhite0Id = uuid()
+	data.document.colorSegmentsById[colorSegmentBlack100ToWhite0Id] = {
+		id: colorSegmentBlack100ToWhite0Id,
+		aId: black100Id,
+		bId: white0Id,
 		tweenPathId: linearPathId,
 	}
-	let colorPathBlackToWhiteId = uuid()
-	data.document.colorPathsById[colorPathBlackToWhiteId] = {
-		id: colorPathBlackToWhiteId,
-		segmentIds: [colorSegmentBlackToWhiteId],
+	let colorSegmentWhite100ToBlack0Id = uuid()
+	data.document.colorSegmentsById[colorSegmentWhite100ToBlack0Id] = {
+		id: colorSegmentWhite100ToBlack0Id,
+		aId: white100Id,
+		bId: black0Id,
+		tweenPathId: linearPathId,
+	}
+	
+	let colorPathBlack100ToWhite0Id = uuid()
+	data.document.colorPathsById[colorPathBlack100ToWhite0Id] = {
+		id: colorPathBlack100ToWhite0Id,
+		segmentIds: [colorSegmentBlack100ToWhite0Id],
 		segmentTs: [0],
 	}
+	let colorPathWhite100ToBlack0Id = uuid()
+	data.document.colorPathsById[colorPathWhite100ToBlack0Id] = {
+		id: colorPathWhite100ToBlack0Id,
+		segmentIds: [colorSegmentWhite100ToBlack0Id],
+		segmentTs: [0],
+	}
+	
 	let colorFieldId = uuid()
 	data.document.colorFieldsById[colorFieldId] = {
 		id: colorFieldId,
-		aId: colorPathBlackToWhiteId,
-		bId: colorPathBlackToWhiteId,
+		aId: colorPathBlack100ToWhite0Id,
+		bId: colorPathWhite100ToBlack0Id,
 		tTweenPathIds: [linearPathId],
 		colorTweenPathIds: [linearPathId],
 	}

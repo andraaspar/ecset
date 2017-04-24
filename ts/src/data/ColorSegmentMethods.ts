@@ -20,13 +20,13 @@
 import { IRenderColorSegment } from './IRenderColorSegment'
 import { IViewColorSegment } from './IViewColorSegment'
 import { IViewDocument } from './IViewDocument'
-import { getRenderColor } from './ColorMethods'
+import { getRenderColorFromAplhaMultiplier } from './AlphaMultiplierMethods'
 
 export function viewColorSegmentToRenderColorSegment(d: IViewDocument, p: IViewColorSegment): IRenderColorSegment {
 	return {
 		id: p.id,
-		a: getRenderColor(d, p.aId),
-		b: getRenderColor(d, p.bId),
+		a: getRenderColorFromAplhaMultiplier(d, p.aId),
+		b: getRenderColorFromAplhaMultiplier(d, p.bId),
 		tweenPathId: p.tweenPathId,
 	}
 }

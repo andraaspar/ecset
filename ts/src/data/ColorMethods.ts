@@ -52,7 +52,7 @@ export function getRenderColor(d: IViewDocument, id: string): IRenderColor {
 export function createViewColor(id: string, alphaValue: number, ...values: number[]) {
 	let result: IViewColor = {
 		id: id,
-		channelValues: [alphaValue].concat(values).map(value => Math.max(0, Math.min(255, Math.floor(value)) || 0)),
+		channelValues: [alphaValue].concat(values).map(sanitizeChannelValue),
 	}
 	if (data.document.channelCount != result.channelValues.length) throw 'oorba3'
 	return result
@@ -64,4 +64,8 @@ export function createGrayViewColor(id: string, alphaValue: number, value: numbe
 		values.push(value)
 	}
 	return createViewColor(id, alphaValue, ...values)
+}
+
+export function sanitizeChannelValue(v: number) {
+	return Math.max(0, Math.min(255, Math.floor(v)) || 0)
 }

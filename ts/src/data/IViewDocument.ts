@@ -17,6 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IViewAlphaMultiplier } from './IViewAlphaMultiplier'
 import { IViewBezierPath } from './IViewBezierPath'
 import { IViewBezierPoint } from './IViewBezierPoint'
 import { IViewColor } from './IViewColor'
@@ -33,6 +34,7 @@ import { IViewValuePathPair } from './IViewValuePathPair'
 import { IViewValueSegment } from './IViewValueSegment'
 
 export interface IViewDocument {
+	aplhaMultipliersById: {[id: string]: IViewAlphaMultiplier}
 	bezierPathsById: {[id: string]: IViewBezierPath}
 	bezierPointsById: {[id: string]: IViewBezierPoint}
 	channelCount: number

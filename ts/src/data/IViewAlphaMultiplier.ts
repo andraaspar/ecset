@@ -17,22 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = () => `
-.${P}-canvas
-{
-	position: relative;
-	background: ${GRAY_7} url('image/{{checkers-10.svg}}');
-	overflow: auto;
-	height: 100%;
+export interface IViewAlphaMultiplier {
+	id: string
+	colorId: string
+	alphaMultiplier: number
 }
-
-.${P}-canvas-layer,
-.${P}-canvas-layer-canvas,
-.${P}-canvas-layer-svg
-{
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-`
-

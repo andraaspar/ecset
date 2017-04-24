@@ -25,6 +25,7 @@ import { getRenderStroke } from './StrokeMethods'
 
 export function createViewDocument(): IViewDocument {
 	return {
+		aplhaMultipliersById: {},
 		bezierPathsById: {},
 		bezierPointsById: {},
 		channelCount: 4,
