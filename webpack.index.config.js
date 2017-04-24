@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const path = require('path')
-const RawSource = require('webpack-sources').RawSource
 
 module.exports = {
 	entry: {
@@ -35,18 +34,6 @@ module.exports = {
 		// 		indent_level: 0
 		// 	}
 		// }),
-		function () {
-			this.plugin('emit', (compilation, callback) => {
-				compilation.chunks.forEach((chunk) => {
-					chunk.files.filter((filename) => /\.js$/.test(filename)).forEach((filename) => {
-						var source = compilation.assets[filename].source()
-
-						compilation.assets[filename] = new RawSource(source.replace(/__WEBPACK_IMPORTED_MODULE_/g, '__'))
-					})
-				})
-				callback()
-			})
-		},
 	],
 	externals: {
 	},
