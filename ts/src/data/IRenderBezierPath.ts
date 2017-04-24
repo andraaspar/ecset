@@ -20,7 +20,7 @@
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 
 export interface IRenderBezierPath {
-	id: string
+	id?: string
 	points: IRenderBezierPoint[]
 	isLoop: boolean
 }

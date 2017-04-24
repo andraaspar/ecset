@@ -18,7 +18,6 @@
  */
 
 import { IRenderColorPath } from './IRenderColorPath'
-import { IRenderColorSegment } from './IRenderColorSegment'
 import { IViewColorPath } from './IViewColorPath'
 import { IViewDocument } from './IViewDocument'
 import { getRenderColorSegment } from './ColorSegmentMethods'
@@ -27,7 +26,7 @@ export function viewColorPathToRenderColorPath(d: IViewDocument, p: IViewColorPa
 	return {
 		id: p.id,
 		segments: p.segmentIds.map(id => getRenderColorSegment(d, id)),
-		segmentEndTs: p.segmentEndTs.slice(0)
+		segmentTs: p.segmentTs.slice(0)
 	}
 }
 

@@ -20,7 +20,7 @@
 import { IRenderColorSegment } from './IRenderColorSegment'
 
 export interface IRenderColorPath {
-	id: string
+	id?: string
 	segments: IRenderColorSegment[]
-	segmentEndTs: number[]
+	segmentTs: number[]
 }

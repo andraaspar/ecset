@@ -17,11 +17,9 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderColorField } from './IRenderColorField'
 import { IViewColorField } from './IViewColorField'
 import { IViewDocument } from './IViewDocument'
-import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderColorPath } from './ColorPathMethods'
 
 export function viewColorFieldToRenderColorField(d: IViewDocument, p: IViewColorField): IRenderColorField {
@@ -29,8 +27,8 @@ export function viewColorFieldToRenderColorField(d: IViewDocument, p: IViewColor
 		id: p.id,
 		a: getRenderColorPath(d, p.aId),
 		b: getRenderColorPath(d, p.bId),
-		colorTweenPaths: p.colorTweenPathIds.map(id => getRenderBezierPath(d, id)),
-		tTweenPaths: p.tTweenPathIds.map(id => getRenderBezierPath(d, id))
+		colorTweenPathIds: p.colorTweenPathIds.slice(0),
+		tTweenPathIds: p.tTweenPathIds.slice(0),
 	}
 }
 

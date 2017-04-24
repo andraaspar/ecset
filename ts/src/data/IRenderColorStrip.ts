@@ -20,7 +20,7 @@
 import { IRenderColorField } from './IRenderColorField'
 
 export interface IRenderColorStrip {
-	id: string
+	id?: string
 	colorFields: IRenderColorField[]
-	colorFieldEndTs: number[]
+	colorFieldTs: number[]
 }

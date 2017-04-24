@@ -20,7 +20,7 @@
 import { IRenderPoint } from './IRenderPoint'
 
 export interface IRenderTransform {
-	id: string
+	id?: string
 	offset: IRenderPoint
 	scale: number
 	rotation: number

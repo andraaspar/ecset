@@ -20,7 +20,7 @@
 import { IRenderPoint } from './IRenderPoint'
 
 export interface IRenderBezierPoint {
-	id: string
+	id?: string
 	center: IRenderPoint
 	handleIn: IRenderPoint
 	handleOut: IRenderPoint

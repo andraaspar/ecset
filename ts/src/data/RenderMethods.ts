@@ -19,6 +19,7 @@
 
 import * as m from 'mithril'
 
+import { IRenderDocument } from './IRenderDocument'
 import { IRenderStroke } from './IRenderStroke'
 import { IRenderTransform } from './IRenderTransform'
 import { IRenderView } from './IRenderView'
@@ -36,7 +37,7 @@ export function render() {
 	console.info(`Renderers: ${data.renderers.length} Max: ${data.maxRenderers}`)
 
 	data.renderers.forEach((renderer, index) => {
-		startRender(renderer, index, strokes, transformLists)
+		startRender(renderer, index, strokes, transformLists, renderDocument)
 	})
 	m.redraw()
 }
@@ -71,13 +72,14 @@ function flattenStrokes(strokes: IRenderStroke[], transforms: IRenderTransform[]
 	return [allStrokes, allTransformLists]
 }
 
-function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], transformLists: IRenderTransform[][], ) {
+function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], transformLists: IRenderTransform[][], renderDocument: IRenderDocument) {
 	let stroke = strokes.pop()
 	let transformList = transformLists.pop()
 	if (stroke) {
 		let pixels = data.pixelsByStrokeId[stroke.id] || new Uint8ClampedArray(data.document.width * data.document.height * data.document.channelCount)
 		let view: IRenderView = {
 			height: data.document.height,
+			pathsById: renderDocument.pathsById,
 			pixels: pixels,
 			stroke: stroke,
 			transforms: transformList,
@@ -88,7 +90,7 @@ function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], 
 		renderer.onmessage = (e) => {
 			data.rendererStates[index] = RendererState.IDLE
 			data.pixelsByStrokeId[stroke.id] = e.data.pixels
-			startRender(renderer, index, strokes, transformLists)
+			startRender(renderer, index, strokes, transformLists, renderDocument)
 			m.redraw()
 		}
 	} else {

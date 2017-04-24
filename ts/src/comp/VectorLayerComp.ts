@@ -19,13 +19,13 @@
 
 import * as m from 'mithril'
 
+import { bezierPathToSvg, getRenderBezierPath } from '../data/BezierPathMethods'
+
 import { IRenderPoint } from '../data/IRenderPoint'
 import { IRenderStroke } from '../data/IRenderStroke'
 import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { VectorLayerModel } from './VectorLayerModel'
-import { bezierPathToSvg } from '../data/BezierPathMethods'
-import { bind } from 'illa/FunctionUtil'
 import { vectorAngle } from '../data/PointMethods'
 
 export declare namespace VectorLayerComp {
@@ -47,7 +47,8 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		let pathD: string = bezierPathToSvg(v.attrs.stroke.bezierPath)
+		let path = getRenderBezierPath(v.attrs.document, v.attrs.stroke.bezierPathId)
+		let pathD: string = bezierPathToSvg(path)
 		return (
 			m('div', {
 				'class': `${P}-canvas-layer`,
@@ -65,7 +66,7 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 						'd': pathD,
 						'class': `${P}-path`
 					}),
-					v.attrs.stroke.bezierPath.points.map((bezierPoint, index) => {
+					path.points.map((bezierPoint, index) => {
 						let handlesD = `M${bezierPoint.handleIn.x},${bezierPoint.handleIn.y}L${bezierPoint.center.x},${bezierPoint.center.y}L${bezierPoint.handleOut.x},${bezierPoint.handleOut.y}`
 						return [
 							m('path', {
@@ -78,7 +79,7 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 							})
 						]
 					}),
-					v.attrs.stroke.bezierPath.points.map(bezierPoint => [
+					path.points.map(bezierPoint => [
 						(bezierPoint.handleIn ?
 							m('polygon', {
 								'class': `${P}-point-handle`,

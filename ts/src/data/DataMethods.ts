@@ -145,7 +145,7 @@ export function createData() {
 	data.document.colorPathsById[colorPathBlackToWhiteId] = {
 		id: colorPathBlackToWhiteId,
 		segmentIds: [colorSegmentBlackToWhiteId],
-		segmentEndTs: [1],
+		segmentTs: [0],
 	}
 	let colorFieldId = uuid()
 	data.document.colorFieldsById[colorFieldId] = {
@@ -159,7 +159,7 @@ export function createData() {
 	data.document.colorStripsById[colorStripId] = {
 		id: colorStripId,
 		colorFieldIds: [colorFieldId],
-		colorFieldEndTs: [1],
+		colorFieldTs: [0],
 	}
 	let colorStripPairId = uuid()
 	data.document.colorStripPairsById[colorStripPairId] = {
@@ -168,24 +168,24 @@ export function createData() {
 		rightId: colorStripId,
 	}
 
-	let valueSegmentId = uuid()
-	data.document.valueSegmentsById[valueSegmentId] = {
-		id: valueSegmentId,
-		a: 255,
-		b: 255,
+	let thicknessSegmentId = uuid()
+	data.document.valueSegmentsById[thicknessSegmentId] = {
+		id: thicknessSegmentId,
+		a: 0,
+		b: 100,
 		tweenPathId: linearPathId,
 	}
-	let valuePathId = uuid()
-	data.document.valuePathsById[valuePathId] = {
-		id: valuePathId,
-		segmentIds: [valueSegmentId],
-		segmentEndTs: [1],
+	let thicknessPathId = uuid()
+	data.document.valuePathsById[thicknessPathId] = {
+		id: thicknessPathId,
+		segmentIds: [thicknessSegmentId],
+		segmentTs: [0],
 	}
-	let valuePathPairId = uuid()
-	data.document.valuePathPairsById[valuePathPairId] = {
-		id: valuePathPairId,
-		leftId: valuePathId,
-		rightId: valuePathId,
+	let thicknessPairId = uuid()
+	data.document.valuePathPairsById[thicknessPairId] = {
+		id: thicknessPairId,
+		leftId: thicknessPathId,
+		rightId: thicknessPathId,
 	}
 
 	let transformId = uuid()
@@ -202,8 +202,7 @@ export function createData() {
 		id: strokeId,
 		stripPairId: colorStripPairId,
 		bezierPathId: curvePathId,
-		thicknessPairId: valuePathPairId,
-		cutoffPairId: valuePathPairId,
+		thicknessPairId: thicknessPairId,
 		childIds: [],
 		transformId: transformId,
 	}

@@ -17,12 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderColor } from './IRenderColor'
 
 export interface IRenderColorSegment {
-	id: string
+	id?: string
 	a: IRenderColor
 	b: IRenderColor
-	tweenPath: IRenderBezierPath
+	tweenPathId?: string
 }

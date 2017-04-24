@@ -17,7 +17,6 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderColorField } from './IRenderColorField'
 import { IRenderColorStrip } from './IRenderColorStrip'
 import { IViewColorStrip } from './IViewColorStrip'
 import { IViewDocument } from './IViewDocument'
@@ -26,7 +25,7 @@ import { getRenderColorField } from './ColorFieldMethods'
 export function viewColorStripToRenderColorStrip(d: IViewDocument, p: IViewColorStrip): IRenderColorStrip {
 	return {
 		id: p.id,
-		colorFieldEndTs: p.colorFieldEndTs.slice(0),
+		colorFieldTs: p.colorFieldTs.slice(0),
 		colorFields: p.colorFieldIds.map(id => getRenderColorField(d, id))
 	}
 }

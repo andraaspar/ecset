@@ -20,7 +20,7 @@
 import { IRenderValuePath } from './IRenderValuePath'
 
 export interface IRenderValuePathPair {
-	id: string
+	id?: string
 	left: IRenderValuePath
 	right: IRenderValuePath
 }

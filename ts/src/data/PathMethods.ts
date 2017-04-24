@@ -22,9 +22,8 @@ import { pointDistance, pointPosition } from './PointMethods'
 import { Axis2D } from 'illa/Axis2D'
 import { End } from 'illa/End'
 import { IPath } from './IPath'
-import { IRenderPoint } from './IRenderPoint'
 import { ISegment } from './ISegment'
-import { segmentToPointDistance } from './SegmentMethods'
+import { interpolateValues } from './ValueMethods'
 
 export function getSegmentOfPath(path: IPath, i: number): ISegment {
 	let result = {
@@ -70,4 +69,18 @@ export function pathLength(path: IPath): number {
 		}
 	}
 	return result
+}
+
+export function pathYForX(path: IPath, x: number) {
+	let pointA = path.points[0]
+	if (x < pointA.x) return pointA.y
+	for (let i = 1, n = path.points.length; i < n; i++) {
+		let pointB = path.points[i]
+		if (pointA.x <= x && pointB.x > x) {
+			let t = (x - pointA.x) / (pointB.x - pointA.x)
+			return interpolateValues(pointA.y, pointB.y, t)
+		}
+		pointA = pointB
+	}
+	return path.points[path.points.length - 1].y
 }

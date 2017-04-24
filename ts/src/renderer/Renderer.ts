@@ -17,49 +17,34 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ALPHA_CHANNEL_INDEX, createGrayViewColor, createViewColor, interpolateColors } from '../data/ColorMethods'
-import { addPoints, pointDistance, reverseVector, toUnitVector } from '../data/PointMethods'
+import { addPoints, reverseVector, toUnitVector } from '../data/PointMethods'
 import { getSegmentOfPath, pathLength, pathSegmentCount } from '../data/PathMethods'
 import { segmentLength, segmentPointSide, segmentPointT, segmentToPointDistance, segmentToVector } from '../data/SegmentMethods'
 
 import { IColor } from '../data/IColor'
-import { IGainInfo } from '../data/IGainInfo'
 import { IPath } from '../data/IPath'
-import { IRenderColor } from '../data/IRenderColor'
+import { IRenderColorField } from '../data/IRenderColorField'
+import { IRenderColorPath } from '../data/IRenderColorPath'
 import { IRenderPoint } from '../data/IRenderPoint'
 import { IRenderView } from '../data/IRenderView'
 import { ISegment } from '../data/ISegment'
 import { ISegmentInfo } from '../data/ISegmentInfo'
-import { linearizeBezierPath } from '../data/BezierPathMethods'
+import { getBySide } from '../data/SideMethods'
+import { interpolateColors } from '../data/ColorMethods'
+import { interpolateValues } from '../data/ValueMethods'
+import { itemAndItemT } from '../data/TMethods'
 
 export class Renderer {
 
 	private segmentCount: number
 	private segmentInfos: ISegmentInfo[]
 	private pathLength: number
-	private startColorLeft: IRenderColor = {
-		id: undefined,
-		channelValues: [255, 0, 0, 255],
-	}
-	private endColorLeft: IRenderColor = {
-		id: undefined,
-		channelValues: [255, 255, 0, 0],
-	}
-	private startColorRight: IRenderColor = {
-		id: undefined,
-		channelValues: [255, 255, 255, 0],
-	}
-	private endColorRight: IRenderColor = {
-		id: undefined,
-		channelValues: [255, 0, 255, 128],
-	}
-	private distanceLimit = 200
 	private path: IPath
 
 	constructor(
 		private view: IRenderView
 	) {
-		this.path = linearizeBezierPath(this.view.stroke.bezierPath, .05)
+		this.path = this.view.pathsById[this.view.stroke.bezierPathId]
 	}
 
 	render(): void {
@@ -79,7 +64,7 @@ export class Renderer {
 		}
 	}
 
-	protected getColor(x: number, y: number, force = false): IColor {
+	protected getColor(x: number, y: number): IColor {
 		// if (x == 1023 && y == 0) {
 		// 	console.log('.')
 		// }
@@ -91,6 +76,7 @@ export class Renderer {
 		let prevT: number = Infinity
 		let closestDistance: number = Infinity
 		let closestPathT: number = NaN
+		let closestThickness: number = NaN
 		let closestPathSide: number = 0
 		let closestSegment: ISegment
 		for (let i = 0; i < this.segmentCount; i++) {
@@ -115,15 +101,20 @@ export class Renderer {
 			let isBeforePath = !this.path.isLoop && isFirst && (isBeyondFocus ? t >= 1 : t < 0)
 			let isAfterPath = !this.path.isLoop && isLast && (isBeyondFocus ? t < 0 : t >= 1)
 			if (isOnPath || isBeforePath || isAfterPath) {
-				if (distance <= this.distanceLimit && distance <= closestDistance) {
+				let pathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
+				if (isBeforePath) {
+					pathT = 0
+				} else if (isAfterPath) {
+					pathT = 1
+				}
+				let thicknessPath = getBySide(side, this.view.stroke.thicknessPair)
+				let [thicknessSegment, thicknessSegmentT] = itemAndItemT(pathT, thicknessPath.segments, thicknessPath.segmentTs)
+				let thickness = interpolateValues(thicknessSegment.a, thicknessSegment.b, pathT, this.view.pathsById[thicknessSegment.tweenPathId])
+				
+				if (distance <= thickness && distance <= closestDistance) {
 					closestDistance = distance
-					if (isBeforePath) {
-						closestPathT = 0
-					} else if (isAfterPath) {
-						closestPathT = 1
-					} else {
-						closestPathT = this.pathLength ? (currentLength + segmentInfo.length * t) / this.pathLength : 0
-					}
+					closestThickness = thickness
+					closestPathT = pathT
 					closestPathSide = side
 					closestSegment = segment
 				}
@@ -133,8 +124,14 @@ export class Renderer {
 			currentT = this.pathLength ? currentLength / this.pathLength : 0
 		}
 		if (!isNaN(closestPathT)) {
-			result = interpolateColors(closestPathSide < 0 ? this.startColorLeft : this.startColorRight, closestPathSide < 0 ? this.endColorLeft : this.endColorRight, closestPathT)
-			result.channelValues[ALPHA_CHANNEL_INDEX] = 255 //- closestDistance
+			let strip = getBySide(closestPathSide, this.view.stroke.stripPair)
+			let [colorField, colorFieldT] = itemAndItemT(closestPathT, strip.colorFields, strip.colorFieldTs)
+			let colorPath = this.getRenderColorPathAtT(colorField, colorFieldT)
+			
+			let colorPathT = closestDistance / closestThickness
+			let [colorSegment, colorSegmentT] = itemAndItemT(colorPathT, colorPath.segments, colorPath.segmentTs)
+
+			result = interpolateColors(colorSegment.a, colorSegment.b, colorSegmentT, this.view.pathsById[colorSegment.tweenPathId])
 		}
 		return result
 	}
@@ -166,19 +163,19 @@ export class Renderer {
 
 			if (prevSegmentInfo) {
 				this.calculateGain(prevSegmentInfo, segmentInfo, prevVector, vector, prevSegment, segment)
-				
+
 				this.calculateFocus(prevSegmentInfo)
 			}
-			
+
 			let isLast = i + 1 == n
 			if (isLast) {
 				if (this.path.isLoop) {
 					let firstSegment = getSegmentOfPath(this.path, 0)
 					this.calculateGain(segmentInfo, result[0], vector, toUnitVector(segmentToVector(firstSegment)), segment, firstSegment)
-					
+
 					this.calculateFocus(result[0])
 				}
-				
+
 				this.calculateFocus(segmentInfo)
 			}
 
@@ -208,7 +205,7 @@ export class Renderer {
 		}
 		return result
 	}
-	
+
 	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: IRenderPoint, vector: IRenderPoint, prevSegment: ISegment, segment: ISegment): void {
 		prevVector = reverseVector(prevVector)
 
@@ -231,7 +228,7 @@ export class Renderer {
 		if (distance) t *= 1 / distance // Per distance pixel
 		prevSegmentInfo.tGain.b = t
 	}
-	
+
 	calculateFocus(info: ISegmentInfo): void {
 		let totalTGain = info.tGain.a + info.tGain.b
 		if (totalTGain > 0) {
@@ -240,5 +237,29 @@ export class Renderer {
 			info.focusSide = 1
 		}
 		info.focusDistance = totalTGain ? Math.abs(1 / totalTGain) : 0
+	}
+
+	getRenderColorPathAtT(colorField: IRenderColorField, t: number): IRenderColorPath {
+		let result: IRenderColorPath = {
+			segments: [],
+			segmentTs: [],
+		}
+		for (let i = 0, n = colorField.a.segments.length; i < n; i++) {
+			let segmentA = colorField.a.segments[i]
+			let segmentB = colorField.b.segments[i]
+			let segmentAT = colorField.a.segmentTs[i]
+			let segmentBT = colorField.b.segmentTs[i]
+			let colorTweenPathId = colorField.colorTweenPathIds[i]
+			let colorTweenPath = this.view.pathsById[colorTweenPathId]
+			let tTweenPathId = colorField.tTweenPathIds[i]
+			let tTweenPath = this.view.pathsById[tTweenPathId]
+			result.segments.push({
+				a: interpolateColors(segmentA.a, segmentB.a, t, colorTweenPath),
+				b: interpolateColors(segmentA.b, segmentB.b, t, colorTweenPath),
+				tweenPathId: segmentA.tweenPathId,
+			})
+			result.segmentTs.push(interpolateValues(segmentAT, segmentBT, t, tTweenPath))
+		}
+		return result
 	}
 }

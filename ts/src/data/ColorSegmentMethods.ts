@@ -17,12 +17,9 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderColor } from './IRenderColor'
 import { IRenderColorSegment } from './IRenderColorSegment'
 import { IViewColorSegment } from './IViewColorSegment'
 import { IViewDocument } from './IViewDocument'
-import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderColor } from './ColorMethods'
 
 export function viewColorSegmentToRenderColorSegment(d: IViewDocument, p: IViewColorSegment): IRenderColorSegment {
@@ -30,7 +27,7 @@ export function viewColorSegmentToRenderColorSegment(d: IViewDocument, p: IViewC
 		id: p.id,
 		a: getRenderColor(d, p.aId),
 		b: getRenderColor(d, p.bId),
-		tweenPath: getRenderBezierPath(d, p.tweenPathId)
+		tweenPathId: p.tweenPathId,
 	}
 }
 

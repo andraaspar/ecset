@@ -20,7 +20,7 @@
 import { IRenderValueSegment } from './IRenderValueSegment'
 
 export interface IRenderValuePath {
-	id: string
+	id?: string
 	segments: IRenderValueSegment[]
 	segmentTs: number[]
 }

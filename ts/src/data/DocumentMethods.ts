@@ -17,6 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { getRenderBezierPath, linearizeBezierPath } from './BezierPathMethods'
+
 import { IRenderDocument } from './IRenderDocument'
 import { IViewDocument } from './IViewDocument'
 import { getRenderStroke } from './StrokeMethods'
@@ -45,7 +47,12 @@ export function createViewDocument(): IViewDocument {
 }
 
 export function viewDocumentToRenderDocument(d: IViewDocument): IRenderDocument {
-	return {
-		strokes: d.strokeIds.map(id => getRenderStroke(d, id))
+	let result: IRenderDocument = {
+		strokes: d.strokeIds.map(id => getRenderStroke(d, id)),
+		pathsById: {},
 	}
+	Object.keys(d.bezierPathsById).forEach(id => {
+		result.pathsById[id] = linearizeBezierPath(getRenderBezierPath(d, id), .05)
+	})
+	return result
 }

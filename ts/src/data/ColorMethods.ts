@@ -18,14 +18,14 @@
  */
 
 import { IColor } from './IColor'
+import { IPath } from './IPath'
 import { IRenderColor } from './IRenderColor'
 import { IViewColor } from './IViewColor'
 import { IViewDocument } from './IViewDocument'
 import { data } from './DataMethods'
+import { interpolateValues } from './ValueMethods'
 
-export const ALPHA_CHANNEL_INDEX = 0
-
-export function interpolateColors(a: IColor, b: IColor, t: number): IColor {
+export function interpolateColors(a: IColor, b: IColor, t: number, path?: IPath): IColor {
 	let length = Math.max(a.channelValues.length, b.channelValues.length)
 	let result: IColor = {
 		channelValues: [],
@@ -33,7 +33,7 @@ export function interpolateColors(a: IColor, b: IColor, t: number): IColor {
 	for (let i = 0; i < length; i++) {
 		let aValue = a.channelValues[i] || 0
 		let bValue = b.channelValues[i] || 0
-		result.channelValues[i] = aValue + (bValue - aValue) * t
+		result.channelValues[i] = interpolateValues(aValue, bValue, t, path)
 	}
 	return result
 }

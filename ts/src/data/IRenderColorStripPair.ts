@@ -20,7 +20,7 @@
 import { IRenderColorStrip } from './IRenderColorStrip'
 
 export interface IRenderColorStripPair {
-	id: string
+	id?: string
 	left: IRenderColorStrip
 	right: IRenderColorStrip
 }

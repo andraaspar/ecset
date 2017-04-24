@@ -19,8 +19,6 @@
 
 import * as m from 'mithril'
 
-import { IRenderStroke } from '../data/IRenderStroke'
-import { IViewStroke } from '../data/IViewStroke'
 import { P } from '../statics'
 import { PaintLayerModel } from './PaintLayerModel'
 

@@ -20,5 +20,5 @@
 export interface IViewValuePath {
 	id: string
 	segmentIds: string[]
-	segmentEndTs: number[]
+	segmentTs: number[]
 }

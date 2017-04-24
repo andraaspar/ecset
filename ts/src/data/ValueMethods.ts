@@ -17,19 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderValueSegment } from './IRenderValueSegment'
-import { IViewDocument } from './IViewDocument'
-import { IViewValueSegment } from './IViewValueSegment'
+import { IPath } from './IPath'
+import { pathYForX } from './PathMethods'
 
-export function viewValueSegmentToRenderValueSegment(d: IViewDocument, p: IViewValueSegment): IRenderValueSegment {
-	return {
-		id: p.id,
-		a: p.a,
-		b: p.b,
-		tweenPathId: p.tweenPathId
+export function interpolateValues(a: number, b: number, t: number, path?: IPath) {
+	let t2: number
+	if (path) {
+		t2 = pathYForX(path, t)
+	} else {
+		t2 = t
 	}
-}
-
-export function getRenderValueSegment(d: IViewDocument, id: string): IRenderValueSegment {
-	return viewValueSegmentToRenderValueSegment(d, d.valueSegmentsById[id])
+	return a + (b - a) * t2
 }

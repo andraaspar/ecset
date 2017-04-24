@@ -26,7 +26,7 @@ export function viewValuePathToRenderValuePath(d: IViewDocument, p: IViewValuePa
 	return {
 		id: p.id,
 		segments: p.segmentIds.map(id => getRenderValueSegment(d, id)),
-		segmentTs: p.segmentEndTs.slice(0)
+		segmentTs: p.segmentTs.slice(0)
 	}
 }
 

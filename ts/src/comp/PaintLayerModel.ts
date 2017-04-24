@@ -19,11 +19,6 @@
 
 import * as m from 'mithril'
 
-import { bind, debounce } from 'illa/FunctionUtil'
-
-import { IRenderStroke } from '../data/IRenderStroke'
-import { IRenderView } from '../data/IRenderView'
-import { IViewStroke } from '../data/IViewStroke'
 import { data } from '../data/DataMethods'
 import jQuery from 'jquery-ts'
 
