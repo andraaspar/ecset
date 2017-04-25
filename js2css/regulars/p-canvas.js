@@ -41,5 +41,10 @@ module.exports = `
 	top: 0;
 	left: 0;
 }
+
+.${P}-canvas-layer-svg:not(:root)
+{
+	overflow: visible;
+}
 `
 
