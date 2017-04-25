@@ -36,6 +36,11 @@ export function createData() {
 		rendererStates: [],
 		maxRenderers: navigator.hardwareConcurrency || 1,
 		pixelsByStrokeId: {},
+		canvasLocation: {
+			x: 0,
+			y: 0,
+		},
+		canvasScale: 1,
 	})
 	
 	let blackId = uuid()

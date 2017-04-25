@@ -17,6 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPoint } from './IPoint'
 import { IViewDocument } from './IViewDocument'
 import { RendererState } from './RendererState'
 
@@ -26,4 +27,6 @@ export interface IData {
 	rendererStates: RendererState[]
 	maxRenderers: number
 	pixelsByStrokeId: {[_: string]: Uint8ClampedArray}
+	canvasLocation: IPoint
+	canvasScale: number
 }

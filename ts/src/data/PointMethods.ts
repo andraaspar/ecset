@@ -108,3 +108,10 @@ export function viewPointToRenderPoint(p: IViewPoint, id: string): IRenderPoint 
 export function getRenderPoint(d: IViewDocument, id: string): IRenderPoint {
 	return viewPointToRenderPoint(d.pointsById[id], id)
 }
+
+export function scaleVector(v: IPoint, scale: number): IPoint {
+	return {
+		x: v.x * scale,
+		y: v.y * scale,
+	}
+}

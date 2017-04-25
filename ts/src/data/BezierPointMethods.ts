@@ -17,10 +17,19 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { getRenderPoint, scaleVector } from './PointMethods'
+
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IViewBezierPoint } from './IViewBezierPoint'
 import { IViewDocument } from './IViewDocument'
-import { getRenderPoint } from './PointMethods'
+
+export function scaleRenderBezierPoint(p: IRenderBezierPoint, scale: number): IRenderBezierPoint {
+	return {
+		handleIn: scaleVector(p.handleIn, scale),
+		center: scaleVector(p.center, scale),
+		handleOut: scaleVector(p.handleOut, scale),
+	}
+}
 
 export function viewBezierPointToRenderBezierPoint(d: IViewDocument, p: IViewBezierPoint, id: string): IRenderBezierPoint {
 	return {

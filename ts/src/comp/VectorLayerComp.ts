@@ -26,6 +26,7 @@ import { IRenderStroke } from '../data/IRenderStroke'
 import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { VectorLayerModel } from './VectorLayerModel'
+import { scaleRenderBezierPoint } from '../data/BezierPointMethods'
 import { vectorAngle } from '../data/PointMethods'
 
 export declare namespace VectorLayerComp {
@@ -34,6 +35,7 @@ export declare namespace VectorLayerComp {
 		height: number
 		document: IViewDocument
 		stroke: IRenderStroke
+		scale: number
 	}
 	interface State {
 		model?: VectorLayerModel
@@ -48,15 +50,15 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		let path = getRenderBezierPath(v.attrs.document, v.attrs.stroke.bezierPathId)
-		let pathD: string = bezierPathToSvg(path)
+		let pathD: string = bezierPathToSvg(path, v.attrs.scale)
 		return (
 			m('div', {
 				'class': `${P}-canvas-layer`,
 			},
 				m('svg', {
 					'class': `${P}-canvas-layer-svg`,
-					'width': v.attrs.width,
-					'height': v.attrs.height
+					'width': v.attrs.width * v.attrs.scale,
+					'height': v.attrs.height * v.attrs.scale,
 				},
 					m('path', {
 						'd': pathD,
@@ -67,7 +69,8 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 						'class': `${P}-path`
 					}),
 					path.points.map((bezierPoint, index) => {
-						let handlesD = `M${bezierPoint.handleIn.x},${bezierPoint.handleIn.y}L${bezierPoint.center.x},${bezierPoint.center.y}L${bezierPoint.handleOut.x},${bezierPoint.handleOut.y}`
+						let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
+						let handlesD = `M${scaledPoint.handleIn.x},${scaledPoint.handleIn.y}L${scaledPoint.center.x},${scaledPoint.center.y}L${scaledPoint.handleOut.x},${scaledPoint.handleOut.y}`
 						return [
 							m('path', {
 								'd': handlesD,
@@ -79,49 +82,46 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 							})
 						]
 					}),
-					path.points.map(bezierPoint => [
-						(bezierPoint.handleIn ?
+					path.points.map(bezierPoint => {
+						let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
+						return [
 							m('polygon', {
 								'class': `${P}-point-handle`,
 								'points': `8 0, -6 -7, -6 7`,
-								'transform': getTriangleTransform(bezierPoint.handleIn, bezierPoint.center, false),
+								'transform': getTriangleTransform(scaledPoint.handleIn, scaledPoint.center, false),
 								'onmousedown': (e: MouseEvent) => {
 									v.state.model.startDrag(v.attrs.document.pointsById[bezierPoint.handleIn.id], e)
 								}
-							})
-							:
-							''
-						),
-						(bezierPoint.handleOut ?
+							}),
 							m('polygon', {
 								'class': `${P}-point-handle`,
 								'points': `8 0, -6 -7, -6 7`,
-								'transform': getTriangleTransform(bezierPoint.center, bezierPoint.handleOut, true),
+								'transform': getTriangleTransform(scaledPoint.center, scaledPoint.handleOut, true),
 								'onmousedown': (e: MouseEvent) => {
 									v.state.model.startDrag(v.attrs.document.pointsById[bezierPoint.handleOut.id], e)
 								}
+							}),
+							m('circle', {
+								'class': `${P}-point-center`,
+								'cx': scaledPoint.center.x,
+								'cy': scaledPoint.center.y,
+								'r': 5,
+								'onmousedown': (e: MouseEvent) => {
+									v.state.model.startDrag(v.attrs.document.pointsById[bezierPoint.center.id], e)
+								}
 							})
-							:
-							''
-						),
-						m('circle', {
-							'class': `${P}-point-center`,
-							'cx': bezierPoint.center.x,
-							'cy': bezierPoint.center.y,
-							'r': 5,
-							'onmousedown': (e: MouseEvent) => {
-								v.state.model.startDrag(v.attrs.document.pointsById[bezierPoint.center.id], e)
-							}
-						})
-					])
+						]
+					})
 				)
 			)
 		)
 	},
 	oncreate(v) {
-		v.state.model = new VectorLayerModel()
+		v.state.model = new VectorLayerModel().initVectorLayerModel(v.attrs)
 	},
-	// onupdate(v) {},
+	onupdate(v) {
+		v.state.model.update(v.attrs)
+	},
 	// onbeforeremove(v) {},
 	onremove(v) {
 		v.state.model.kill()

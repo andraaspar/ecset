@@ -19,16 +19,24 @@
 
 import * as m from 'mithril'
 
+import { CanvasModel } from './CanvasModel'
+import { IPoint } from '../data/IPoint'
 import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
 import { VectorLayerComp } from './VectorLayerComp'
-import { data } from '../data/DataMethods'
 import { getRenderStroke } from '../data/StrokeMethods'
 
 export declare namespace CanvasComp {
-	interface Attrs { }
-	interface State { }
+	interface Attrs {
+		document: IViewDocument
+		location: IPoint
+		scale: number
+		scaleSetter: (v: number) => void
+	}
+	interface State {
+		model?: CanvasModel
+	}
 }
 type Vnode = m.Vnode<CanvasComp.Attrs, CanvasComp.State>
 type VnodeDOM = m.VnodeDOM<CanvasComp.Attrs, CanvasComp.State>
@@ -39,27 +47,47 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return (
-			m('div', { 'class': `${P}-canvas` },
-				data.document.strokeIds.map(id => (
-					m(PaintLayerComp, {
-						'width': data.document.width,
-						'height': data.document.height,
-						'strokeId': id,
-					})
-				)),
-				data.document.strokeIds.map(id => (
-					m(VectorLayerComp, {
-						'width': data.document.width,
-						'height': data.document.height,
-						'document': data.document,
-						'stroke': getRenderStroke(data.document, id),
-					})
-				))
+			m('div', {
+				'class': `${P}-canvas-area`,
+			},
+				m('div', {
+					'class': `${P}-canvas`,
+					'style': {
+						'width': v.attrs.document.width * v.attrs.scale + 'px',
+						'height': v.attrs.document.height * v.attrs.scale + 'px',
+						'left': `calc(50% - ${(v.attrs.document.width / 2 - v.attrs.location.x) * v.attrs.scale}px)`,
+						'top': `calc(50% - ${(v.attrs.document.height / 2 - v.attrs.location.y) * v.attrs.scale}px)`,
+					}
+				},
+					v.attrs.document.strokeIds.map(id => (
+						m(PaintLayerComp, {
+							'width': v.attrs.document.width,
+							'height': v.attrs.document.height,
+							'strokeId': id,
+							'scale': v.attrs.scale,
+						})
+					)),
+					v.attrs.document.strokeIds.map(id => (
+						m(VectorLayerComp, {
+							'width': v.attrs.document.width,
+							'height': v.attrs.document.height,
+							'document': v.attrs.document,
+							'stroke': getRenderStroke(v.attrs.document, id),
+							'scale': v.attrs.scale,
+						})
+					))
+				)
 			)
 		)
 	},
-	// oncreate(v) {},
-	// onupdate(v) {},
+	oncreate(v) {
+		v.state.model = new CanvasModel().initCanvasModel(v.dom, v.attrs)
+	},
+	onupdate(v) {
+		v.state.model.update(v.attrs)
+	},
 	// onbeforeremove(v) {},
-	// onremove(v) {}
+	onremove(v) {
+		v.state.model.kill()
+	}
 }

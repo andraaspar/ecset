@@ -27,6 +27,7 @@ export declare namespace PaintLayerComp {
 		width: number
 		height: number
 		strokeId: string
+		scale: number
 	}
 	interface State {
 		model?: PaintLayerModel
@@ -46,6 +47,10 @@ export const PaintLayerComp: m.Comp<PaintLayerComp.Attrs, PaintLayerComp.State> 
 					'class': `${P}-canvas-layer-canvas`,
 					'width': v.attrs.width,
 					'height': v.attrs.height,
+					'style': {
+						'transform-origin': `0 0`,
+						'transform': `scale(${v.attrs.scale})`,
+					},
 				})
 			)
 		)

@@ -20,37 +20,52 @@
 import * as m from 'mithril'
 
 import { GLOBAL } from 'illa/GLOBAL'
+import { IPoint } from '../data/IPoint'
 import { IRenderPoint } from '../data/IRenderPoint'
 import { IViewPoint } from '../data/IViewPoint'
+import { VectorLayerComp } from './VectorLayerComp'
 import { bind } from 'illa/FunctionUtil'
 import { render } from '../data/RenderMethods'
 
 export class VectorLayerModel {
 
+	private attrs: VectorLayerComp.Attrs
 	private selection: IViewPoint
-	private startMouse: IRenderPoint
+	private startMouse: IPoint
 	private startSelection: IRenderPoint
+	
+	initVectorLayerModel(attrs: VectorLayerComp.Attrs) {
+		this.update(attrs)
+		return this
+	}
+	
+	update(attrs: VectorLayerComp.Attrs) {
+		this.attrs = attrs
+	}
 
 	startDrag(point: IViewPoint, e: MouseEvent): void {
 		this.selection = point
 		this.startSelection = JSON.parse(JSON.stringify(point))
-		this.startMouse = { id: undefined, x: e.pageX, y: e.pageY }
+		this.startMouse = {
+			x: e.pageX,
+			y: e.pageY,
+		}
 		document.addEventListener('mouseup', this.stopDragBound)
 		document.addEventListener('mousemove', this.onMouseMovedBound)
 	}
 
-	stopDragBound = bind(this.stopDrag, this)
-	stopDrag(): void {
+	protected stopDragBound = bind(this.stopDrag, this)
+	protected stopDrag(): void {
 		this.selection = null
 		document.removeEventListener('mouseup', this.stopDragBound)
 		document.removeEventListener('mousemove', this.onMouseMovedBound)
 		render()
 	}
 
-	onMouseMovedBound = bind(this.onMouseMoved, this)
-	onMouseMoved(e: MouseEvent): void {
-		this.selection.x = this.startSelection.x + e.pageX - this.startMouse.x
-		this.selection.y = this.startSelection.y + e.pageY - this.startMouse.y
+	protected onMouseMovedBound = bind(this.onMouseMoved, this)
+	protected onMouseMoved(e: MouseEvent): void {
+		this.selection.x = this.startSelection.x + (e.pageX - this.startMouse.x) / this.attrs.scale
+		this.selection.y = this.startSelection.y + (e.pageY - this.startMouse.y) / this.attrs.scale
 		m.redraw()
 	}
 

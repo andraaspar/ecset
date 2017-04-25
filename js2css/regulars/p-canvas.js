@@ -17,13 +17,20 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = () => `
-.${P}-canvas
+module.exports = `
+.${P}-canvas-area
 {
 	position: relative;
 	background: ${GRAY_7} url('image/{{checkers-10.svg}}');
-	overflow: auto;
+	overflow: hidden;
 	height: 100%;
+}
+
+.${P}-canvas
+{
+	position: absolute;
+	outline: 1px solid ${color('white').alpha(.2)};
+	box-shadow: 0 0 20px ${color('black').alpha(.6)};
 }
 
 .${P}-canvas-layer,

@@ -17,13 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { getRenderBezierPoint, scaleRenderBezierPoint } from './BezierPointMethods'
+
 import { IPath } from './IPath'
 import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IViewBezierPath } from './IViewBezierPath'
 import { IViewDocument } from './IViewDocument'
-import { getRenderBezierPoint } from './BezierPointMethods'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
+import { scaleVector } from './PointMethods'
 
 export function linearizeBezierPath(bezierPath: IRenderBezierPath, detailMultiplier: number): IPath {
 	let path: IPath = {
@@ -55,11 +57,11 @@ export function linearizeBezierPath(bezierPath: IRenderBezierPath, detailMultipl
 	return path
 }
 
-export function bezierPathToSvg(bezierPath: IRenderBezierPath): string {
+export function bezierPathToSvg(bezierPath: IRenderBezierPath, scale: number): string {
 	let result = ''
 	let prevBezierPoint: IRenderBezierPoint
 	for (let i = 0, n = bezierPath.points.length; i < n; i++) {
-		let bezierPoint = bezierPath.points[i]
+		let bezierPoint = scaleRenderBezierPoint(bezierPath.points[i], scale)
 		if (i == 0) {
 			result += `M${bezierPoint.center.x},${bezierPoint.center.y}`
 		} else {
@@ -68,7 +70,7 @@ export function bezierPathToSvg(bezierPath: IRenderBezierPath): string {
 		prevBezierPoint = bezierPoint
 	}
 	if (bezierPath.isLoop) {
-		let bezierPoint = bezierPath.points[0]
+		let bezierPoint = scaleRenderBezierPoint(bezierPath.points[0], scale)
 		result += `C${prevBezierPoint.handleOut.x},${prevBezierPoint.handleOut.y} ${bezierPoint.handleIn.x},${bezierPoint.handleIn.y} ${bezierPoint.center.x},${bezierPoint.center.y}`
 	}
 	return result

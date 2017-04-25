@@ -17,6 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+global.color = require('color')
+
 let out = ``
 
 let imports = [
@@ -38,6 +40,8 @@ imports.forEach(i => {
 		let t = require(i)
 		if (typeof t == 'function') {
 			out += t()
+		} else {
+			out += t
 		}
 	}
 })

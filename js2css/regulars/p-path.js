@@ -17,7 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = () => `
+module.exports = `
 .${P}-path
 {
 	fill: none;

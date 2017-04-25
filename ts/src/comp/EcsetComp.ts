@@ -20,6 +20,7 @@
 import * as m from 'mithril'
 
 import { CanvasComp } from './CanvasComp'
+import { data } from '../data/DataMethods'
 
 export declare namespace EcsetComp {
 	interface Attrs { }
@@ -34,7 +35,12 @@ export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return [
-			m(CanvasComp)
+			m(CanvasComp, {
+				'document': data.document,
+				'location': data.canvasLocation,
+				'scale': data.canvasScale,
+				'scaleSetter': (v: number) => data.canvasScale = v,
+			})
 		]
 	},
 	// oncreate(v) {},
