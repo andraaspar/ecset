@@ -76,7 +76,9 @@ function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], 
 	let stroke = strokes.pop()
 	let transformList = transformLists.pop()
 	if (stroke) {
-		let pixels = data.pixelsByStrokeId[stroke.id] || new Uint8ClampedArray(data.document.width * data.document.height * data.document.channelCount)
+		let pixels = data.pixelsByStrokeId[stroke.id]
+		let pixelCount = data.document.width * data.document.height * data.document.channelCount
+		if (!pixels || pixels.length != pixelCount) pixels = data.pixelsByStrokeId[stroke.id] = new Uint8ClampedArray(pixelCount)
 		let view: IRenderView = {
 			height: data.document.height,
 			pathsById: renderDocument.pathsById,

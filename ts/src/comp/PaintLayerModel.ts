@@ -26,21 +26,20 @@ export class PaintLayerModel {
 
 	private canvas: HTMLCanvasElement
 	private context: CanvasRenderingContext2D
-	private imageData: ImageData
 
 	constructor(
 		canvasContainer: Element,
 	) {
 		this.canvas = <HTMLCanvasElement>jQuery(canvasContainer).find('canvas')[0]
 		this.context = this.canvas.getContext('2d')
-		this.imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
 	}
 
 	update(strokeId: string) {
 		let pixels = data.pixelsByStrokeId[strokeId]
 		if (pixels) {
-			this.imageData.data.set(pixels)
-			this.context.putImageData(this.imageData, 0, 0)
+			let imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
+			imageData.data.set(pixels)
+			this.context.putImageData(imageData, 0, 0)
 		}
 	}
 }
