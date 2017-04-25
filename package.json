@@ -13,6 +13,7 @@
     "grunt-kapocs": "^2.0.4",
     "grunt-shell": "^2.1.0",
     "mkdirp": "^0.5.1",
+    "nodemon": "^1.11.0",
     "typescript": "^2.2.2",
     "webpack": "2.4.1"
   },

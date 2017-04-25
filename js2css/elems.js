@@ -32,4 +32,16 @@ body
 	height: 100%;
 	margin: 0;
 }
+
+html,
+body,
+button,
+input,
+textarea
+{
+	font-family: sans-serif;
+	font-size: 14px;
+	line-height: ${20/14};
+}
+
 `

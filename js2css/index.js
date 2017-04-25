@@ -29,6 +29,9 @@ let imports = [
 	'./regulars/p-ecset',
 	'./regulars/p-path',
 	'./regulars/p-point',
+	'./regulars/p-form',
+	'./regulars/p-border',
+	'./regulars/p-button',
 ]
 
 imports.filter(i => !i.endsWith('.css')).forEach(i => require(i))

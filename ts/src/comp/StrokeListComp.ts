@@ -20,32 +20,54 @@
 import * as m from 'mithril'
 
 import { BorderComp } from './BorderComp'
-import { CanvasComp } from './CanvasComp'
-import { FormComp } from './FormComp'
 import { P } from '../statics'
 import { data } from '../data/DataMethods'
 
-export declare namespace EcsetComp {
+export declare namespace StrokeListComp {
 	interface Attrs { }
 	interface State { }
 }
-type Vnode = m.Vnode<EcsetComp.Attrs, EcsetComp.State>
-type VnodeDOM = m.VnodeDOM<EcsetComp.Attrs, EcsetComp.State>
+type Vnode = m.Vnode<StrokeListComp.Attrs, StrokeListComp.State>
+type VnodeDOM = m.VnodeDOM<StrokeListComp.Attrs, StrokeListComp.State>
 
-export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
+export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> = {
 
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return [
-			m(CanvasComp, {
-				'document': data.document,
-				'location': data.canvasLocation,
-				'scale': data.canvasScale,
-				'scaleSetter': (v: number) => data.canvasScale = v,
-			}),
+			m(`div`, {'class': `${P}-form-title`},
+				`Strokes`,
+			),
 			m(BorderComp),
-			m(FormComp)
+			m(`div`, { 'class': `${P}-form-list` },
+				data.document.strokeIds.map(id => {
+					let stroke = data.document.strokesById[id]
+					return (
+						m(`div`, {
+							'key': id,
+							'class': `${P}-form-list-item`,
+						},
+							stroke.id
+						)
+					)
+				})
+			),
+			m(BorderComp),
+			m(`div`, {'class': `${P}-buttons ${P}--1`},
+				m(`button`, {
+					'type': `button`,
+					'class': `${P}-button`,
+				},
+					m(`span`, `Add stroke`)
+				),
+				m(`button`, {
+					'type': `button`,
+					'class': `${P}-button`,
+				},
+					m(`span`, `Show all`)
+				),
+			)
 		]
 	},
 	// oncreate(v) {},

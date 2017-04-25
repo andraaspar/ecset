@@ -18,33 +18,11 @@
  */
 
 module.exports = `
-.${P}-canvas-area
+.${P}-border
 {
-	position: relative;
-	background: ${GRAY_7} url('image/{{checkers-10.svg}}');
-	overflow: hidden;
-	flex-grow: 1;
-}
-
-.${P}-canvas
-{
-	position: absolute;
-	outline: 1px solid ${color('white').alpha(.2)};
-	box-shadow: 0 0 20px ${color('black').alpha(.6)};
-}
-
-.${P}-canvas-layer,
-.${P}-canvas-layer-canvas,
-.${P}-canvas-layer-svg
-{
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-.${P}-canvas-layer-svg:not(:root)
-{
-	overflow: visible;
+	flex-grow: 0;
+	flex-shrink: 0;
+	flex-basis: 1px;
+	background: ${color(`black`).alpha(.6)};
 }
 `
-

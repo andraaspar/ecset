@@ -18,4 +18,12 @@
  */
 
 global.P = 'e'
+
+global.GRAY_5 = '#555'
+global.GRAY_6 = '#444'
 global.GRAY_7 = '#333'
+
+global.BUTTON_PADDING = '2px 10px 4px'
+global.BUTTON_PADDING_SMALL = '1px 5px 2px'
+
+global.P_BUTTON = []

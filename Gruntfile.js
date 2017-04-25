@@ -109,9 +109,10 @@ module.exports = function (grunt) {
 			},
 			wpw: {
 				command: [
-					'"node_modules/.bin/concurrently" --kill-others --names index,worker --prefix name',
-					'"webpack --progress --colors --watch --config webpack.index.wpw.config.js"',// --display-chunks --display-reasons',
-					'"webpack --progress --colors --watch --config webpack.worker.wpw.config.js"',// --display-chunks --display-reasons',
+					'"node_modules/.bin/concurrently" --kill-others --names index,worker,css --prefix name',
+					'"webpack --watch --config webpack.index.wpw.config.js"',
+					'"webpack --watch --config webpack.worker.wpw.config.js"',
+					'"nodemon --watch js2css --exec \\"grunt compileCss\\""',
 				].join(' ')
 			}
 		}

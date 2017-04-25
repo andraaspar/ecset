@@ -18,33 +18,32 @@
  */
 
 module.exports = `
-.${P}-canvas-area
+.${P}-form-area
 {
-	position: relative;
-	background: ${GRAY_7} url('image/{{checkers-10.svg}}');
-	overflow: hidden;
+	width: 300px;
+	flex-grow: 0;
+	
+	display: flex;
+	flex-direction: column;
+}
+.${P}-form-title
+{
+	font-size: 10px;
+	color: ${color(`white`).alpha(.6)};
+	padding: ${BUTTON_PADDING_SMALL};
+}
+.${P}-form-list
+{
+	flex-basis: 20px;
+	flex-shrink: 0;
 	flex-grow: 1;
 }
-
-.${P}-canvas
+.${P}-form-list-item
 {
-	position: absolute;
-	outline: 1px solid ${color('white').alpha(.2)};
-	box-shadow: 0 0 20px ${color('black').alpha(.6)};
+	padding: ${BUTTON_PADDING};
 }
-
-.${P}-canvas-layer,
-.${P}-canvas-layer-canvas,
-.${P}-canvas-layer-svg
+.${P}-form-list-item + .${P}-form-list-item
 {
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-.${P}-canvas-layer-svg:not(:root)
-{
-	overflow: visible;
+	border-top: 1px solid black;
 }
 `
-

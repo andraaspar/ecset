@@ -19,34 +19,23 @@
 
 import * as m from 'mithril'
 
-import { BorderComp } from './BorderComp'
-import { CanvasComp } from './CanvasComp'
-import { FormComp } from './FormComp'
 import { P } from '../statics'
-import { data } from '../data/DataMethods'
 
-export declare namespace EcsetComp {
-	interface Attrs { }
-	interface State { }
+export declare namespace BorderComp {
+	interface Attrs {}
+	interface State {}
 }
-type Vnode = m.Vnode<EcsetComp.Attrs, EcsetComp.State>
-type VnodeDOM = m.VnodeDOM<EcsetComp.Attrs, EcsetComp.State>
+type Vnode = m.Vnode<BorderComp.Attrs, BorderComp.State>
+type VnodeDOM = m.VnodeDOM<BorderComp.Attrs, BorderComp.State>
 
-export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
-
+export const BorderComp: m.Comp<BorderComp.Attrs, BorderComp.State> = {
+	
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		return [
-			m(CanvasComp, {
-				'document': data.document,
-				'location': data.canvasLocation,
-				'scale': data.canvasScale,
-				'scaleSetter': (v: number) => data.canvasScale = v,
-			}),
-			m(BorderComp),
-			m(FormComp)
-		]
+		return (
+			m(`div`, {'class': `${P}-border`})
+		)
 	},
 	// oncreate(v) {},
 	// onupdate(v) {},
