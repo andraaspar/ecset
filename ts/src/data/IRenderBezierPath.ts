@@ -24,5 +24,6 @@ export interface IRenderBezierPath {
 	id?: string
 	points: IRenderBezierPoint[]
 	isLoop: boolean
+	detail?: number
 	path?: IPath
 }

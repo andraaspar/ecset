@@ -28,11 +28,13 @@ import { TSet } from './TSet'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
 import { scaleVector } from './PointMethods'
 
-export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath, detailMultiplier: number): IPath {
+export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath): IPath {
 	let path: IPath = {
 		points: [],
 		isLoop: bezierPath.isLoop
 	}
+	let detail = bezierPath.detail
+	if (isNaN(detail)) detail = .05
 
 	let n = bezierPath.points.length - 1
 	for (let i = 0; i < n; i++) {
@@ -40,7 +42,7 @@ export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath, detailM
 			a: bezierPath.points[i],
 			b: bezierPath.points[i + 1]
 		}
-		let segmentPoints = linearizeBezierSegment(bezierSegment, detailMultiplier)
+		let segmentPoints = linearizeBezierSegment(bezierSegment, detail)
 		path.points = path.points.concat(segmentPoints.slice(i ? 1 : 0))
 	}
 	
@@ -49,7 +51,7 @@ export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath, detailM
 			a: bezierPath.points[n],
 			b: bezierPath.points[0]
 		}
-		let segmentPath = linearizeBezierSegment(bezierSegment, detailMultiplier)
+		let segmentPath = linearizeBezierSegment(bezierSegment, detail)
 		path.points = path.points.concat(segmentPath.slice(1, -1))
 	} else {
 		path.points = [{x: bezierPath.points[0].handleIn.x, y: bezierPath.points[0].handleIn.y}, ...path.points, {x: bezierPath.points[n].handleOut.x, y: bezierPath.points[n].handleOut.y}]
@@ -82,8 +84,9 @@ export function viewBezierPathToRenderBezierPath(d: IViewDocument, s: TSet<IPath
 		id: p.id,
 		points: p.pointIds.map(id => getRenderBezierPoint(d, id)),
 		isLoop: p.isLoop,
+		detail: p.detail,
 	}
-	result.path = s[result.id] = s[result.id] || linearizeRenderBezierPath(result, .05)
+	result.path = s[result.id] = s[result.id] || linearizeRenderBezierPath(result)
 	return result
 }
 

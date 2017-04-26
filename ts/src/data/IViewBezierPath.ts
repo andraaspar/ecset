@@ -21,4 +21,5 @@ export interface IViewBezierPath {
 	id: string
 	pointIds: string[]
 	isLoop: boolean
+	detail?: number
 }
