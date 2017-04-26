@@ -18,6 +18,7 @@
  */
 
 import { IPoint } from './IPoint'
+import { IRenderView } from './IRenderView'
 import { IViewDocument } from './IViewDocument'
 import { RendererState } from './RendererState'
 
@@ -27,6 +28,7 @@ export interface IData {
 	rendererStates: RendererState[]
 	maxRenderers: number
 	pixelsByStrokeId: {[_: string]: Uint8ClampedArray}
+	viewsByStrokeId: {[_: string]: IRenderView}
 	canvasLocation: IPoint
 	canvasScale: number
 }

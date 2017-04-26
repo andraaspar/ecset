@@ -36,6 +36,7 @@ export function createData() {
 		rendererStates: [],
 		maxRenderers: navigator.hardwareConcurrency || 1,
 		pixelsByStrokeId: {},
+		viewsByStrokeId: {},
 		canvasLocation: {
 			x: 0,
 			y: 0,
@@ -43,43 +44,46 @@ export function createData() {
 		canvasScale: 1,
 	})
 	
-	let blackId = uuid()
-	let whiteId = uuid()
+}
+
+export function createStroke() {
+	let blackId = `Black`
+	let whiteId = `White`
 	data.document.colorsById[blackId] = createGrayViewColor(blackId, 255, 0)
 	data.document.colorsById[whiteId] = createGrayViewColor(whiteId, 255, 255)
 	
-	let black100Id = uuid()
+	let black100Id = `Black 100%`
 	data.document.aplhaMultipliersById[black100Id] = {
 		id: black100Id,
 		colorId: blackId,
 		alphaMultiplier: 1,
 	}
-	let black0Id = uuid()
+	let black0Id = `Black 0%`
 	data.document.aplhaMultipliersById[black0Id] = {
 		id: black0Id,
 		colorId: blackId,
 		alphaMultiplier: 0,
 	}
-	let white100Id = uuid()
+	let white100Id = `White 100%`
 	data.document.aplhaMultipliersById[white100Id] = {
 		id: white100Id,
 		colorId: whiteId,
 		alphaMultiplier: 1,
 	}
-	let white0Id = uuid()
+	let white0Id = `White 0%`
 	data.document.aplhaMultipliersById[white0Id] = {
 		id: white0Id,
 		colorId: whiteId,
 		alphaMultiplier: 0,
 	}
 
-	let pointZeroId = uuid()
+	let pointZeroId = `Origin`
 	data.document.pointsById[pointZeroId] = {
 		id: pointZeroId,
 		x: 0,
 		y: 0,
 	}
-	let pointOneId = uuid()
+	let pointOneId = `Tween End`
 	data.document.pointsById[pointOneId] = {
 		id: pointOneId,
 		x: 1,
@@ -122,14 +126,14 @@ export function createData() {
 		y: 900,
 	}
 	
-	let bezierPointZeroId = uuid()
+	let bezierPointZeroId = `Origin Linear`
 	data.document.bezierPointsById[bezierPointZeroId] = {
 		id: bezierPointZeroId,
 		handleInId: pointZeroId,
 		centerId: pointZeroId,
 		handleOutId: pointZeroId,
 	}
-	let bezierPointOneId = uuid()
+	let bezierPointOneId = `Tween End Linear`
 	data.document.bezierPointsById[bezierPointOneId] = {
 		id: bezierPointOneId,
 		handleInId: pointOneId,
@@ -151,7 +155,7 @@ export function createData() {
 		handleOutId: pointFId,
 	}
 	
-	let linearPathId = uuid()
+	let linearPathId = `Linear Tween`
 	data.document.bezierPathsById[linearPathId] = {
 		id: linearPathId,
 		pointIds: [bezierPointZeroId, bezierPointOneId],
@@ -164,14 +168,14 @@ export function createData() {
 		isLoop: false,
 	}
 
-	let colorSegmentBlack100ToWhite0Id = uuid()
+	let colorSegmentBlack100ToWhite0Id = `Default Color Segment 1`
 	data.document.colorSegmentsById[colorSegmentBlack100ToWhite0Id] = {
 		id: colorSegmentBlack100ToWhite0Id,
 		aId: black100Id,
 		bId: white0Id,
 		tweenPathId: linearPathId,
 	}
-	let colorSegmentWhite100ToBlack0Id = uuid()
+	let colorSegmentWhite100ToBlack0Id = `Default Color Segment 2`
 	data.document.colorSegmentsById[colorSegmentWhite100ToBlack0Id] = {
 		id: colorSegmentWhite100ToBlack0Id,
 		aId: white100Id,
@@ -179,20 +183,20 @@ export function createData() {
 		tweenPathId: linearPathId,
 	}
 	
-	let colorPathBlack100ToWhite0Id = uuid()
+	let colorPathBlack100ToWhite0Id = `Default Color Path 1`
 	data.document.colorPathsById[colorPathBlack100ToWhite0Id] = {
 		id: colorPathBlack100ToWhite0Id,
 		segmentIds: [colorSegmentBlack100ToWhite0Id],
 		segmentTs: [0],
 	}
-	let colorPathWhite100ToBlack0Id = uuid()
+	let colorPathWhite100ToBlack0Id = `Default Color Path 2`
 	data.document.colorPathsById[colorPathWhite100ToBlack0Id] = {
 		id: colorPathWhite100ToBlack0Id,
 		segmentIds: [colorSegmentWhite100ToBlack0Id],
 		segmentTs: [0],
 	}
 	
-	let colorFieldId = uuid()
+	let colorFieldId = `Default Color Field`
 	data.document.colorFieldsById[colorFieldId] = {
 		id: colorFieldId,
 		aId: colorPathBlack100ToWhite0Id,
@@ -200,13 +204,13 @@ export function createData() {
 		tTweenPathIds: [linearPathId],
 		colorTweenPathIds: [linearPathId],
 	}
-	let colorStripId = uuid()
+	let colorStripId = `Default Color Strip`
 	data.document.colorStripsById[colorStripId] = {
 		id: colorStripId,
 		colorFieldIds: [colorFieldId],
 		colorFieldTs: [0],
 	}
-	let colorStripPairId = uuid()
+	let colorStripPairId = `Default Color Strip Pair`
 	data.document.colorStripPairsById[colorStripPairId] = {
 		id: colorStripPairId,
 		leftId: colorStripId,
@@ -253,4 +257,6 @@ export function createData() {
 	}
 	
 	data.document.strokeIds.push(strokeId)
+	
+	return strokeId
 }

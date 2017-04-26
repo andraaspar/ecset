@@ -29,6 +29,6 @@ export function onMessage(e: MessageEvent) {
 	renderer.render()
 	// console.log('Render finished.')
 
-	GLOBAL.postMessage({ pixels: view.pixels })
+	GLOBAL.postMessage({ pixels: renderer.getPixels() })
 }
 GLOBAL.onmessage = onMessage

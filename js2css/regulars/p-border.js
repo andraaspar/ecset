@@ -23,6 +23,6 @@ module.exports = `
 	flex-grow: 0;
 	flex-shrink: 0;
 	flex-basis: 1px;
-	background: ${color(`black`).alpha(.6)};
+	background: ${rgba(`black`, .6)};
 }
 `

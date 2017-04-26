@@ -17,11 +17,4 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
-
-export interface IRenderValueSegment {
-	id?: string
-	a: number
-	b: number
-	tweenPath?: IRenderBezierPath
-}
+export type TSet<T> = {[_: string]: T}

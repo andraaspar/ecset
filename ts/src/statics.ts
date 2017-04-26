@@ -20,5 +20,18 @@
 import * as m from 'mithril'
 
 import { GLOBAL } from 'illa/GLOBAL'
+import { isFunction } from 'illa/Type'
 
 export const P = 'e'
+
+export function get<T>(what: (() => T | T), ...rest: (() => T | T)[]): T {
+	if (isFunction(what)) {
+		try {
+			return what()
+		} catch (e) {
+			return get.apply(undefined, rest)
+		}
+	} else {
+		return what
+	}
+}

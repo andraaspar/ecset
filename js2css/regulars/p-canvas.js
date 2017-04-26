@@ -29,8 +29,8 @@ module.exports = `
 .${P}-canvas
 {
 	position: absolute;
-	outline: 1px solid ${color('white').alpha(.2)};
-	box-shadow: 0 0 20px ${color('black').alpha(.6)};
+	outline: 1px solid ${rgba('white', .2)};
+	box-shadow: 0 0 20px ${rgba('black', .6)};
 }
 
 .${P}-canvas-layer,

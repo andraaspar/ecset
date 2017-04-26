@@ -17,19 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderValuePath } from './IRenderValuePath'
 import { IViewDocument } from './IViewDocument'
 import { IViewValuePath } from './IViewValuePath'
+import { TSet } from './TSet'
 import { getRenderValueSegment } from './ValueSegmentMethods'
 
-export function viewValuePathToRenderValuePath(d: IViewDocument, p: IViewValuePath): IRenderValuePath {
+export function viewValuePathToRenderValuePath(d: IViewDocument, s: TSet<IPath>, p: IViewValuePath): IRenderValuePath {
 	return {
 		id: p.id,
-		segments: p.segmentIds.map(id => getRenderValueSegment(d, id)),
+		segments: p.segmentIds.map(id => getRenderValueSegment(d, s, id)),
 		segmentTs: p.segmentTs.slice(0)
 	}
 }
 
-export function getRenderValuePath(d: IViewDocument, id: string): IRenderValuePath {
-	return viewValuePathToRenderValuePath(d, d.valuePathsById[id])
+export function getRenderValuePath(d: IViewDocument, s: TSet<IPath>, id: string): IRenderValuePath {
+	return viewValuePathToRenderValuePath(d, s, d.valuePathsById[id])
 }

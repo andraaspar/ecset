@@ -24,10 +24,11 @@ import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IViewBezierPath } from './IViewBezierPath'
 import { IViewDocument } from './IViewDocument'
+import { TSet } from './TSet'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
 import { scaleVector } from './PointMethods'
 
-export function linearizeBezierPath(bezierPath: IRenderBezierPath, detailMultiplier: number): IPath {
+export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath, detailMultiplier: number): IPath {
 	let path: IPath = {
 		points: [],
 		isLoop: bezierPath.isLoop
@@ -76,14 +77,16 @@ export function bezierPathToSvg(bezierPath: IRenderBezierPath, scale: number): s
 	return result
 }
 
-export function viewBezierPathToRenderBezierPath(d: IViewDocument, p: IViewBezierPath): IRenderBezierPath {
-	return {
+export function viewBezierPathToRenderBezierPath(d: IViewDocument, s: TSet<IPath>, p: IViewBezierPath): IRenderBezierPath {
+	let result: IRenderBezierPath = {
 		id: p.id,
 		points: p.pointIds.map(id => getRenderBezierPoint(d, id)),
-		isLoop: p.isLoop
+		isLoop: p.isLoop,
 	}
+	result.path = s[result.id] = s[result.id] || linearizeRenderBezierPath(result, .05)
+	return result
 }
 
-export function getRenderBezierPath(d: IViewDocument, id: string ): IRenderBezierPath {
-	return viewBezierPathToRenderBezierPath(d, d.bezierPathsById[id])
+export function getRenderBezierPath(d: IViewDocument, s: TSet<IPath>, id: string ): IRenderBezierPath {
+	return viewBezierPathToRenderBezierPath(d, s, d.bezierPathsById[id])
 }

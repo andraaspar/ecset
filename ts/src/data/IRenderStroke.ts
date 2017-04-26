@@ -17,6 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderColorStripPair } from './IRenderColorStripPair'
 import { IRenderTransform } from './IRenderTransform'
 import { IRenderValuePathPair } from './IRenderValuePathPair'
@@ -24,7 +25,7 @@ import { IRenderValuePathPair } from './IRenderValuePathPair'
 export interface IRenderStroke {
 	id?: string
 	stripPair: IRenderColorStripPair
-	bezierPathId: string
+	bezierPath: IRenderBezierPath
 	thicknessPair: IRenderValuePathPair
 	children: IRenderStroke[]
 	transform: IRenderTransform

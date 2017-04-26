@@ -17,19 +17,22 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderValueSegment } from './IRenderValueSegment'
 import { IViewDocument } from './IViewDocument'
 import { IViewValueSegment } from './IViewValueSegment'
+import { TSet } from './TSet'
+import { getRenderBezierPath } from './BezierPathMethods'
 
-export function viewValueSegmentToRenderValueSegment(d: IViewDocument, p: IViewValueSegment): IRenderValueSegment {
+export function viewValueSegmentToRenderValueSegment(d: IViewDocument, s: TSet<IPath>, p: IViewValueSegment): IRenderValueSegment {
 	return {
 		id: p.id,
 		a: p.a,
 		b: p.b,
-		tweenPathId: p.tweenPathId
+		tweenPath: getRenderBezierPath(d, s, p.tweenPathId),
 	}
 }
 
-export function getRenderValueSegment(d: IViewDocument, id: string): IRenderValueSegment {
-	return viewValueSegmentToRenderValueSegment(d, d.valueSegmentsById[id])
+export function getRenderValueSegment(d: IViewDocument, s: TSet<IPath>, id: string): IRenderValueSegment {
+	return viewValueSegmentToRenderValueSegment(d, s, d.valueSegmentsById[id])
 }

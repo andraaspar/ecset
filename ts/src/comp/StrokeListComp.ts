@@ -19,9 +19,11 @@
 
 import * as m from 'mithril'
 
+import { createStroke, data } from '../data/DataMethods'
+
 import { BorderComp } from './BorderComp'
 import { P } from '../statics'
-import { data } from '../data/DataMethods'
+import { render } from '../data/RenderMethods'
 
 export declare namespace StrokeListComp {
 	interface Attrs { }
@@ -58,14 +60,18 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 				m(`button`, {
 					'type': `button`,
 					'class': `${P}-button`,
+					'onclick': () => {
+						createStroke()
+						render()
+					},
 				},
-					m(`span`, `Add stroke`)
+					m(`span`, `New`)
 				),
 				m(`button`, {
 					'type': `button`,
 					'class': `${P}-button`,
 				},
-					m(`span`, `Show all`)
+					m(`span`, `Delete`)
 				),
 			)
 		]

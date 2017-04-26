@@ -17,20 +17,23 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderColorSegment } from './IRenderColorSegment'
 import { IViewColorSegment } from './IViewColorSegment'
 import { IViewDocument } from './IViewDocument'
+import { TSet } from './TSet'
+import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderColorFromAplhaMultiplier } from './AlphaMultiplierMethods'
 
-export function viewColorSegmentToRenderColorSegment(d: IViewDocument, p: IViewColorSegment): IRenderColorSegment {
+export function viewColorSegmentToRenderColorSegment(d: IViewDocument, s: TSet<IPath>, p: IViewColorSegment): IRenderColorSegment {
 	return {
 		id: p.id,
 		a: getRenderColorFromAplhaMultiplier(d, p.aId),
 		b: getRenderColorFromAplhaMultiplier(d, p.bId),
-		tweenPathId: p.tweenPathId,
+		tweenPath: getRenderBezierPath(d, s, p.tweenPathId),
 	}
 }
 
-export function getRenderColorSegment(d: IViewDocument, id: string): IRenderColorSegment {
-	return viewColorSegmentToRenderColorSegment(d, d.colorSegmentsById[id])
+export function getRenderColorSegment(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorSegment {
+	return viewColorSegmentToRenderColorSegment(d, s, d.colorSegmentsById[id])
 }

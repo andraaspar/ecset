@@ -19,6 +19,13 @@
 
 global.color = require('color')
 
+global.rgba = (c, alpha) => color(c).alpha(alpha)
+global.rules = (arr, mapper) => arr.map(mapper).join('')
+global.selectors = (arr, mapper) => {
+	if (mapper) arr = arr.map(mapper)
+	return arr.join(',\n')
+}
+
 let out = ``
 
 let imports = [

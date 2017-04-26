@@ -17,15 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from './IPath'
 import { IRenderStroke } from './IRenderStroke'
 import { IRenderTransform } from './IRenderTransform'
 
 export interface IRenderView {
+	channelCount: number
 	stroke: IRenderStroke
 	transforms: IRenderTransform[]
 	width: number
 	height: number
-	pixels: Uint8ClampedArray
-	pathsById: {[_: string]: IPath}
 }

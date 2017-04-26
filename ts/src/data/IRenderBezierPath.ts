@@ -17,10 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 
 export interface IRenderBezierPath {
 	id?: string
 	points: IRenderBezierPoint[]
 	isLoop: boolean
+	path?: IPath
 }

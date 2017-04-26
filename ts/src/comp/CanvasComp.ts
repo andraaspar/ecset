@@ -20,10 +20,12 @@
 import * as m from 'mithril'
 
 import { CanvasModel } from './CanvasModel'
+import { IPath } from '../data/IPath'
 import { IPoint } from '../data/IPoint'
 import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
+import { TSet } from '../data/TSet'
 import { VectorLayerComp } from './VectorLayerComp'
 import { getRenderStroke } from '../data/StrokeMethods'
 
@@ -46,6 +48,7 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
+		let s: TSet<IPath> = {}
 		return (
 			m('div', {
 				'class': `${P}-canvas-area`,
@@ -72,7 +75,7 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 							'width': v.attrs.document.width,
 							'height': v.attrs.document.height,
 							'document': v.attrs.document,
-							'stroke': getRenderStroke(v.attrs.document, id),
+							'stroke': getRenderStroke(v.attrs.document, s, id),
 							'scale': v.attrs.scale,
 						})
 					))

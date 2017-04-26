@@ -17,24 +17,27 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderStroke } from './IRenderStroke'
 import { IViewDocument } from './IViewDocument'
 import { IViewStroke } from './IViewStroke'
+import { TSet } from './TSet'
+import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderColorStripPair } from './ColorStripPairMethods'
 import { getRenderTransform } from './TransformMethods'
 import { getRenderValuePathPair } from './ValuePathPairMethods'
 
-export function viewStrokeToRenderStroke(d: IViewDocument, p: IViewStroke): IRenderStroke {
+export function viewStrokeToRenderStroke(d: IViewDocument, s: TSet<IPath>, p: IViewStroke): IRenderStroke {
 	return {
 		id: p.id,
-		bezierPathId: p.bezierPathId,
-		stripPair: getRenderColorStripPair(d, p.stripPairId),
-		thicknessPair: getRenderValuePathPair(d, p.thicknessPairId),
-		children: p.childIds.map(id => getRenderStroke(d, id)),
+		bezierPath: getRenderBezierPath(d, s, p.bezierPathId),
+		stripPair: getRenderColorStripPair(d, s, p.stripPairId),
+		thicknessPair: getRenderValuePathPair(d, s, p.thicknessPairId),
+		children: p.childIds.map(id => getRenderStroke(d, s, id)),
 		transform: getRenderTransform(d, p.transformId)
 	}
 }
 
-export function getRenderStroke(d: IViewDocument, id: string): IRenderStroke {
-	return viewStrokeToRenderStroke(d, d.strokesById[id])
+export function getRenderStroke(d: IViewDocument, s: TSet<IPath>, id: string): IRenderStroke {
+	return viewStrokeToRenderStroke(d, s, d.strokesById[id])
 }

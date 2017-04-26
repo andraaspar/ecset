@@ -17,11 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
+import { isEqual, isEqualWith } from 'lodash'
 
-export interface IRenderValueSegment {
-	id?: string
-	a: number
-	b: number
-	tweenPath?: IRenderBezierPath
+import { IRenderView } from './IRenderView'
+
+export function viewsEqual(a: IRenderView, b: IRenderView) {
+	if (!isEqualWith(a, b, (a, b, key) => key === 'pathsById' ? true : undefined)) {
+		return false
+	}
+	let paths = []
+	
+	return true
 }

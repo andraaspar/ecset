@@ -49,16 +49,15 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		let path = getRenderBezierPath(v.attrs.document, v.attrs.stroke.bezierPathId)
-		let pathD: string = bezierPathToSvg(path, v.attrs.scale)
+		let pathD: string = bezierPathToSvg(v.attrs.stroke.bezierPath, v.attrs.scale)
 		return (
 			m('div', {
 				'class': `${P}-canvas-layer`,
 			},
 				m('svg', {
 					'class': `${P}-canvas-layer-svg`,
-					'width': v.attrs.width * v.attrs.scale,
-					'height': v.attrs.height * v.attrs.scale,
+					'width': 1,
+					'height': 1,
 				},
 					m('path', {
 						'd': pathD,
@@ -68,7 +67,7 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 						'd': pathD,
 						'class': `${P}-path`
 					}),
-					path.points.map((bezierPoint, index) => {
+					v.attrs.stroke.bezierPath.points.map((bezierPoint, index) => {
 						let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
 						let handlesD = `M${scaledPoint.handleIn.x},${scaledPoint.handleIn.y}L${scaledPoint.center.x},${scaledPoint.center.y}L${scaledPoint.handleOut.x},${scaledPoint.handleOut.y}`
 						return [
@@ -82,7 +81,7 @@ export const VectorLayerComp: m.Comp<VectorLayerComp.Attrs, VectorLayerComp.Stat
 							})
 						]
 					}),
-					path.points.map(bezierPoint => {
+					v.attrs.stroke.bezierPath.points.map(bezierPoint => {
 						let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
 						return [
 							m('polygon', {

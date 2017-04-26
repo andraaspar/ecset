@@ -17,21 +17,24 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderColorField } from './IRenderColorField'
 import { IViewColorField } from './IViewColorField'
 import { IViewDocument } from './IViewDocument'
+import { TSet } from './TSet'
+import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderColorPath } from './ColorPathMethods'
 
-export function viewColorFieldToRenderColorField(d: IViewDocument, p: IViewColorField): IRenderColorField {
+export function viewColorFieldToRenderColorField(d: IViewDocument, s: TSet<IPath>, p: IViewColorField): IRenderColorField {
 	return {
 		id: p.id,
-		a: getRenderColorPath(d, p.aId),
-		b: getRenderColorPath(d, p.bId),
-		colorTweenPathIds: p.colorTweenPathIds.slice(0),
-		tTweenPathIds: p.tTweenPathIds.slice(0),
+		a: getRenderColorPath(d, s, p.aId),
+		b: getRenderColorPath(d, s, p.bId),
+		colorTweenPaths: p.colorTweenPathIds.map(id => getRenderBezierPath(d, s, id)),
+		tTweenPaths: p.tTweenPathIds.map(id => getRenderBezierPath(d, s, id)),
 	}
 }
 
-export function getRenderColorField(d: IViewDocument, id: string): IRenderColorField {
-	return viewColorFieldToRenderColorField(d, d.colorFieldsById[id])
+export function getRenderColorField(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorField {
+	return viewColorFieldToRenderColorField(d, s, d.colorFieldsById[id])
 }

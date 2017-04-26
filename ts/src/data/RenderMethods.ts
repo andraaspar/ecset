@@ -19,25 +19,35 @@
 
 import * as m from 'mithril'
 
+import { isEqual, isEqualWith } from 'lodash'
+
 import { IRenderDocument } from './IRenderDocument'
 import { IRenderStroke } from './IRenderStroke'
 import { IRenderTransform } from './IRenderTransform'
 import { IRenderView } from './IRenderView'
+import { IViewDocument } from './IViewDocument'
 import { RendererState } from './RendererState'
 import { data } from './DataMethods'
+import { get } from '../statics'
 import { viewDocumentToRenderDocument } from './DocumentMethods'
 
-export function render() {
-	console.info(`Render starting...`)
+export function render(force?: boolean) {
 	let renderDocument = viewDocumentToRenderDocument(data.document)
-	let [strokes, transformLists] = flattenStrokes(renderDocument.strokes)
-	let renderersNeeded = Math.min(data.maxRenderers, strokes.length)
+	let views = createViews(renderDocument, renderDocument.strokes)
+	if (!force) {
+		views = views.filter(view => {
+			let oldView = data.viewsByStrokeId[view.stroke.id]
+			return !isEqual(oldView, view)
+		})
+	}
+	console.info(`Views to render: ${views.length}`)
+	let renderersNeeded = Math.min(data.maxRenderers, views.length)
 	terminateBusyRenderers()
 	createRenderers(renderersNeeded)
 	console.info(`Renderers: ${data.renderers.length} Max: ${data.maxRenderers}`)
 
 	data.renderers.forEach((renderer, index) => {
-		startRender(renderer, index, strokes, transformLists, renderDocument)
+		startRender(renderer, index, views, renderDocument)
 	})
 	m.redraw()
 }
@@ -58,41 +68,32 @@ function createRenderers(count: number) {
 	}
 }
 
-function flattenStrokes(strokes: IRenderStroke[], transforms: IRenderTransform[] = []): [IRenderStroke[], IRenderTransform[][]] {
-	let allStrokes: IRenderStroke[] = []
-	let allTransformLists: IRenderTransform[][] = []
+function createViews(d: IRenderDocument, strokes: IRenderStroke[], transforms: IRenderTransform[] = []) {
+	let views: IRenderView[] = []
 	for (let stroke of strokes) {
-		allStrokes.push(stroke)
-		let transformList = transforms.concat([stroke.transform])
-		allTransformLists.push(transformList)
-		let [childStrokes, childTransformLists] = flattenStrokes(stroke.children, transformList)
-		allStrokes = allStrokes.concat(childStrokes)
-		allTransformLists = allTransformLists.concat(childTransformLists)
-	}
-	return [allStrokes, allTransformLists]
-}
-
-function startRender(renderer: Worker, index: number, strokes: IRenderStroke[], transformLists: IRenderTransform[][], renderDocument: IRenderDocument) {
-	let stroke = strokes.pop()
-	let transformList = transformLists.pop()
-	if (stroke) {
-		let pixels = data.pixelsByStrokeId[stroke.id]
-		let pixelCount = data.document.width * data.document.height * data.document.channelCount
-		if (!pixels || pixels.length != pixelCount) pixels = data.pixelsByStrokeId[stroke.id] = new Uint8ClampedArray(pixelCount)
 		let view: IRenderView = {
+			channelCount: data.document.channelCount,
 			height: data.document.height,
-			pathsById: renderDocument.pathsById,
-			pixels: pixels,
 			stroke: stroke,
-			transforms: transformList,
+			transforms: transforms.concat(stroke.transform),
 			width: data.document.width,
 		}
+		views.push(view)
+		views = views.concat(createViews(d, stroke.children, view.transforms))
+	}
+	return views
+}
+
+function startRender(renderer: Worker, index: number, views: IRenderView[], renderDocument: IRenderDocument) {
+	let view = views.pop()
+	if (view) {
 		data.rendererStates[index] = RendererState.BUSY
 		renderer.postMessage(view)
 		renderer.onmessage = (e) => {
 			data.rendererStates[index] = RendererState.IDLE
-			data.pixelsByStrokeId[stroke.id] = e.data.pixels
-			startRender(renderer, index, strokes, transformLists, renderDocument)
+			data.pixelsByStrokeId[view.stroke.id] = e.data.pixels
+			data.viewsByStrokeId[view.stroke.id] = view
+			startRender(renderer, index, views, renderDocument)
 			m.redraw()
 		}
 	} else {

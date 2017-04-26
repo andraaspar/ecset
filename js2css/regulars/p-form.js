@@ -29,7 +29,7 @@ module.exports = `
 .${P}-form-title
 {
 	font-size: 10px;
-	color: ${color(`white`).alpha(.6)};
+	color: ${rgba(`white`, .6)};
 	padding: ${BUTTON_PADDING_SMALL};
 }
 .${P}-form-list

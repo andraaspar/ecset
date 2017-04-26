@@ -17,19 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderColorStrip } from './IRenderColorStrip'
 import { IViewColorStrip } from './IViewColorStrip'
 import { IViewDocument } from './IViewDocument'
+import { TSet } from './TSet'
 import { getRenderColorField } from './ColorFieldMethods'
 
-export function viewColorStripToRenderColorStrip(d: IViewDocument, p: IViewColorStrip): IRenderColorStrip {
+export function viewColorStripToRenderColorStrip(d: IViewDocument, s: TSet<IPath>, p: IViewColorStrip): IRenderColorStrip {
 	return {
 		id: p.id,
 		colorFieldTs: p.colorFieldTs.slice(0),
-		colorFields: p.colorFieldIds.map(id => getRenderColorField(d, id))
+		colorFields: p.colorFieldIds.map(id => getRenderColorField(d, s, id))
 	}
 }
 
-export function getRenderColorStrip(d: IViewDocument, id: string): IRenderColorStrip {
-	return viewColorStripToRenderColorStrip(d, d.colorStripsById[id])
+export function getRenderColorStrip(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorStrip {
+	return viewColorStripToRenderColorStrip(d, s, d.colorStripsById[id])
 }

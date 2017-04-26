@@ -31,7 +31,7 @@ const ECSET_ELEMENT = document.getElementById('ecset')
 
 createData()
 
-GLOBAL.ecset = {
+GLOBAL.e = {
 	data: data,
 	render: render,
 	redraw: () => m.redraw(),

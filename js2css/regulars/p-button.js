@@ -19,11 +19,11 @@
 
 module.exports = () => {
 
-let buttons = `.${P}-buttons`
-let button = [`.${P}-button`, ...P_BUTTON]
-let distances = [1, 5]
+	let buttons = `.${P}-buttons`
+	let buttonSelectors = [`.${P}-button`, ...BUTTON]
+	let distances = [1, 5]
 
-return `
+	return `
 ${buttons}
 {
 	flex-shrink: 0;
@@ -31,39 +31,35 @@ ${buttons}
 	display: flex;
 	flex-wrap: wrap;
 }
-${
-distances.map(distance => `
+${rules(distances, distance => `
 ${buttons}.${P}--${distance}
 {
 	margin-top: ${-distance}px;
 	margin-left: ${-distance}px;
 }
-`)
-}
-${button.map(button => `${buttons} ${button}`)}
+`)}
+${selectors(buttonSelectors, button => `${buttons} ${button}`)}
 {
 	flex-shrink: 0;
 	
 	display: flex;
 	flex-wrap: wrap;
 }
-${
-distances.map(distance => `
-${button.map(button => `${buttons}.${P}--${distance} ${button}`)}
+${rules(distances, distance => `
+${selectors(buttonSelectors, button => `${buttons}.${P}--${distance} ${button}`)}
 {
 	margin-top: ${distance}px;
 	margin-left: ${distance}px;
 }
-`)
-}
-${button.join()}
+`)}
+${selectors(buttonSelectors)}
 {
 	flex-grow: 1;
 	flex-shrink: 0;
 	
 	display: inline-box;
 	background: ${GRAY_6};
-	border: 1px solid ${color(`white`).alpha(.1)};
+	border: 1px solid ${rgba(`white`, .1)};
 	color: white;
 	padding: ${BUTTON_PADDING};
 	text-align: center;
@@ -71,12 +67,12 @@ ${button.join()}
 	cursor: pointer;
 }
 
-${button.map(_ => `${_}:hover`).join()}
+${selectors(buttonSelectors, button => `${button}:hover`)}
 {
 	background: ${GRAY_5};
 }
 
-${button.map(_ => `${_}:active`).join()}
+${selectors(buttonSelectors, button => `${button}:active`)}
 {
 	background: ${GRAY_7};
 }

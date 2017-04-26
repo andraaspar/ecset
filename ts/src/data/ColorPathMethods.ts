@@ -17,19 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IPath } from './IPath'
 import { IRenderColorPath } from './IRenderColorPath'
 import { IViewColorPath } from './IViewColorPath'
 import { IViewDocument } from './IViewDocument'
+import { TSet } from './TSet'
 import { getRenderColorSegment } from './ColorSegmentMethods'
 
-export function viewColorPathToRenderColorPath(d: IViewDocument, p: IViewColorPath): IRenderColorPath {
+export function viewColorPathToRenderColorPath(d: IViewDocument, s: TSet<IPath>, p: IViewColorPath): IRenderColorPath {
 	return {
 		id: p.id,
-		segments: p.segmentIds.map(id => getRenderColorSegment(d, id)),
+		segments: p.segmentIds.map(id => getRenderColorSegment(d, s, id)),
 		segmentTs: p.segmentTs.slice(0)
 	}
 }
 
-export function getRenderColorPath(d: IViewDocument, id: string): IRenderColorPath {
-	return viewColorPathToRenderColorPath(d, d.colorPathsById[id])
+export function getRenderColorPath(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorPath {
+	return viewColorPathToRenderColorPath(d, s, d.colorPathsById[id])
 }

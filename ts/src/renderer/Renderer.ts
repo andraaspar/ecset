@@ -40,26 +40,27 @@ export class Renderer {
 	private segmentInfos: ISegmentInfo[]
 	private pathLength: number
 	private path: IPath
+	private pixels: Uint8ClampedArray
 
 	constructor(
 		private view: IRenderView
 	) {
-		this.path = this.view.pathsById[this.view.stroke.bezierPathId]
+		this.path = this.view.stroke.bezierPath.path
 	}
 
 	render(): void {
 
 		this.pathLength = pathLength(this.path)
 		this.segmentInfos = this.calculateSegmentInfos()
+		this.pixels = new Uint8ClampedArray(this.view.width * this.view.height * this.view.channelCount)
 
-		for (let i = 0, n = this.view.pixels.length; i < n; i += 4) {
-			let x = i / 4 % this.view.width
-			let y = Math.floor(i / 4 / this.view.width)
-			let d = 1 / 3
+		for (let i = 0, n = this.pixels.length; i < n; i += this.view.channelCount) {
+			let x = i / this.view.channelCount % this.view.width
+			let y = Math.floor(i / this.view.channelCount / this.view.width)
 			let color = this.getColor(x, y)
 			color.channelValues.push(color.channelValues.shift()) // ARGB to RGBA
 			for (let j = 0, o = color.channelValues.length; j < o; j++) {
-				this.view.pixels[i + j] = color.channelValues[j]
+				this.pixels[i + j] = color.channelValues[j]
 			}
 		}
 	}
@@ -109,8 +110,8 @@ export class Renderer {
 				}
 				let thicknessPath = getBySide(side, this.view.stroke.thicknessPair)
 				let [thicknessSegment, thicknessSegmentT] = itemAndItemT(pathT, thicknessPath.segments, thicknessPath.segmentTs)
-				let thickness = interpolateValues(thicknessSegment.a, thicknessSegment.b, pathT, this.view.pathsById[thicknessSegment.tweenPathId])
-				
+				let thickness = interpolateValues(thicknessSegment.a, thicknessSegment.b, pathT, thicknessSegment.tweenPath.path)
+
 				if (distance <= thickness && distance <= closestDistance) {
 					closestDistance = distance
 					closestThickness = thickness
@@ -127,11 +128,11 @@ export class Renderer {
 			let strip = getBySide(closestPathSide, this.view.stroke.stripPair)
 			let [colorField, colorFieldT] = itemAndItemT(closestPathT, strip.colorFields, strip.colorFieldTs)
 			let colorPath = this.getRenderColorPathAtT(colorField, colorFieldT)
-			
+
 			let colorPathT = closestDistance / closestThickness
 			let [colorSegment, colorSegmentT] = itemAndItemT(colorPathT, colorPath.segments, colorPath.segmentTs)
 
-			result = interpolateColors(colorSegment.a, colorSegment.b, colorSegmentT, this.view.pathsById[colorSegment.tweenPathId])
+			result = interpolateColors(colorSegment.a, colorSegment.b, colorSegmentT, colorSegment.tweenPath.path)
 		}
 		return result
 	}
@@ -249,17 +250,19 @@ export class Renderer {
 			let segmentB = colorField.b.segments[i]
 			let segmentAT = colorField.a.segmentTs[i]
 			let segmentBT = colorField.b.segmentTs[i]
-			let colorTweenPathId = colorField.colorTweenPathIds[i]
-			let colorTweenPath = this.view.pathsById[colorTweenPathId]
-			let tTweenPathId = colorField.tTweenPathIds[i]
-			let tTweenPath = this.view.pathsById[tTweenPathId]
+			let colorTweenPath = colorField.colorTweenPaths[i]
+			let tTweenPath = colorField.tTweenPaths[i]
 			result.segments.push({
-				a: interpolateColors(segmentA.a, segmentB.a, t, colorTweenPath),
-				b: interpolateColors(segmentA.b, segmentB.b, t, colorTweenPath),
-				tweenPathId: segmentA.tweenPathId,
+				a: interpolateColors(segmentA.a, segmentB.a, t, colorTweenPath.path),
+				b: interpolateColors(segmentA.b, segmentB.b, t, colorTweenPath.path),
+				tweenPath: segmentA.tweenPath,
 			})
-			result.segmentTs.push(interpolateValues(segmentAT, segmentBT, t, tTweenPath))
+			result.segmentTs.push(interpolateValues(segmentAT, segmentBT, t, tTweenPath.path))
 		}
 		return result
+	}
+
+	getPixels(): Uint8ClampedArray {
+		return this.pixels
 	}
 }

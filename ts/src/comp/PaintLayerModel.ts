@@ -20,6 +20,7 @@
 import * as m from 'mithril'
 
 import { data } from '../data/DataMethods'
+import { get } from '../statics'
 import jQuery from 'jquery-ts'
 
 export class PaintLayerModel {
@@ -35,7 +36,7 @@ export class PaintLayerModel {
 	}
 
 	update(strokeId: string) {
-		let pixels = data.pixelsByStrokeId[strokeId]
+		let pixels = get(() => data.pixelsByStrokeId[strokeId])
 		if (pixels) {
 			let imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
 			imageData.data.set(pixels)
