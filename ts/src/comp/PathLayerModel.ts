@@ -23,25 +23,17 @@ import { GLOBAL } from 'illa/GLOBAL'
 import { IPoint } from '../data/IPoint'
 import { IRenderPoint } from '../data/IRenderPoint'
 import { IViewPoint } from '../data/IViewPoint'
-import { VectorLayerComp } from './VectorLayerComp'
+import { PathLayerComp } from './PathLayerComp'
 import { bind } from 'illa/FunctionUtil'
+import { data } from '../data/DataMethods'
 import { render } from '../data/RenderMethods'
 
-export class VectorLayerModel {
+export class PathLayerModel {
 
-	private attrs: VectorLayerComp.Attrs
+	private attrs: PathLayerComp.Attrs
 	private selection: IViewPoint
 	private startMouse: IPoint
 	private startSelection: IRenderPoint
-	
-	initVectorLayerModel(attrs: VectorLayerComp.Attrs) {
-		this.update(attrs)
-		return this
-	}
-	
-	update(attrs: VectorLayerComp.Attrs) {
-		this.attrs = attrs
-	}
 
 	startDrag(point: IViewPoint, e: MouseEvent): void {
 		this.selection = point
@@ -64,8 +56,8 @@ export class VectorLayerModel {
 
 	protected onMouseMovedBound = bind(this.onMouseMoved, this)
 	protected onMouseMoved(e: MouseEvent): void {
-		this.selection.x = this.startSelection.x + (e.pageX - this.startMouse.x) / this.attrs.scale
-		this.selection.y = this.startSelection.y + (e.pageY - this.startMouse.y) / this.attrs.scale
+		this.selection.x = this.startSelection.x + (e.pageX - this.startMouse.x) / data.canvasScale
+		this.selection.y = this.startSelection.y + (e.pageY - this.startMouse.y) / data.canvasScale
 		m.redraw()
 	}
 

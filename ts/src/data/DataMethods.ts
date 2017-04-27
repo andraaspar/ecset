@@ -42,6 +42,8 @@ export function createData() {
 			y: 0,
 		},
 		canvasScale: 1,
+		selectedStrokeIds: {},
+		selectedPointIds: {},
 	})
 	
 }

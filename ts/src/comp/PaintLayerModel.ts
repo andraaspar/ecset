@@ -19,6 +19,7 @@
 
 import * as m from 'mithril'
 
+import { PaintLayerComp } from './PaintLayerComp'
 import { data } from '../data/DataMethods'
 import { get } from '../statics'
 import jQuery from 'jquery-ts'
@@ -29,14 +30,17 @@ export class PaintLayerModel {
 	private context: CanvasRenderingContext2D
 
 	constructor(
-		canvasContainer: Element,
+		canvas: HTMLCanvasElement,
+		attrs: PaintLayerComp.Attrs,
 	) {
-		this.canvas = <HTMLCanvasElement>jQuery(canvasContainer).find('canvas')[0]
+		this.canvas = canvas
 		this.context = this.canvas.getContext('2d')
+		
+		this.update(attrs)
 	}
 
-	update(strokeId: string) {
-		let pixels = get(() => data.pixelsByStrokeId[strokeId])
+	update(attrs: PaintLayerComp.Attrs) {
+		let pixels = get(() => data.pixelsByStrokeId[attrs.strokeId])
 		if (pixels) {
 			let imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
 			imageData.data.set(pixels)

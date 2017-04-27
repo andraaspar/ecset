@@ -24,6 +24,7 @@ import { addPoints, scaleVector, subtractPoints } from '../data/PointMethods'
 import { CanvasComp } from './CanvasComp'
 import { IPoint } from '../data/IPoint'
 import { bind } from 'illa/FunctionUtil'
+import { data } from '../data/DataMethods'
 import jQuery from 'jquery-ts'
 
 export class CanvasModel {
@@ -41,7 +42,7 @@ export class CanvasModel {
 		this.areaJq.on('mousedown', this.onMouseDownBound)
 		this.areaJq.on('wheel', this.onWheelBound)
 		
-		let targetScale = Math.min(this.areaJq.width() / this.attrs.document.width, this.areaJq.height() / this.attrs.document.height)
+		let targetScale = Math.min(this.areaJq.width() / data.document.width, this.areaJq.height() / data.document.height)
 		let scale = this.attrs.scale
 		while (scale > targetScale) {
 			scale /= 2

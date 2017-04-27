@@ -39,7 +39,6 @@ export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
 	view(v) {
 		return [
 			m(CanvasComp, {
-				'document': data.document,
 				'location': data.canvasLocation,
 				'scale': data.canvasScale,
 				'scaleSetter': (v: number) => data.canvasScale = v,

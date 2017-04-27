@@ -21,13 +21,11 @@ import * as m from 'mithril'
 
 import { P } from '../statics'
 import { PaintLayerModel } from './PaintLayerModel'
+import { data } from '../data/DataMethods'
 
 export declare namespace PaintLayerComp {
 	interface Attrs {
-		width: number
-		height: number
 		strokeId: string
-		scale: number
 	}
 	interface State {
 		model?: PaintLayerModel
@@ -37,30 +35,27 @@ type Vnode = m.Vnode<PaintLayerComp.Attrs, PaintLayerComp.State>
 type VnodeDOM = m.VnodeDOM<PaintLayerComp.Attrs, PaintLayerComp.State>
 
 export const PaintLayerComp: m.Comp<PaintLayerComp.Attrs, PaintLayerComp.State> = {
-	
+
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return (
-			m('div', {'class': `${P}-canvas-layer`},
-				m('canvas', {
-					'class': `${P}-canvas-layer-canvas`,
-					'width': v.attrs.width,
-					'height': v.attrs.height,
-					'style': {
-						'transform-origin': `0 0`,
-						'transform': `scale(${v.attrs.scale})`,
-					},
-				})
-			)
+			m('canvas', {
+				'class': `${P}-canvas-layer-canvas`,
+				'width': data.document.width,
+				'height': data.document.height,
+				'style': {
+					'transform-origin': `0 0`,
+					'transform': `scale(${data.canvasScale})`,
+				},
+			})
 		)
 	},
 	oncreate(v) {
-		v.state.model = new PaintLayerModel(v.dom)
-		v.state.model.update(v.attrs.strokeId)
+		v.state.model = new PaintLayerModel(<HTMLCanvasElement>v.dom, v.attrs)
 	},
 	onupdate(v) {
-		v.state.model.update(v.attrs.strokeId)
+		v.state.model.update(v.attrs)
 	},
 	// onbeforeremove(v) {},
 	// onremove(v) {}

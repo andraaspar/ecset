@@ -21,14 +21,17 @@ import { IPoint } from './IPoint'
 import { IRenderView } from './IRenderView'
 import { IViewDocument } from './IViewDocument'
 import { RendererState } from './RendererState'
+import { TSet } from './TSet'
 
 export interface IData {
 	document: IViewDocument
 	renderers: Worker[]
 	rendererStates: RendererState[]
 	maxRenderers: number
-	pixelsByStrokeId: {[_: string]: Uint8ClampedArray}
-	viewsByStrokeId: {[_: string]: IRenderView}
+	pixelsByStrokeId: TSet<Uint8ClampedArray>
+	viewsByStrokeId: TSet<IRenderView>
 	canvasLocation: IPoint
 	canvasScale: number
+	selectedStrokeIds: TSet<boolean>
+	selectedPointIds: TSet<boolean>
 }

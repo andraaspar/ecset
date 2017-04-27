@@ -25,13 +25,16 @@ import { IPoint } from '../data/IPoint'
 import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
+import { PathLayerComp } from './PathLayerComp'
+import { PointLayerComp } from './PointLayerComp'
 import { TSet } from '../data/TSet'
-import { VectorLayerComp } from './VectorLayerComp'
+import { data } from '../data/DataMethods'
+import { getRenderBezierPath } from '../data/BezierPathMethods'
+import { getRenderPoint } from '../data/PointMethods'
 import { getRenderStroke } from '../data/StrokeMethods'
 
 export declare namespace CanvasComp {
 	interface Attrs {
-		document: IViewDocument
 		location: IPoint
 		scale: number
 		scaleSetter: (v: number) => void
@@ -56,29 +59,26 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 				m('div', {
 					'class': `${P}-canvas`,
 					'style': {
-						'width': v.attrs.document.width * v.attrs.scale + 'px',
-						'height': v.attrs.document.height * v.attrs.scale + 'px',
-						'left': `calc(50% - ${(v.attrs.document.width / 2 - v.attrs.location.x) * v.attrs.scale}px)`,
-						'top': `calc(50% - ${(v.attrs.document.height / 2 - v.attrs.location.y) * v.attrs.scale}px)`,
+						'width': data.document.width * v.attrs.scale + 'px',
+						'height': data.document.height * v.attrs.scale + 'px',
+						'left': `calc(50% - ${(data.document.width / 2 - v.attrs.location.x) * v.attrs.scale}px)`,
+						'top': `calc(50% - ${(data.document.height / 2 - v.attrs.location.y) * v.attrs.scale}px)`,
 					}
 				},
-					v.attrs.document.strokeIds.map(id => (
+					Object.keys(data.document.strokesById).map(id => (
 						m(PaintLayerComp, {
-							'width': v.attrs.document.width,
-							'height': v.attrs.document.height,
+							'key': id,
 							'strokeId': id,
-							'scale': v.attrs.scale,
 						})
 					)),
-					v.attrs.document.strokeIds.map(id => (
-						m(VectorLayerComp, {
-							'width': v.attrs.document.width,
-							'height': v.attrs.document.height,
-							'document': v.attrs.document,
-							'stroke': getRenderStroke(v.attrs.document, s, id),
-							'scale': v.attrs.scale,
-						})
-					))
+					m('svg', {
+						'class': `${P}-canvas-layer-svg`,
+						'width': data.document.width,
+						'height': data.document.height,
+					},
+						m(PathLayerComp),
+						m(PointLayerComp)
+					)
 				)
 			)
 		)

@@ -33,7 +33,6 @@ module.exports = `
 	box-shadow: 0 0 20px ${rgba('black', .6)};
 }
 
-.${P}-canvas-layer,
 .${P}-canvas-layer-canvas,
 .${P}-canvas-layer-svg
 {
