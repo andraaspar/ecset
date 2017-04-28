@@ -17,30 +17,27 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import './statics.ts'
+import { isArray, isObjectNotNull } from 'illa/Type'
 
-import * as m from 'mithril'
-
-import { createData, data } from './data/DataMethods'
-
-import { EcsetComp } from './comp/EcsetComp'
-import { GLOBAL } from 'illa/GLOBAL'
-import { getStrokeUseCountInDocument } from './data/DocumentMethods'
-import jQuery from 'jquery-ts'
-import { render } from './data/RenderMethods'
-
-const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
-
-GLOBAL.$ = GLOBAL.jQuery = jQuery
-GLOBAL.m = m
-GLOBAL.e = {
-	data: data,
-	render: render,
-	getStrokeUseCountInDocument: (id: string) => getStrokeUseCountInDocument(data.document, id),
+export function deepFind<T>(o: any, predicate: (o: any, key: string | number, parent: any) => boolean, key?: string | number, parent?: any): T[] {
+	let result: T[] = []
+	if (o) {
+		if (predicate(o, key, parent)) {
+			result.push(o)
+		}
+	}
+	if (isArray(o)) {
+		for (let i = 0, n = o.length; i < n; i++) {
+			if (o[i]) {
+				result = result.concat(deepFind<T>(o[i], predicate, i, o))
+			}
+		}
+	} else if (isObjectNotNull(o)) {
+		for (let k of Object.keys(o)) {
+			if (o[k]) {
+				result = result.concat(deepFind<T>(o[k], predicate, k, o))
+			}
+		}
+	}
+	return result
 }
-
-m.mount(ECSET_ELEMENT, EcsetComp)
-
-render()

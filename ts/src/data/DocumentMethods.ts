@@ -21,6 +21,7 @@ import { IPath } from './IPath'
 import { IRenderDocument } from './IRenderDocument'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
+import { deepFind } from './ObjectMethods'
 import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderStroke } from './StrokeMethods'
 
@@ -53,5 +54,13 @@ export function viewDocumentToRenderDocument(d: IViewDocument): IRenderDocument 
 	let result: IRenderDocument = {
 		strokes: d.strokeIds.map(id => getRenderStroke(d, s, id)),
 	}
+	return result
+}
+
+export function getStrokeUseCountInDocument(d: IViewDocument, id: string) {
+	let result = 0
+	result += deepFind<string>(viewDocumentToRenderDocument(d), (obj, key, parent) => {
+		return key === `id` && obj === id
+	}).length
 	return result
 }
