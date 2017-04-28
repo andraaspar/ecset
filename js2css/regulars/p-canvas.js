@@ -24,6 +24,7 @@ module.exports = `
 	background: ${GRAY_7} url('image/{{checkers-10.svg}}');
 	overflow: hidden;
 	flex-grow: 1;
+	cursor: default;
 }
 
 .${P}-canvas
@@ -39,6 +40,12 @@ module.exports = `
 	position: absolute;
 	top: 0;
 	left: 0;
+	pointer-events: none;
+}
+
+.${P}-canvas-layer-svg > *
+{
+	pointer-events: auto;
 }
 
 .${P}-canvas-layer-svg:not(:root)

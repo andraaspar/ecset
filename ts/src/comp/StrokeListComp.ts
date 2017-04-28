@@ -19,7 +19,7 @@
 
 import * as m from 'mithril'
 
-import { createStroke, data } from '../data/DataMethods'
+import { createStroke, data, deselectAllStrokes, selectStroke } from '../data/DataMethods'
 
 import { BorderComp } from './BorderComp'
 import { P } from '../statics'
@@ -61,7 +61,9 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 					'type': `button`,
 					'class': `${P}-button`,
 					'onclick': () => {
-						createStroke()
+						let id = createStroke()
+						deselectAllStrokes()
+						selectStroke(id)
 						render()
 					},
 				},

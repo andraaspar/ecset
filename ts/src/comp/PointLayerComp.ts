@@ -42,27 +42,36 @@ export const PointLayerComp: m.Comp<PointLayerComp.Attrs, PointLayerComp.State> 
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return (
-			Object.keys(data.document.pointsById).map(id => data.document.pointsById[id]).filter(point => point.kind == BezierKind.ART).map(point => (
-				m(`g`, {
-					'key': point.id,
-					'onmousedown': (e: MouseEvent) => {
-						v.state.model.startDrag(point, e)
+			Object.keys(data.document.pointsById)
+				.map(id => data.document.pointsById[id])
+				.filter(point => data.selectedPointIds[point.id] && point.kind == BezierKind.ART)
+				.map(point => (
+					m('svg', {
+						'class': `${P}-canvas-layer-svg`,
+						'width': data.document.width * data.canvasScale,
+						'height': data.document.height * data.canvasScale,
+						'key': point.id,
+						'onmousedown': (e: MouseEvent) => {
+							v.state.model.startDrag(point, e)
+						},
+						'onclick': (e: MouseEvent) => {
+							e.stopPropagation()
+						},
 					},
-				},
-					m('circle', {
-						'class': `${P}-point-bg`,
-						'cx': point.x * data.canvasScale,
-						'cy': point.y * data.canvasScale,
-						'r': 5,
-					}),
-					m('circle', {
-						'class': `${P}-point`,
-						'cx': point.x * data.canvasScale,
-						'cy': point.y * data.canvasScale,
-						'r': 1,
-					})
-				)
-			))
+						m('circle', {
+							'class': `${P}-point-bg`,
+							'cx': point.x * data.canvasScale,
+							'cy': point.y * data.canvasScale,
+							'r': 5,
+						}),
+						m('circle', {
+							'class': `${P}-point`,
+							'cx': point.x * data.canvasScale,
+							'cy': point.y * data.canvasScale,
+							'r': 1,
+						})
+					)
+				))
 		)
 	},
 	oncreate(v) {

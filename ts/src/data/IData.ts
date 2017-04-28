@@ -33,5 +33,7 @@ export interface IData {
 	canvasLocation: IPoint
 	canvasScale: number
 	selectedStrokeIds: TSet<boolean>
+	selectedBezierPathIds: TSet<boolean>
+	selectedBezierPointIds: TSet<boolean>
 	selectedPointIds: TSet<boolean>
 }

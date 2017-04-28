@@ -18,19 +18,32 @@
  */
 
 module.exports = `
+.${P}-path,
+.${P}-path-bg,
+.${P}-path-ghost
+{
+	fill: none;
+	stroke-linecap: round;
+	cursor: pointer;
+}
 .${P}-path
 {
-	fill: none;
 	stroke: white;
 	stroke-width: 1px;
-	stroke-linecap: round;
 }
-.${P}-path-bg
+.${P}-path-bg,
+.${P}-path-ghost
 {
-	fill: none;
 	stroke: black;
 	stroke-width: 6px;
-	stroke-linecap: round;
 	opacity: .6;
+}
+.${P}-path-ghost
+{
+	opacity: 0;
+}
+.${P}-path-ghost:hover
+{
+	opacity: .2;
 }
 `

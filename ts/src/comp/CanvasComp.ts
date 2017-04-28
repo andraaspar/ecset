@@ -19,6 +19,8 @@
 
 import * as m from 'mithril'
 
+import { data, deselectAllStrokes } from '../data/DataMethods'
+
 import { BezierPointLayerComp } from './BezierPointLayerComp'
 import { CanvasModel } from './CanvasModel'
 import { IPath } from '../data/IPath'
@@ -29,10 +31,10 @@ import { PaintLayerComp } from './PaintLayerComp'
 import { PathLayerComp } from './PathLayerComp'
 import { PointLayerComp } from './PointLayerComp'
 import { TSet } from '../data/TSet'
-import { data } from '../data/DataMethods'
 import { getRenderBezierPath } from '../data/BezierPathMethods'
 import { getRenderPoint } from '../data/PointMethods'
 import { getRenderStroke } from '../data/StrokeMethods'
+import jQuery from 'jquery-ts'
 
 export declare namespace CanvasComp {
 	interface Attrs {
@@ -56,6 +58,9 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 		return (
 			m('div', {
 				'class': `${P}-canvas-area`,
+				'onclick': () => {
+					deselectAllStrokes()
+				},
 			},
 				m('div', {
 					'class': `${P}-canvas`,
@@ -72,15 +77,15 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 							'strokeId': id,
 						})
 					)),
-					m('svg', {
-						'class': `${P}-canvas-layer-svg`,
-						'width': data.document.width,
-						'height': data.document.height,
-					},
-						m(PathLayerComp),
-						m(BezierPointLayerComp),
-						m(PointLayerComp)
-					)
+					// m('svg', {
+					// 	'class': `${P}-canvas-layer-svg`,
+					// 	'width': data.document.width * data.canvasScale,
+					// 	'height': data.document.height * data.canvasScale,
+					// },
+					m(PathLayerComp),
+					m(BezierPointLayerComp),
+					m(PointLayerComp),
+					// )
 				)
 			)
 		)

@@ -20,6 +20,7 @@
 import * as m from 'mithril'
 
 import { bezierPathToSvg, getRenderBezierPath } from '../data/BezierPathMethods'
+import { data, deselectAllStrokes, selectStroke } from '../data/DataMethods'
 
 import { BezierKind } from '../data/BezierKind'
 import { IPath } from '../data/IPath'
@@ -30,7 +31,6 @@ import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PathLayerModel } from './PathLayerModel'
 import { TSet } from '../data/TSet'
-import { data } from '../data/DataMethods'
 import { scaleRenderBezierPoint } from '../data/BezierPointMethods'
 import { vectorAngle } from '../data/PointMethods'
 
@@ -49,70 +49,53 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		let s: TSet<IPath> = {}
+		let strokes = data.document.strokeIds.map(id => data.document.strokesById[id])
 		return (
-			Object.keys(data.document.bezierPathsById).map(id => data.document.bezierPathsById[id]).filter(path => path.kind == BezierKind.ART).map(path => {
-				let pathD: string = bezierPathToSvg(getRenderBezierPath(data.document, s, path.id), data.canvasScale)
+			strokes.sort((a, b) => {
+				let aSelected = data.selectedStrokeIds[a.id]
+				let bSelected = data.selectedStrokeIds[b.id]
+				if (aSelected == bSelected) return 0
+				if (aSelected && !bSelected) return 1
+				return -1
+			}).map(stroke => {
+				let path = data.document.bezierPathsById[stroke.bezierPathId]
+				let pathD = bezierPathToSvg(getRenderBezierPath(data.document, s, path.id), data.canvasScale)
 				return (
-					m(`g`, {
+					m('svg', {
+						'class': `${P}-canvas-layer-svg`,
+						'width': data.document.width * data.canvasScale,
+						'height': data.document.height * data.canvasScale,
 						'key': path.id,
 						'onmousedown': (e: MouseEvent) => {
-							v.state.model.startDrag(path, e)
+							if (data.selectedBezierPathIds[path.id]) {
+								v.state.model.startDrag(path, e)
+							} else {
+								deselectAllStrokes()
+								selectStroke(stroke.id)
+							}
+						},
+						'onclick': (e: MouseEvent) => {
+							e.stopPropagation()
 						},
 					},
-						m('path', {
-							'd': pathD,
-							'class': `${P}-path-bg`
-						}),
-						m('path', {
-							'd': pathD,
-							'class': `${P}-path`
-						}),
+						(data.selectedBezierPathIds[path.id] ?
+							[
+								m('path', {
+									'd': pathD,
+									'class': `${P}-path-bg`
+								}),
+								m('path', {
+									'd': pathD,
+									'class': `${P}-path`
+								}),
+							]
+							:
+							m('path', {
+								'd': pathD,
+								'class': `${P}-path-ghost`
+							})
+						)
 					)
-
-					// v.attrs.renderBezierPath.points.map((bezierPoint, index) => {
-					// 	let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
-					// 	let handlesD = `M${scaledPoint.handleIn.x},${scaledPoint.handleIn.y}L${scaledPoint.center.x},${scaledPoint.center.y}L${scaledPoint.handleOut.x},${scaledPoint.handleOut.y}`
-					// 	return [
-					// 		m('path', {
-					// 			'd': handlesD,
-					// 			'class': `${P}-path-handles-bg`
-					// 		}),
-					// 		m('path', {
-					// 			'd': handlesD,
-					// 			'class': `${P}-path-handles`
-					// 		})
-					// 	]
-					// }),
-					// v.attrs.renderBezierPath.points.map(bezierPoint => {
-					// 	let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
-					// 	return [
-					// 		m('polygon', {
-					// 			'class': `${P}-point-handle`,
-					// 			'points': `8 0, -6 -7, -6 7`,
-					// 			'transform': getTriangleTransform(scaledPoint.handleIn, scaledPoint.center, false),
-					// 			'onmousedown': (e: MouseEvent) => {
-					// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.handleIn.id], e)
-					// 			}
-					// 		}),
-					// 		m('polygon', {
-					// 			'class': `${P}-point-handle`,
-					// 			'points': `8 0, -6 -7, -6 7`,
-					// 			'transform': getTriangleTransform(scaledPoint.center, scaledPoint.handleOut, true),
-					// 			'onmousedown': (e: MouseEvent) => {
-					// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.handleOut.id], e)
-					// 			}
-					// 		}),
-					// 		m('circle', {
-					// 			'class': `${P}-point-center`,
-					// 			'cx': scaledPoint.center.x,
-					// 			'cy': scaledPoint.center.y,
-					// 			'r': 5,
-					// 			'onmousedown': (e: MouseEvent) => {
-					// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.center.id], e)
-					// 			}
-					// 		})
-					// 	]
-					// })
 				)
 			})
 		)
@@ -125,9 +108,4 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 	onremove(v) {
 		v.state.model.kill()
 	}
-}
-
-function getTriangleTransform(a: IRenderPoint, b: IRenderPoint, placeAtB: boolean): string {
-	let location = placeAtB ? b : a
-	return `rotate(${vectorAngle({ x: b.x - a.x, y: b.y - a.y }) / Math.PI * 180} ${location.x} ${location.y}) translate(${location.x} ${location.y})`
 }

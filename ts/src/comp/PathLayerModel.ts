@@ -59,7 +59,6 @@ export class PathLayerModel {
 
 	protected onMouseMovedBound = bind(this.onMouseMoved, this)
 	protected onMouseMoved(e: MouseEvent): void {
-		// this.selection.x = this.startSelection.x + (e.pageX - this.startMouse.x) / data.canvasScale
 		let movePoint: IPoint = {
 			x: (e.pageX - this.startMouse.x) / data.canvasScale,
 			y: (e.pageY - this.startMouse.y) / data.canvasScale,

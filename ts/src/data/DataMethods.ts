@@ -44,6 +44,8 @@ export function createData() {
 		},
 		canvasScale: 1,
 		selectedStrokeIds: {},
+		selectedBezierPathIds: {},
+		selectedBezierPointIds: {},
 		selectedPointIds: {},
 	})
 	
@@ -276,4 +278,45 @@ export function createStroke() {
 	data.document.strokeIds.push(strokeId)
 	
 	return strokeId
+}
+
+export function deselectAllPoints() {
+	data.selectedPointIds = {}
+}
+
+export function selectPoint(id: string) {
+	data.selectedPointIds[id] = true
+}
+
+export function deselectAllBezierPoints() {
+	data.selectedBezierPointIds = {}
+	deselectAllPoints()
+}
+
+export function selectBezierPoint(id: string) {
+	data.selectedBezierPointIds[id] = true
+	let p = data.document.bezierPointsById[id]
+	;[p.centerId, p.handleInId, p.handleOutId].forEach(selectPoint)
+}
+
+export function deselectAllBezierPaths() {
+	data.selectedBezierPathIds = {}
+	deselectAllBezierPoints()
+}
+
+export function selectBezierPath(id: string) {
+	data.selectedBezierPathIds[id] = true
+	let p = data.document.bezierPathsById[id]
+	p.pointIds.forEach(selectBezierPoint)
+}
+
+export function deselectAllStrokes() {
+	data.selectedStrokeIds = {}
+	deselectAllBezierPaths()
+}
+
+export function selectStroke(id: string) {
+	data.selectedStrokeIds[id] = true
+	let s = data.document.strokesById[id]
+	selectBezierPath(s.bezierPathId)
 }
