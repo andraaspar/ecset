@@ -17,8 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { BezierKind } from './BezierKind'
+
 export interface IViewBezierPoint {
 	id: string
+	kind: BezierKind
 	centerId: string
 	handleInId: string
 	handleOutId: string

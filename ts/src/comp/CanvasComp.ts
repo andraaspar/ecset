@@ -19,6 +19,7 @@
 
 import * as m from 'mithril'
 
+import { BezierPointLayerComp } from './BezierPointLayerComp'
 import { CanvasModel } from './CanvasModel'
 import { IPath } from '../data/IPath'
 import { IPoint } from '../data/IPoint'
@@ -77,6 +78,7 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 						'height': data.document.height,
 					},
 						m(PathLayerComp),
+						m(BezierPointLayerComp),
 						m(PointLayerComp)
 					)
 				)

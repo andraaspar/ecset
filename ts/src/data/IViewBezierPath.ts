@@ -17,8 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { BezierKind } from './BezierKind'
+
 export interface IViewBezierPath {
 	id: string
+	kind: BezierKind
 	pointIds: string[]
 	isLoop: boolean
 	detail?: number

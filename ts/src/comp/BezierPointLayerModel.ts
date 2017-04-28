@@ -19,28 +19,23 @@
 
 import * as m from 'mithril'
 
-import { GLOBAL } from 'illa/GLOBAL'
-import { IPath } from '../data/IPath'
 import { IPoint } from '../data/IPoint'
-import { IRenderBezierPath } from '../data/IRenderBezierPath'
-import { IRenderPoint } from '../data/IRenderPoint'
-import { IViewBezierPath } from '../data/IViewBezierPath'
-import { IViewPoint } from '../data/IViewPoint'
-import { PathLayerComp } from './PathLayerComp'
+import { IRenderBezierPoint } from '../data/IRenderBezierPoint'
+import { IViewBezierPoint } from '../data/IViewBezierPoint'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
-import { getRenderBezierPath } from '../data/BezierPathMethods'
+import { getRenderBezierPoint } from '../data/BezierPointMethods'
 import { render } from '../data/RenderMethods'
 
-export class PathLayerModel {
-
-	private selection: IViewBezierPath
+export class BezierPointLayerModel {
+	
+	private selection: IViewBezierPoint
 	private startMouse: IPoint
-	private startSelection: IRenderBezierPath
+	private startSelection: IRenderBezierPoint
 
-	startDrag(path: IViewBezierPath, e: MouseEvent): void {
-		this.selection = path
-		this.startSelection = getRenderBezierPath(data.document, {}, path.id)
+	startDrag(bezierPoint: IViewBezierPoint, e: MouseEvent): void {
+		this.selection = bezierPoint
+		this.startSelection = getRenderBezierPoint(data.document, bezierPoint.id)
 		this.startMouse = {
 			x: e.pageX,
 			y: e.pageY,
@@ -64,12 +59,10 @@ export class PathLayerModel {
 			x: (e.pageX - this.startMouse.x) / data.canvasScale,
 			y: (e.pageY - this.startMouse.y) / data.canvasScale,
 		}
-		this.startSelection.points.map(bezierPoint => {
-			[bezierPoint.center, bezierPoint.handleIn, bezierPoint.handleOut].forEach(startPoint => {
-				let viewPoint = data.document.pointsById[startPoint.id]
-				viewPoint.x = startPoint.x + movePoint.x
-				viewPoint.y = startPoint.y + movePoint.y
-			})
+		;[this.startSelection.center, this.startSelection.handleIn, this.startSelection.handleOut].forEach(startPoint => {
+			let viewPoint = data.document.pointsById[startPoint.id]
+			viewPoint.x = startPoint.x + movePoint.x
+			viewPoint.y = startPoint.y + movePoint.y
 		})
 		m.redraw()
 	}

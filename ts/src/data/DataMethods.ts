@@ -17,6 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { BezierKind } from './BezierKind'
 import { IData } from './IData'
 import { createGrayViewColor } from './ColorMethods'
 import { createViewDocument } from './DocumentMethods'
@@ -82,48 +83,56 @@ export function createStroke() {
 	let pointZeroId = `Origin`
 	data.document.pointsById[pointZeroId] = {
 		id: pointZeroId,
+		kind: BezierKind.TWEEN,
 		x: 0,
 		y: 0,
 	}
 	let pointOneId = `Tween End`
 	data.document.pointsById[pointOneId] = {
 		id: pointOneId,
+		kind: BezierKind.TWEEN,
 		x: 1,
 		y: 1,
 	}
 	let pointAId = uuid()
 	data.document.pointsById[pointAId] = {
 		id: pointAId,
+		kind: BezierKind.ART,
 		x: 100,
 		y: 100,
 	}
 	let pointBId = uuid()
 	data.document.pointsById[pointBId] = {
 		id: pointBId,
+		kind: BezierKind.ART,
 		x: 300,
 		y: 80,
 	}
 	let pointCId = uuid()
 	data.document.pointsById[pointCId] = {
 		id: pointCId,
+		kind: BezierKind.ART,
 		x: 400,
 		y: 100,
 	}
 	let pointDId = uuid()
 	data.document.pointsById[pointDId] = {
 		id: pointDId,
+		kind: BezierKind.ART,
 		x: 600,
 		y: 900,
 	}
 	let pointEId = uuid()
 	data.document.pointsById[pointEId] = {
 		id: pointEId,
+		kind: BezierKind.ART,
 		x: 700,
 		y: 920,
 	}
 	let pointFId = uuid()
 	data.document.pointsById[pointFId] = {
 		id: pointFId,
+		kind: BezierKind.ART,
 		x: 900,
 		y: 900,
 	}
@@ -131,6 +140,7 @@ export function createStroke() {
 	let bezierPointZeroId = `Origin Linear`
 	data.document.bezierPointsById[bezierPointZeroId] = {
 		id: bezierPointZeroId,
+		kind: BezierKind.TWEEN,
 		handleInId: pointZeroId,
 		centerId: pointZeroId,
 		handleOutId: pointZeroId,
@@ -138,6 +148,7 @@ export function createStroke() {
 	let bezierPointOneId = `Tween End Linear`
 	data.document.bezierPointsById[bezierPointOneId] = {
 		id: bezierPointOneId,
+		kind: BezierKind.TWEEN,
 		handleInId: pointOneId,
 		centerId: pointOneId,
 		handleOutId: pointOneId,
@@ -145,6 +156,7 @@ export function createStroke() {
 	let bezierPointAId = uuid()
 	data.document.bezierPointsById[bezierPointAId] = {
 		id: bezierPointAId,
+		kind: BezierKind.ART,
 		handleInId: pointAId,
 		centerId: pointBId,
 		handleOutId: pointCId,
@@ -152,6 +164,7 @@ export function createStroke() {
 	let bezierPointBId = uuid()
 	data.document.bezierPointsById[bezierPointBId] = {
 		id: bezierPointBId,
+		kind: BezierKind.ART,
 		handleInId: pointDId,
 		centerId: pointEId,
 		handleOutId: pointFId,
@@ -160,12 +173,14 @@ export function createStroke() {
 	let linearPathId = `Linear Tween`
 	data.document.bezierPathsById[linearPathId] = {
 		id: linearPathId,
+		kind: BezierKind.TWEEN,
 		pointIds: [bezierPointZeroId, bezierPointOneId],
 		isLoop: false,
 	}
 	let curvePathId = uuid()
 	data.document.bezierPathsById[curvePathId] = {
 		id: curvePathId,
+		kind: BezierKind.ART,
 		pointIds: [bezierPointAId, bezierPointBId],
 		isLoop: false,
 	}

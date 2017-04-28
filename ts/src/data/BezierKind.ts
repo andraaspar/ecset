@@ -17,19 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = `
-.${P}-point
-{
-	fill: white;
+export enum BezierKind {
+	ART ,
+	PROFILE ,
+	TWEEN ,
 }
-.${P}-point-bg
-{
-	fill: black;
-	opacity: .6;
-}
-.${P}-point-handle
-{
-	fill: black;
-	stroke: white;
-}
-`

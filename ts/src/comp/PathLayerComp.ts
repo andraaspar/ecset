@@ -21,6 +21,7 @@ import * as m from 'mithril'
 
 import { bezierPathToSvg, getRenderBezierPath } from '../data/BezierPathMethods'
 
+import { BezierKind } from '../data/BezierKind'
 import { IPath } from '../data/IPath'
 import { IRenderBezierPath } from '../data/IRenderBezierPath'
 import { IRenderPoint } from '../data/IRenderPoint'
@@ -49,13 +50,15 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 	view(v) {
 		let s: TSet<IPath> = {}
 		return (
-			Object.keys(data.document.bezierPathsById).map(id => {
-				let renderBezierPath = getRenderBezierPath(data.document, s, id)
-				let pathD: string = bezierPathToSvg(renderBezierPath, data.canvasScale)
-				return m.fragment({
-					'key': id,
-				},
-					[
+			Object.keys(data.document.bezierPathsById).map(id => data.document.bezierPathsById[id]).filter(path => path.kind == BezierKind.ART).map(path => {
+				let pathD: string = bezierPathToSvg(getRenderBezierPath(data.document, s, path.id), data.canvasScale)
+				return (
+					m(`g`, {
+						'key': path.id,
+						'onmousedown': (e: MouseEvent) => {
+							v.state.model.startDrag(path, e)
+						},
+					},
 						m('path', {
 							'd': pathD,
 							'class': `${P}-path-bg`
@@ -64,51 +67,52 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 							'd': pathD,
 							'class': `${P}-path`
 						}),
-						// v.attrs.renderBezierPath.points.map((bezierPoint, index) => {
-						// 	let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
-						// 	let handlesD = `M${scaledPoint.handleIn.x},${scaledPoint.handleIn.y}L${scaledPoint.center.x},${scaledPoint.center.y}L${scaledPoint.handleOut.x},${scaledPoint.handleOut.y}`
-						// 	return [
-						// 		m('path', {
-						// 			'd': handlesD,
-						// 			'class': `${P}-path-handles-bg`
-						// 		}),
-						// 		m('path', {
-						// 			'd': handlesD,
-						// 			'class': `${P}-path-handles`
-						// 		})
-						// 	]
-						// }),
-						// v.attrs.renderBezierPath.points.map(bezierPoint => {
-						// 	let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
-						// 	return [
-						// 		m('polygon', {
-						// 			'class': `${P}-point-handle`,
-						// 			'points': `8 0, -6 -7, -6 7`,
-						// 			'transform': getTriangleTransform(scaledPoint.handleIn, scaledPoint.center, false),
-						// 			'onmousedown': (e: MouseEvent) => {
-						// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.handleIn.id], e)
-						// 			}
-						// 		}),
-						// 		m('polygon', {
-						// 			'class': `${P}-point-handle`,
-						// 			'points': `8 0, -6 -7, -6 7`,
-						// 			'transform': getTriangleTransform(scaledPoint.center, scaledPoint.handleOut, true),
-						// 			'onmousedown': (e: MouseEvent) => {
-						// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.handleOut.id], e)
-						// 			}
-						// 		}),
-						// 		m('circle', {
-						// 			'class': `${P}-point-center`,
-						// 			'cx': scaledPoint.center.x,
-						// 			'cy': scaledPoint.center.y,
-						// 			'r': 5,
-						// 			'onmousedown': (e: MouseEvent) => {
-						// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.center.id], e)
-						// 			}
-						// 		})
-						// 	]
-						// })
-					]
+					)
+
+					// v.attrs.renderBezierPath.points.map((bezierPoint, index) => {
+					// 	let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
+					// 	let handlesD = `M${scaledPoint.handleIn.x},${scaledPoint.handleIn.y}L${scaledPoint.center.x},${scaledPoint.center.y}L${scaledPoint.handleOut.x},${scaledPoint.handleOut.y}`
+					// 	return [
+					// 		m('path', {
+					// 			'd': handlesD,
+					// 			'class': `${P}-path-handles-bg`
+					// 		}),
+					// 		m('path', {
+					// 			'd': handlesD,
+					// 			'class': `${P}-path-handles`
+					// 		})
+					// 	]
+					// }),
+					// v.attrs.renderBezierPath.points.map(bezierPoint => {
+					// 	let scaledPoint = scaleRenderBezierPoint(bezierPoint, v.attrs.scale)
+					// 	return [
+					// 		m('polygon', {
+					// 			'class': `${P}-point-handle`,
+					// 			'points': `8 0, -6 -7, -6 7`,
+					// 			'transform': getTriangleTransform(scaledPoint.handleIn, scaledPoint.center, false),
+					// 			'onmousedown': (e: MouseEvent) => {
+					// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.handleIn.id], e)
+					// 			}
+					// 		}),
+					// 		m('polygon', {
+					// 			'class': `${P}-point-handle`,
+					// 			'points': `8 0, -6 -7, -6 7`,
+					// 			'transform': getTriangleTransform(scaledPoint.center, scaledPoint.handleOut, true),
+					// 			'onmousedown': (e: MouseEvent) => {
+					// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.handleOut.id], e)
+					// 			}
+					// 		}),
+					// 		m('circle', {
+					// 			'class': `${P}-point-center`,
+					// 			'cx': scaledPoint.center.x,
+					// 			'cy': scaledPoint.center.y,
+					// 			'r': 5,
+					// 			'onmousedown': (e: MouseEvent) => {
+					// 				v.state.model.startDrag(data.document.pointsById[bezierPoint.center.id], e)
+					// 			}
+					// 		})
+					// 	]
+					// })
 				)
 			})
 		)

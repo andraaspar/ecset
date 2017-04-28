@@ -35,6 +35,7 @@ let imports = [
 	'./regulars/p-canvas',
 	'./regulars/p-ecset',
 	'./regulars/p-path',
+	'./regulars/p-bezier-point',
 	'./regulars/p-point',
 	'./regulars/p-form',
 	'./regulars/p-border',

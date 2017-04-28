@@ -17,8 +17,10 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { BezierKind } from './BezierKind'
 import { IPoint } from './IPoint'
 
 export interface IViewPoint extends IPoint {
 	id: string
+	kind: BezierKind
 }
