@@ -74,7 +74,7 @@ export class CanvasModel {
 
 	protected onMouseDownBound = bind(this.onMouseDown, this)
 	protected onMouseDown(e: jQuery.IEvent) {
-		if (e.which == 2 && !this.moveHandlersAttached) {
+		if (e.button == 1 && !this.moveHandlersAttached) {
 			e.preventDefault()
 
 			jQuery(document)
@@ -108,7 +108,7 @@ export class CanvasModel {
 
 	protected onMouseUpBound = bind(this.onMouseUp, this)
 	protected onMouseUp(e: jQuery.IEvent) {
-		if (e.which == 2) {
+		if (e.button == 1) {
 			e.preventDefault()
 
 			this.detachMoveHandlers()

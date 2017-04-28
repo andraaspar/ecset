@@ -39,22 +39,26 @@ export class PathLayerModel {
 	private startSelection: IRenderBezierPath
 
 	startDrag(path: IViewBezierPath, e: MouseEvent): void {
-		this.selection = path
-		this.startSelection = getRenderBezierPath(data.document, {}, path.id)
-		this.startMouse = {
-			x: e.pageX,
-			y: e.pageY,
+		if (e.button == 0) {
+			this.selection = path
+			this.startSelection = getRenderBezierPath(data.document, {}, path.id)
+			this.startMouse = {
+				x: e.pageX,
+				y: e.pageY,
+			}
+			document.addEventListener('mouseup', this.stopDragBound)
+			document.addEventListener('mousemove', this.onMouseMovedBound)
 		}
-		document.addEventListener('mouseup', this.stopDragBound)
-		document.addEventListener('mousemove', this.onMouseMovedBound)
 	}
 
 	protected stopDragBound = bind(this.stopDrag, this)
-	protected stopDrag(): void {
-		this.selection = null
-		document.removeEventListener('mouseup', this.stopDragBound)
-		document.removeEventListener('mousemove', this.onMouseMovedBound)
-		render()
+	protected stopDrag(e?: MouseEvent): void {
+		if (!e || e.button == 0) {
+			this.selection = null
+			document.removeEventListener('mouseup', this.stopDragBound)
+			document.removeEventListener('mousemove', this.onMouseMovedBound)
+			render()
+		}
 	}
 
 	protected onMouseMovedBound = bind(this.onMouseMoved, this)
