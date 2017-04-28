@@ -94,6 +94,7 @@ function startRender(renderer: Worker, index: number, views: IRenderView[], rend
 			data.pixelsByStrokeId[view.stroke.id] = e.data.pixels
 			data.viewsByStrokeId[view.stroke.id] = view
 			startRender(renderer, index, views, renderDocument)
+			data.lastRenderFinished = Date.now()
 			m.redraw()
 		}
 	} else {

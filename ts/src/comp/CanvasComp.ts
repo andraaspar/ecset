@@ -71,12 +71,8 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 						'top': `calc(50% - ${(data.document.height / 2 - v.attrs.location.y) * v.attrs.scale}px)`,
 					}
 				},
-					Object.keys(data.document.strokesById).map(id => (
-						m(PaintLayerComp, {
-							'key': id,
-							'strokeId': id,
-						})
-					)),
+					
+					m(PaintLayerComp),
 					// m('svg', {
 					// 	'class': `${P}-canvas-layer-svg`,
 					// 	'width': data.document.width * data.canvasScale,

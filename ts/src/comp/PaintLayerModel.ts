@@ -20,31 +20,45 @@
 import * as m from 'mithril'
 
 import { PaintLayerComp } from './PaintLayerComp'
+import { RendererState } from '../data/RendererState'
 import { data } from '../data/DataMethods'
 import { get } from '../statics'
 import jQuery from 'jquery-ts'
 
 export class PaintLayerModel {
 
+	private tempCanvas = document.createElement('canvas')
+	private tempContext = this.tempCanvas.getContext('2d')
 	private canvas: HTMLCanvasElement
 	private context: CanvasRenderingContext2D
+	private lastComposited = 0
 
 	constructor(
 		canvas: HTMLCanvasElement,
-		attrs: PaintLayerComp.Attrs,
 	) {
 		this.canvas = canvas
 		this.context = this.canvas.getContext('2d')
-		
-		this.update(attrs)
 	}
 
-	update(attrs: PaintLayerComp.Attrs) {
-		let pixels = get(() => data.pixelsByStrokeId[attrs.strokeId])
-		if (pixels) {
-			let imageData = this.context.createImageData(this.canvas.width, this.canvas.height)
-			imageData.data.set(pixels)
-			this.context.putImageData(imageData, 0, 0)
+	update() {
+		if (data.lastRenderFinished > this.lastComposited && data.rendererStates.filter(state => state == RendererState.BUSY).length == 0) {
+			this.tempCanvas.width = this.canvas.width
+			this.tempCanvas.height = this.canvas.height
+			let imageData = this.tempContext.createImageData(this.canvas.width, this.canvas.height)
+
+			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+			Object.keys(data.document.strokesById).map(id => {
+				let pixels = get(() => data.pixelsByStrokeId[id])
+				if (pixels) {
+					imageData.data.set(pixels)
+					this.tempContext.putImageData(imageData, 0, 0)
+
+					this.context.drawImage(this.tempCanvas, 0, 0)
+				}
+			})
+			
+			this.lastComposited = Date.now()
 		}
 	}
 }

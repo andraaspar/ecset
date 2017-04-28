@@ -37,6 +37,7 @@ module.exports = `
 	flex-basis: 20px;
 	flex-shrink: 0;
 	flex-grow: 1;
+	overflow: auto;
 }
 .${P}-form-list-item
 {

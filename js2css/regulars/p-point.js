@@ -18,6 +18,11 @@
  */
 
 module.exports = `
+.${P}-point,
+.${P}-point-bg
+{
+	cursor: pointer;
+}
 .${P}-point
 {
 	fill: white;
@@ -26,10 +31,5 @@ module.exports = `
 {
 	fill: black;
 	opacity: .6;
-}
-.${P}-point-handle
-{
-	fill: black;
-	stroke: white;
 }
 `

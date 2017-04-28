@@ -36,6 +36,7 @@ export function createData() {
 		renderers: [],
 		rendererStates: [],
 		maxRenderers: navigator.hardwareConcurrency || 1,
+		lastRenderFinished: 0,
 		pixelsByStrokeId: {},
 		viewsByStrokeId: {},
 		canvasLocation: {

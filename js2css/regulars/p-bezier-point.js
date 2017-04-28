@@ -18,20 +18,23 @@
  */
 
 module.exports = `
-.${P}-bezier-point
+.${P}-bezier-point,
+.${P}-bezier-point-bg
 {
 	fill: none;
+	stroke-linecap: round;
+	cursor: pointer;
+}
+.${P}-bezier-point
+{
 	stroke: white;
 	stroke-width: 1px;
-	stroke-linecap: round;
 	stroke-dasharray: 6, 6;
 }
 .${P}-bezier-point-bg
 {
-	fill: none;
 	stroke: black;
 	stroke-width: 3px;
-	stroke-linecap: round;
 	opacity: .6;
 }
 `

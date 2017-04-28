@@ -24,9 +24,7 @@ import { PaintLayerModel } from './PaintLayerModel'
 import { data } from '../data/DataMethods'
 
 export declare namespace PaintLayerComp {
-	interface Attrs {
-		strokeId: string
-	}
+	interface Attrs {}
 	interface State {
 		model?: PaintLayerModel
 	}
@@ -52,10 +50,10 @@ export const PaintLayerComp: m.Comp<PaintLayerComp.Attrs, PaintLayerComp.State> 
 		)
 	},
 	oncreate(v) {
-		v.state.model = new PaintLayerModel(<HTMLCanvasElement>v.dom, v.attrs)
+		v.state.model = new PaintLayerModel(<HTMLCanvasElement>v.dom)
 	},
 	onupdate(v) {
-		v.state.model.update(v.attrs)
+		v.state.model.update()
 	},
 	// onbeforeremove(v) {},
 	// onremove(v) {}

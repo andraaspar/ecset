@@ -25,16 +25,18 @@ import { createData, data } from './data/DataMethods'
 
 import { EcsetComp } from './comp/EcsetComp'
 import { GLOBAL } from 'illa/GLOBAL'
+import jQuery from 'jquery-ts'
 import { render } from './data/RenderMethods'
 
 const ECSET_ELEMENT = document.getElementById('ecset')
 
 createData()
 
+GLOBAL.$ = GLOBAL.jQuery = jQuery
+GLOBAL.m = m
 GLOBAL.e = {
 	data: data,
 	render: render,
-	redraw: () => m.redraw(),
 }
 
 m.mount(ECSET_ELEMENT, EcsetComp)

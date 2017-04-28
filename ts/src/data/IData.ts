@@ -28,6 +28,7 @@ export interface IData {
 	renderers: Worker[]
 	rendererStates: RendererState[]
 	maxRenderers: number
+	lastRenderFinished: number
 	pixelsByStrokeId: TSet<Uint8ClampedArray>
 	viewsByStrokeId: TSet<IRenderView>
 	canvasLocation: IPoint
