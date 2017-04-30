@@ -18,16 +18,9 @@
  */
 
 import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderBezierPathPair } from './IRenderBezierPathPair'
-import { IRenderColorStripPair } from './IRenderColorStripPair'
-import { IRenderTransform } from './IRenderTransform'
-import { IRenderValuePathPair } from './IRenderValuePathPair'
 
-export interface IRenderStroke {
-	id?: string
-	stripPair: IRenderColorStripPair
-	bezierPath: IRenderBezierPath
-	thicknessPair: IRenderBezierPathPair
-	children: IRenderStroke[]
-	transform: IRenderTransform
+export interface IRenderBezierPathPair {
+	id: string
+	left: IRenderBezierPath
+	right: IRenderBezierPath
 }

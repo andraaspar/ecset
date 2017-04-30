@@ -17,17 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderBezierPathPair } from './IRenderBezierPathPair'
-import { IRenderColorStripPair } from './IRenderColorStripPair'
-import { IRenderTransform } from './IRenderTransform'
-import { IRenderValuePathPair } from './IRenderValuePathPair'
+import { BezierKind } from './BezierKind'
 
-export interface IRenderStroke {
-	id?: string
-	stripPair: IRenderColorStripPair
-	bezierPath: IRenderBezierPath
-	thicknessPair: IRenderBezierPathPair
-	children: IRenderStroke[]
-	transform: IRenderTransform
+export interface IViewBezierPathPair {
+	id: string
+	leftId: string
+	rightId: string
+	kind: BezierKind
 }

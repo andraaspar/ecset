@@ -236,23 +236,65 @@ export function createStroke() {
 		leftId: colorStripId,
 		rightId: colorStripId,
 	}
-
-	let thicknessSegmentId = uuid()
-	data.document.valueSegmentsById[thicknessSegmentId] = {
-		id: thicknessSegmentId,
-		a: 0,
-		b: 100,
-		tweenPathId: linearPathId,
+	
+	let thicknessPointAId = uuid()
+	data.document.pointsById[thicknessPointAId] = {
+		id: thicknessPointAId,
+		x: 0,
+		y: 0,
+		kind: BezierKind.PROFILE,
 	}
+	let thicknessPointBId = uuid()
+	data.document.pointsById[thicknessPointBId] = {
+		id: thicknessPointBId,
+		x: .25,
+		y: 100,
+		kind: BezierKind.PROFILE,
+	}
+	let thicknessPointCId = uuid()
+	data.document.pointsById[thicknessPointCId] = {
+		id: thicknessPointCId,
+		x: .75,
+		y: 100,
+		kind: BezierKind.PROFILE,
+	}
+	let thicknessPointDId = uuid()
+	data.document.pointsById[thicknessPointDId] = {
+		id: thicknessPointDId,
+		x: 1,
+		y: 0,
+		kind: BezierKind.PROFILE,
+	}
+	
+	let thicknessBezierPointAId = uuid()
+	data.document.bezierPointsById[thicknessBezierPointAId] = {
+		id: thicknessBezierPointAId,
+		kind: BezierKind.PROFILE,
+		handleInId: thicknessPointAId,
+		centerId: thicknessPointAId,
+		handleOutId: thicknessPointBId,
+	}
+	let thicknessBezierPointBId = uuid()
+	data.document.bezierPointsById[thicknessBezierPointBId] = {
+		id: thicknessBezierPointBId,
+		kind: BezierKind.PROFILE,
+		handleInId: thicknessPointCId,
+		centerId: thicknessPointDId,
+		handleOutId: thicknessPointDId,
+	}
+	
 	let thicknessPathId = uuid()
-	data.document.valuePathsById[thicknessPathId] = {
+	data.document.bezierPathsById[thicknessPathId] = {
 		id: thicknessPathId,
-		segmentIds: [thicknessSegmentId],
-		segmentTs: [0],
+		kind: BezierKind.PROFILE,
+		pointIds: [thicknessBezierPointAId, thicknessBezierPointBId],
+		isLoop: false,
 	}
-	let thicknessPairId = uuid()
-	data.document.valuePathPairsById[thicknessPairId] = {
-		id: thicknessPairId,
+	
+	let thicknessPathPairId = uuid()
+	data.document.bezierPathPairsById[thicknessPathPairId] = {
+		id: thicknessPathPairId,
+		kind: BezierKind.PROFILE,
 		leftId: thicknessPathId,
 		rightId: thicknessPathId,
 	}
@@ -271,7 +313,7 @@ export function createStroke() {
 		id: strokeId,
 		stripPairId: colorStripPairId,
 		bezierPathId: curvePathId,
-		thicknessPairId: thicknessPairId,
+		thicknessPairId: thicknessPathPairId,
 		childIds: [],
 		transformId: transformId,
 	}

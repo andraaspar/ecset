@@ -23,6 +23,7 @@ import { IViewDocument } from './IViewDocument'
 import { IViewStroke } from './IViewStroke'
 import { TSet } from './TSet'
 import { getRenderBezierPath } from './BezierPathMethods'
+import { getRenderBezierPathPair } from './BezierPathPairMethods'
 import { getRenderColorStripPair } from './ColorStripPairMethods'
 import { getRenderTransform } from './TransformMethods'
 import { getRenderValuePathPair } from './ValuePathPairMethods'
@@ -32,7 +33,7 @@ export function viewStrokeToRenderStroke(d: IViewDocument, s: TSet<IPath>, p: IV
 		id: p.id,
 		bezierPath: getRenderBezierPath(d, s, p.bezierPathId),
 		stripPair: getRenderColorStripPair(d, s, p.stripPairId),
-		thicknessPair: getRenderValuePathPair(d, s, p.thicknessPairId),
+		thicknessPair: getRenderBezierPathPair(d, s, p.thicknessPairId),
 		children: p.childIds.map(id => getRenderStroke(d, s, id)),
 		transform: getRenderTransform(d, p.transformId)
 	}

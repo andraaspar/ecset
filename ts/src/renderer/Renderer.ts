@@ -18,7 +18,7 @@
  */
 
 import { addPoints, reverseVector, toUnitVector } from '../data/PointMethods'
-import { getSegmentOfPath, pathLength, pathSegmentCount } from '../data/PathMethods'
+import { getSegmentOfPath, pathLength, pathSegmentCount, pathYForX } from '../data/PathMethods'
 import { segmentLength, segmentPointSide, segmentPointT, segmentToPointDistance, segmentToVector } from '../data/SegmentMethods'
 
 import { IColor } from '../data/IColor'
@@ -109,8 +109,7 @@ export class Renderer {
 					pathT = 1
 				}
 				let thicknessPath = getBySide(side, this.view.stroke.thicknessPair)
-				let [thicknessSegment, thicknessSegmentT] = itemAndItemT(pathT, thicknessPath.segments, thicknessPath.segmentTs)
-				let thickness = interpolateValues(thicknessSegment.a, thicknessSegment.b, pathT, thicknessSegment.tweenPath.path)
+				let thickness = pathYForX(thicknessPath.path, pathT)
 
 				if (distance <= thickness && distance <= closestDistance) {
 					closestDistance = distance

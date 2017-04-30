@@ -19,6 +19,7 @@
 
 import { IViewAlphaMultiplier } from './IViewAlphaMultiplier'
 import { IViewBezierPath } from './IViewBezierPath'
+import { IViewBezierPathPair } from './IViewBezierPathPair'
 import { IViewBezierPoint } from './IViewBezierPoint'
 import { IViewColor } from './IViewColor'
 import { IViewColorField } from './IViewColorField'
@@ -35,6 +36,7 @@ import { IViewValueSegment } from './IViewValueSegment'
 
 export interface IViewDocument {
 	aplhaMultipliersById: {[id: string]: IViewAlphaMultiplier}
+	bezierPathPairsById: {[id: string]: IViewBezierPathPair}
 	bezierPathsById: {[id: string]: IViewBezierPath}
 	bezierPointsById: {[id: string]: IViewBezierPoint}
 	channelCount: number
