@@ -64,7 +64,7 @@ function terminateBusyRenderers() {
 
 function createRenderers(count: number) {
 	while (data.renderers.length < count) {
-		data.renderers.push(new Worker('script/{{worker.js}}'))
+		data.renderers.push(new Worker('script/◄worker.js►'))
 	}
 }
 

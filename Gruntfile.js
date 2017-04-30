@@ -24,7 +24,7 @@ module.exports = function (grunt) {
 			wpw: {
 				options: {
 					process: function(content, srcpath) {
-						return content.replace(/\{\{([^\{\}]+)\}\}/g, '$1')
+						return content.replace(/◄([^◄►]+)►/g, '$1')
 					}
 				},
 				files: [
@@ -60,6 +60,10 @@ module.exports = function (grunt) {
 			}
 		},
 		kapocs: {
+			options: {
+				referencePrefix: '◄',
+				referenceSuffix: '►',
+			},
 			compile: {
 				assets: [
 					{

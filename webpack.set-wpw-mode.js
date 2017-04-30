@@ -10,7 +10,7 @@ module.exports = function(baseConfig) {
 				chunk.files.filter((filename) => /\.js$/.test(filename)).forEach((filename) => {
 					var source = compilation.assets[filename].source()
 
-					compilation.assets[filename] = new RawSource(source.replace(/__WEBPACK_IMPORTED_MODULE_/g, '__').replace(/\{\{([^\{\}]+)\}\}/g, '$1'))
+					compilation.assets[filename] = new RawSource(source.replace(/__WEBPACK_IMPORTED_MODULE_/g, '__').replace(/◄([^◄►]+)►/g, '$1'))
 				})
 			})
 			callback()
