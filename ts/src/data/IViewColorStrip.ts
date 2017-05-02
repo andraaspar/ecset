@@ -21,4 +21,5 @@ export interface IViewColorStrip {
 	id: string
 	colorFieldIds: string[]
 	colorFieldTs: number[]
+	parallelTPathIds: string[]
 }

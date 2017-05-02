@@ -22,13 +22,15 @@ import { IRenderColorStrip } from './IRenderColorStrip'
 import { IViewColorStrip } from './IViewColorStrip'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
+import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderColorField } from './ColorFieldMethods'
 
 export function viewColorStripToRenderColorStrip(d: IViewDocument, s: TSet<IPath>, p: IViewColorStrip): IRenderColorStrip {
 	return {
 		id: p.id,
 		colorFieldTs: p.colorFieldTs.slice(0),
-		colorFields: p.colorFieldIds.map(id => getRenderColorField(d, s, id))
+		colorFields: p.colorFieldIds.map(id => getRenderColorField(d, s, id)),
+		parallelTPaths: p.parallelTPathIds.map(id => getRenderBezierPath(d, s, id)),
 	}
 }
 

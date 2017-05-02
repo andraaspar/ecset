@@ -207,13 +207,11 @@ export function createStroke() {
 	data.document.colorPathsById[colorPathBlack100ToWhite0Id] = {
 		id: colorPathBlack100ToWhite0Id,
 		segmentIds: [colorSegmentBlack100ToWhite0Id],
-		segmentTs: [0],
 	}
 	let colorPathWhite100ToBlack0Id = `Default Color Path 2`
 	data.document.colorPathsById[colorPathWhite100ToBlack0Id] = {
 		id: colorPathWhite100ToBlack0Id,
 		segmentIds: [colorSegmentWhite100ToBlack0Id],
-		segmentTs: [0],
 	}
 	
 	let colorFieldId = `Default Color Field`
@@ -221,7 +219,6 @@ export function createStroke() {
 		id: colorFieldId,
 		aId: colorPathBlack100ToWhite0Id,
 		bId: colorPathWhite100ToBlack0Id,
-		tTweenPathIds: [linearPathId],
 		colorTweenPathIds: [linearPathId],
 	}
 	let colorStripId = `Default Color Strip`
@@ -229,6 +226,7 @@ export function createStroke() {
 		id: colorStripId,
 		colorFieldIds: [colorFieldId],
 		colorFieldTs: [0],
+		parallelTPathIds: [linearPathId],
 	}
 	let colorStripPairId = `Default Color Strip Pair`
 	data.document.colorStripPairsById[colorStripPairId] = {

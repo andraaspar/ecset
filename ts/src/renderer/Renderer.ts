@@ -23,6 +23,7 @@ import { segmentLength, segmentPointSide, segmentPointT, segmentToPointDistance,
 
 import { IColor } from '../data/IColor'
 import { IPath } from '../data/IPath'
+import { IRenderBezierPath } from '../data/IRenderBezierPath'
 import { IRenderColorField } from '../data/IRenderColorField'
 import { IRenderColorPath } from '../data/IRenderColorPath'
 import { IRenderPoint } from '../data/IRenderPoint'
@@ -127,9 +128,10 @@ export class Renderer {
 			let strip = getBySide(closestPathSide, this.view.stroke.stripPair)
 			let [colorField, colorFieldT] = itemAndItemT(closestPathT, strip.colorFields, strip.colorFieldTs)
 			let colorPath = this.getRenderColorPathAtT(colorField, colorFieldT)
+			let colorPathTs = this.getColorPathTsAtT(strip.parallelTPaths, closestPathT)
 
 			let colorPathT = closestDistance / closestThickness
-			let [colorSegment, colorSegmentT] = itemAndItemT(colorPathT, colorPath.segments, colorPath.segmentTs)
+			let [colorSegment, colorSegmentT] = itemAndItemT(colorPathT, colorPath.segments, colorPathTs)
 
 			result = interpolateColors(colorSegment.a, colorSegment.b, colorSegmentT, colorSegment.tweenPath.path)
 		}
@@ -242,26 +244,32 @@ export class Renderer {
 	getRenderColorPathAtT(colorField: IRenderColorField, t: number): IRenderColorPath {
 		let result: IRenderColorPath = {
 			segments: [],
-			segmentTs: [],
 		}
+		let segmentTs: number[] = []
 		for (let i = 0, n = colorField.a.segments.length; i < n; i++) {
 			let segmentA = colorField.a.segments[i]
 			let segmentB = colorField.b.segments[i]
-			let segmentAT = colorField.a.segmentTs[i]
-			let segmentBT = colorField.b.segmentTs[i]
 			let colorTweenPath = colorField.colorTweenPaths[i]
-			let tTweenPath = colorField.tTweenPaths[i]
 			result.segments.push({
 				a: interpolateColors(segmentA.a, segmentB.a, t, colorTweenPath.path),
 				b: interpolateColors(segmentA.b, segmentB.b, t, colorTweenPath.path),
 				tweenPath: segmentA.tweenPath,
 			})
-			result.segmentTs.push(interpolateValues(segmentAT, segmentBT, t, tTweenPath.path))
 		}
 		return result
 	}
 
 	getPixels(): Uint8ClampedArray {
 		return this.pixels
+	}
+	
+	getColorPathTsAtT(parallelPaths: IRenderBezierPath[], pathT: number) {
+		let result = parallelPaths.map(path => pathYForX(path.path, pathT))
+		let total = result.reduce((sum, value) => sum + value)
+		let lastValue = 0
+		return [0, ...result.map(value => {
+			lastValue += value
+			return total == 0 ? 0 : lastValue / total
+		})]
 	}
 }

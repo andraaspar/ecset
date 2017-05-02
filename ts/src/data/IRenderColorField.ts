@@ -24,6 +24,5 @@ export interface IRenderColorField {
 	id?: string
 	a: IRenderColorPath
 	b: IRenderColorPath
-	tTweenPaths: IRenderBezierPath[]
 	colorTweenPaths: IRenderBezierPath[]
 }

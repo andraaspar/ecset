@@ -28,7 +28,6 @@ export function viewColorPathToRenderColorPath(d: IViewDocument, s: TSet<IPath>,
 	return {
 		id: p.id,
 		segments: p.segmentIds.map(id => getRenderColorSegment(d, s, id)),
-		segmentTs: p.segmentTs.slice(0)
 	}
 }
 

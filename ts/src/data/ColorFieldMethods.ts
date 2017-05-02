@@ -31,7 +31,6 @@ export function viewColorFieldToRenderColorField(d: IViewDocument, s: TSet<IPath
 		a: getRenderColorPath(d, s, p.aId),
 		b: getRenderColorPath(d, s, p.bId),
 		colorTweenPaths: p.colorTweenPathIds.map(id => getRenderBezierPath(d, s, id)),
-		tTweenPaths: p.tTweenPathIds.map(id => getRenderBezierPath(d, s, id)),
 	}
 }
 

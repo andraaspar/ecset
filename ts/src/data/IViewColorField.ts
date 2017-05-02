@@ -21,6 +21,5 @@ export interface IViewColorField {
 	id: string
 	aId: string
 	bId: string
-	tTweenPathIds: string[]
 	colorTweenPathIds: string[]
 }

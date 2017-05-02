@@ -20,5 +20,4 @@
 export interface IViewColorPath {
 	id: string
 	segmentIds: string[]
-	segmentTs: number[]
 }
