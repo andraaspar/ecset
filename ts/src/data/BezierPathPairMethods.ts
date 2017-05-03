@@ -17,12 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deleteBezierPath, getRenderBezierPath } from './BezierPathMethods'
+
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderBezierPathPair } from './IRenderBezierPathPair'
 import { IViewBezierPathPair } from './IViewBezierPathPair'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
-import { getRenderBezierPath } from './BezierPathMethods'
+import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewBezierPathPairToRenderBezierPathPair(d: IViewDocument, s: TSet<IPath>, p: IViewBezierPathPair): IRenderBezierPathPair {
 	return {
@@ -34,4 +37,21 @@ export function viewBezierPathPairToRenderBezierPathPair(d: IViewDocument, s: TS
 
 export function getRenderBezierPathPair(d: IViewDocument, s: TSet<IPath>, id: string) {
 	return viewBezierPathPairToRenderBezierPathPair(d, s, d.bezierPathPairsById[id])
+}
+
+export function deleteBezierPathPair(data: IData, pair: IRenderBezierPathPair) {
+	delete data.document.bezierPathPairsById[pair.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let path of [
+			pair.left,
+			pair.right,
+		]) {
+			if (getIdCountInViewDocument(data.document, path.id) == 1) {
+				deleteCount++
+				deleteBezierPath(data, path)
+			}
+		}
+	} while (deleteCount)
 }

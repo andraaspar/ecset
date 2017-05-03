@@ -18,11 +18,11 @@
  */
 
 import { IColor } from './IColor'
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColor } from './IRenderColor'
 import { IViewColor } from './IViewColor'
 import { IViewDocument } from './IViewDocument'
-import { data } from './DataMethods'
 import { interpolateValues } from './ValueMethods'
 
 export function interpolateColors(a: IColor, b: IColor, t: number, path?: IPath): IColor {
@@ -49,7 +49,7 @@ export function getRenderColor(d: IViewDocument, id: string): IRenderColor {
 	return viewColorToRenderColor(d.colorsById[id])
 }
 
-export function createViewColor(id: string, alphaValue: number, ...values: number[]) {
+export function createViewColor(data: IData, id: string, alphaValue: number, ...values: number[]) {
 	let result: IViewColor = {
 		id: id,
 		channelValues: [alphaValue].concat(values).map(sanitizeChannelValue),
@@ -58,14 +58,18 @@ export function createViewColor(id: string, alphaValue: number, ...values: numbe
 	return result
 }
 
-export function createGrayViewColor(id: string, alphaValue: number, value: number) {
+export function createGrayViewColor(data: IData, id: string, alphaValue: number, value: number) {
 	let values: number[] = []
 	for (let i = 1; i < data.document.channelCount; i++) {
 		values.push(value)
 	}
-	return createViewColor(id, alphaValue, ...values)
+	return createViewColor(data, id, alphaValue, ...values)
 }
 
 export function sanitizeChannelValue(v: number) {
 	return Math.max(0, Math.min(255, Math.floor(v)) || 0)
+}
+
+export function deleteColor(data: IData, colorId: string) {
+	delete data.document.colorsById[colorId]
 }

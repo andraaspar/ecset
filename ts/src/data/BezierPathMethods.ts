@@ -17,14 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { getRenderBezierPoint, scaleRenderBezierPoint } from './BezierPointMethods'
+import { deleteBezierPoint, deselectAllBezierPoints, getRenderBezierPoint, scaleRenderBezierPoint, selectBezierPoint } from './BezierPointMethods'
 
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IViewBezierPath } from './IViewBezierPath'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
+import { getIdCountInViewDocument } from './DocumentMethods'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
 import { scaleVector } from './PointMethods'
 
@@ -92,4 +94,30 @@ export function viewBezierPathToRenderBezierPath(d: IViewDocument, s: TSet<IPath
 
 export function getRenderBezierPath(d: IViewDocument, s: TSet<IPath>, id: string ): IRenderBezierPath {
 	return viewBezierPathToRenderBezierPath(d, s, d.bezierPathsById[id])
+}
+
+export function deselectAllBezierPaths(data: IData) {
+	data.selectedBezierPathIds = {}
+	deselectAllBezierPoints(data)
+}
+
+export function selectBezierPath(data: IData, id: string) {
+	data.selectedBezierPathIds[id] = true
+	let p = data.document.bezierPathsById[id]
+	p.pointIds.forEach(bp => selectBezierPoint(data, bp))
+}
+
+export function deleteBezierPath(data: IData, path: IRenderBezierPath) {
+	delete data.selectedBezierPathIds[path.id]
+	delete data.document.bezierPathsById[path.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let point of path.points) {
+			if (getIdCountInViewDocument(data.document, point.id) == 1) {
+				deleteCount++
+				deleteBezierPoint(data, point)
+			}
+		}
+	} while (deleteCount)
 }

@@ -17,11 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deletePoint, getRenderPoint } from './PointMethods'
+
+import { IData } from './IData'
 import { IRenderPoint } from './IRenderPoint'
 import { IRenderTransform } from './IRenderTransform'
 import { IViewDocument } from './IViewDocument'
 import { IViewTransform } from './IViewTransform'
-import { getRenderPoint } from './PointMethods'
+import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewTransformToRenderTransform(d: IViewDocument, p: IViewTransform): IRenderTransform {
 	return {
@@ -35,4 +38,21 @@ export function viewTransformToRenderTransform(d: IViewDocument, p: IViewTransfo
 
 export function getRenderTransform(d: IViewDocument, id: string): IRenderTransform {
 	return viewTransformToRenderTransform(d, d.transformsById[id])
+}
+
+export function deleteTransform(data: IData, transform: IRenderTransform) {
+	delete data.document.transformsById[transform.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let p of [
+			transform.offset,
+			transform.pivot,
+		]) {
+			if (getIdCountInViewDocument(data.document, p.id) == 1) {
+				deleteCount++
+				deletePoint(data, p)
+			}
+		}
+	} while (deleteCount)
 }

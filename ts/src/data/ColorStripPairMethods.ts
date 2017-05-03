@@ -17,12 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deleteColorStrip, getRenderColorStrip } from './ColorStripMethods'
+
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColorStripPair } from './IRenderColorStripPair'
 import { IViewColorStripPair } from './IViewColorStripPair'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
-import { getRenderColorStrip } from './ColorStripMethods'
+import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewColorStripPairToRenderColorStripPair(d: IViewDocument, s: TSet<IPath>, p: IViewColorStripPair): IRenderColorStripPair {
 	return {
@@ -34,4 +37,21 @@ export function viewColorStripPairToRenderColorStripPair(d: IViewDocument, s: TS
 
 export function getRenderColorStripPair(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorStripPair {
 	return viewColorStripPairToRenderColorStripPair(d, s, d.colorStripPairsById[id])
+}
+
+export function deleteColorStripPair(data: IData, pair: IRenderColorStripPair) {
+	delete data.document.colorStripPairsById[pair.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let strip of [
+			pair.left,
+			pair.right,
+		]) {
+			if (getIdCountInViewDocument(data.document, strip.id) == 1) {
+				deleteCount++
+				deleteColorStrip(data, strip)
+			}
+		}
+	} while (deleteCount)
 }

@@ -17,13 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deleteBezierPath, getRenderBezierPath } from './BezierPathMethods'
+import { deleteColorPath, getRenderColorPath } from './ColorPathMethods'
+
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColorField } from './IRenderColorField'
 import { IViewColorField } from './IViewColorField'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
-import { getRenderBezierPath } from './BezierPathMethods'
-import { getRenderColorPath } from './ColorPathMethods'
+import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewColorFieldToRenderColorField(d: IViewDocument, s: TSet<IPath>, p: IViewColorField): IRenderColorField {
 	return {
@@ -36,4 +39,27 @@ export function viewColorFieldToRenderColorField(d: IViewDocument, s: TSet<IPath
 
 export function getRenderColorField(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorField {
 	return viewColorFieldToRenderColorField(d, s, d.colorFieldsById[id])
+}
+
+export function deleteColorField(data: IData, field: IRenderColorField) {
+	delete data.document.colorFieldsById[field.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let path of [
+			field.a,
+			field.b,
+		]) {
+			if (getIdCountInViewDocument(data.document, path.id) == 1) {
+				deleteCount++
+				deleteColorPath(data, path)
+			}
+		}
+		for (let path of field.colorTweenPaths) {
+			if (getIdCountInViewDocument(data.document, path.id) == 1) {
+				deleteCount++
+				deleteBezierPath(data, path)
+			}
+		}
+	} while (deleteCount)
 }

@@ -20,7 +20,7 @@
 import * as m from 'mithril'
 
 import { bezierPathToSvg, getRenderBezierPath } from '../data/BezierPathMethods'
-import { data, deselectAllStrokes, selectStroke } from '../data/DataMethods'
+import { deselectAllStrokes, selectStroke } from '../data/StrokeMethods'
 
 import { BezierKind } from '../data/BezierKind'
 import { IPath } from '../data/IPath'
@@ -31,6 +31,7 @@ import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PathLayerModel } from './PathLayerModel'
 import { TSet } from '../data/TSet'
+import { data } from '../data/DataMethods'
 import { scaleRenderBezierPoint } from '../data/BezierPointMethods'
 import { vectorAngle } from '../data/PointMethods'
 
@@ -70,8 +71,8 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 							if (data.selectedBezierPathIds[path.id]) {
 								v.state.model.startDrag(path, e)
 							} else {
-								deselectAllStrokes()
-								selectStroke(stroke.id)
+								deselectAllStrokes(data)
+								selectStroke(data, stroke.id)
 							}
 						},
 						'onclick': (e: MouseEvent) => {

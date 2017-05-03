@@ -17,13 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deleteAlphaMultiplier, getRenderColorFromAplhaMultiplier } from './AlphaMultiplierMethods'
+import { deleteBezierPath, getRenderBezierPath } from './BezierPathMethods'
+
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColorSegment } from './IRenderColorSegment'
 import { IViewColorSegment } from './IViewColorSegment'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
-import { getRenderBezierPath } from './BezierPathMethods'
-import { getRenderColorFromAplhaMultiplier } from './AlphaMultiplierMethods'
+import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewColorSegmentToRenderColorSegment(d: IViewDocument, s: TSet<IPath>, p: IViewColorSegment): IRenderColorSegment {
 	return {
@@ -36,4 +39,22 @@ export function viewColorSegmentToRenderColorSegment(d: IViewDocument, s: TSet<I
 
 export function getRenderColorSegment(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorSegment {
 	return viewColorSegmentToRenderColorSegment(d, s, d.colorSegmentsById[id])
+}
+
+export function deleteColorSegment(data: IData, segment: IRenderColorSegment) {
+	delete data.document.colorSegmentsById[segment.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		if (getIdCountInViewDocument(data.document, segment.tweenPath.id) == 1) {
+			deleteCount++
+			deleteBezierPath(data, segment.tweenPath)
+		}
+		for (let color of [
+			segment.a,
+			segment.b,
+		]) {
+			deleteAlphaMultiplier(data, color)
+		}
+	} while (deleteCount)
 }

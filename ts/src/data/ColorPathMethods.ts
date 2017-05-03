@@ -17,12 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deleteColorSegment, getRenderColorSegment } from './ColorSegmentMethods'
+
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColorPath } from './IRenderColorPath'
 import { IViewColorPath } from './IViewColorPath'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
-import { getRenderColorSegment } from './ColorSegmentMethods'
+import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewColorPathToRenderColorPath(d: IViewDocument, s: TSet<IPath>, p: IViewColorPath): IRenderColorPath {
 	return {
@@ -33,4 +36,18 @@ export function viewColorPathToRenderColorPath(d: IViewDocument, s: TSet<IPath>,
 
 export function getRenderColorPath(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorPath {
 	return viewColorPathToRenderColorPath(d, s, d.colorPathsById[id])
+}
+
+export function deleteColorPath(data: IData, path: IRenderColorPath) {
+	delete data.document.colorPathsById[path.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let segment of path.segments) {
+			if (getIdCountInViewDocument(data.document, segment.id) == 1) {
+				deleteCount++
+				deleteColorSegment(data, segment)
+			}
+		}
+	} while (deleteCount)
 }

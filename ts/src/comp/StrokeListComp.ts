@@ -19,10 +19,13 @@
 
 import * as m from 'mithril'
 
-import { createStroke, data, deselectAllStrokes, selectStroke } from '../data/DataMethods'
+import { createStroke, deleteStroke, deselectAllStrokes, getRenderStroke, selectStroke } from '../data/StrokeMethods'
 
 import { BorderComp } from './BorderComp'
+import { IPath } from '../data/IPath'
 import { P } from '../statics'
+import { TSet } from '../data/TSet'
+import { data } from '../data/DataMethods'
 import { render } from '../data/RenderMethods'
 
 export declare namespace StrokeListComp {
@@ -61,9 +64,9 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 					'type': `button`,
 					'class': `${P}-button`,
 					'onclick': () => {
-						let id = createStroke()
-						deselectAllStrokes()
-						selectStroke(id)
+						let id = createStroke(data)
+						deselectAllStrokes(data)
+						selectStroke(data, id)
 						render()
 					},
 				},
@@ -72,6 +75,14 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 				m(`button`, {
 					'type': `button`,
 					'class': `${P}-button`,
+					'onclick': () => {
+						let s: TSet<IPath> = {}
+						for (let strokeId of Object.keys(data.selectedStrokeIds)) {
+							let renderStroke = getRenderStroke(data.document, s, strokeId)
+							deleteStroke(data, renderStroke)
+						}
+						render()
+					},
 				},
 					m(`span`, `Delete`)
 				),

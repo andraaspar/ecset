@@ -17,13 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { deleteColorField, getRenderColorField } from './ColorFieldMethods'
+
+import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColorStrip } from './IRenderColorStrip'
 import { IViewColorStrip } from './IViewColorStrip'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
+import { getIdCountInViewDocument } from './DocumentMethods'
 import { getRenderBezierPath } from './BezierPathMethods'
-import { getRenderColorField } from './ColorFieldMethods'
 
 export function viewColorStripToRenderColorStrip(d: IViewDocument, s: TSet<IPath>, p: IViewColorStrip): IRenderColorStrip {
 	return {
@@ -36,4 +39,24 @@ export function viewColorStripToRenderColorStrip(d: IViewDocument, s: TSet<IPath
 
 export function getRenderColorStrip(d: IViewDocument, s: TSet<IPath>, id: string): IRenderColorStrip {
 	return viewColorStripToRenderColorStrip(d, s, d.colorStripsById[id])
+}
+
+export function deleteColorStrip(data: IData, strip: IRenderColorStrip) {
+	delete data.document.colorStripsById[strip.id]
+	let deleteCount
+	do {
+		deleteCount = 0
+		for (let field of strip.colorFields) {
+			if (getIdCountInViewDocument(data.document, field.id) == 1) {
+				deleteCount++
+				deleteColorField(data, field)
+			}
+		}
+		for (let path of strip.parallelTPaths) {
+			if (getIdCountInViewDocument(data.document, path.id) == 1) {
+				deleteCount++
+				deleteColorStrip(data, strip)
+			}
+		}
+	} while (deleteCount)
 }

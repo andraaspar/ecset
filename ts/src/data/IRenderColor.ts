@@ -20,5 +20,6 @@
 import { IColor } from './IColor'
 
 export interface IRenderColor extends IColor {
+	alphaMultiplierId?: string
 	id?: string
 }
