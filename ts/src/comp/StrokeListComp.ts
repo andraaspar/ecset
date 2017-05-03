@@ -23,6 +23,7 @@ import { createStroke, deleteStroke, deselectAllStrokes, getRenderStroke, select
 
 import { BorderComp } from './BorderComp'
 import { IPath } from '../data/IPath'
+import { IViewStroke } from '../data/IViewStroke'
 import { P } from '../statics'
 import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'
@@ -30,18 +31,22 @@ import { render } from '../data/RenderMethods'
 
 export declare namespace StrokeListComp {
 	interface Attrs { }
-	interface State { }
+	interface State {
+		editedStrokeIds?: WeakSet<IViewStroke>
+	}
 }
 type Vnode = m.Vnode<StrokeListComp.Attrs, StrokeListComp.State>
 type VnodeDOM = m.VnodeDOM<StrokeListComp.Attrs, StrokeListComp.State>
 
 export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> = {
 
-	// oninit(v) {},
+	oninit(v) {
+		v.state.editedStrokeIds = new WeakSet<IViewStroke>([])
+	},
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return [
-			m(`div`, {'class': `${P}-form-title`},
+			m(`div`, { 'class': `${P}-form-title` },
 				`Strokes`,
 			),
 			m(BorderComp),
@@ -53,13 +58,55 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 							'key': id,
 							'class': `${P}-form-list-item`,
 						},
-							stroke.id
+							m(`button`, {
+								'type': `button`,
+								'class': `${P}-button ${P}-form-list-item-opener`,
+								'onclick': () => {
+									let stroke = data.document.strokesById[id]
+									if (v.state.editedStrokeIds.has(stroke)) {
+										v.state.editedStrokeIds.delete(stroke)
+									} else {
+										v.state.editedStrokeIds.add(stroke)
+									}
+								},
+							},
+								(v.state.editedStrokeIds.has(stroke) ?
+									`▼`
+									:
+									`►`
+								)
+							),
+							m(BorderComp),
+							m(`div`, { 'class': `${P}-form-list-item-end` },
+								m(`div`, { 'class': `${P}-buttons` },
+									m(`button`, {
+										'type': `button`,
+										'class': `${P}-button ${P}-form-list-item-name ${stroke.name ? `` : `${P}--unnamed`}`,
+										'onclick': () => {
+											deselectAllStrokes(data)
+											selectStroke(data, id)
+										},
+									},
+										stroke.name || `Stroke`
+									),
+								),
+								v.state.editedStrokeIds.has(stroke) &&
+								m(`div`, { 'class': `${P}-form-list-item-meta` },
+									m(`span`, { 'class': `${P}-form-list-item-meta-label` },
+										`ID:`
+									),
+									` `,
+									m(`span`, { 'class': `${P}-form-list-item-meta-value` },
+										stroke.id
+									)
+								)
+							)
 						)
 					)
 				})
 			),
 			m(BorderComp),
-			m(`div`, {'class': `${P}-buttons ${P}--1`},
+			m(`div`, { 'class': `${P}-buttons ${P}--1` },
 				m(`button`, {
 					'type': `button`,
 					'class': `${P}-button`,

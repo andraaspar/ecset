@@ -351,6 +351,7 @@ export function createStroke(data: IData) {
 	let strokeId = uuid()
 	data.document.strokesById[strokeId] = {
 		id: strokeId,
+		name: ``,
 		stripPairId: colorStripPairId,
 		bezierPathId: curvePathId,
 		thicknessPairId: thicknessPathPairId,

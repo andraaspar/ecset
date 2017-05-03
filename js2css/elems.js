@@ -41,7 +41,7 @@ textarea
 {
 	font-family: sans-serif;
 	font-size: 14px;
-	line-height: ${20/14};
+	line-height: ${LINE_HEIGHT_P_UNITLESS};
 }
 
 `

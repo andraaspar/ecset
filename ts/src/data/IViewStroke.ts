@@ -19,6 +19,7 @@
 
 export interface IViewStroke {
 	id: string
+	name: string
 	stripPairId: string
 	bezierPathId: string
 	thicknessPairId: string

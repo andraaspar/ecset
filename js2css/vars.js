@@ -27,3 +27,10 @@ global.BUTTON_PADDING = '2px 10px 4px'
 global.BUTTON_PADDING_SMALL = '1px 5px 2px'
 
 global.BUTTON = []
+
+global.FONT_SIZE_P = `14px`
+global.LINE_HEIGHT_P = `20px`
+global.LINE_HEIGHT_P_UNITLESS = parseFloat(LINE_HEIGHT_P) / parseFloat(FONT_SIZE_P)
+
+global.FONT_SIZE_SMALL = `12px`
+global.FONT_SIZE_TINY = `10px`

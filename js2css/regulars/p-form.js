@@ -41,10 +41,40 @@ module.exports = `
 }
 .${P}-form-list-item
 {
+	border-bottom: 1px solid black;
+	display: flex;
+}
+.${P}-form-list-item-end
+{
+	flex-grow: 1;
+}
+.${P}-form-list-item-opener
+{
+	flex-grow: 0;
+	align-self: flex-start;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.${P}-form-list-item-name
+{
+	justify-content: flex-start;
+}
+.${P}-form-list-item-name.${P}--unnamed
+{
+	font-style: italic;
+}
+.${P}-form-list-item-meta
+{
+	font-size: ${FONT_SIZE_TINY};
 	padding: ${BUTTON_PADDING};
 }
-.${P}-form-list-item + .${P}-form-list-item
+.${P}-form-list-item-meta-label
 {
-	border-top: 1px solid black;
+	font-weight: bold;
+	color: ${rgba(`white`, .6)};
+}
+.${P}-form-list-item-meta-value
+{
+	color: ${rgba(`white`, .8)};
 }
 `
