@@ -67,6 +67,12 @@ ${selectors(buttonSelectors)}
 	cursor: pointer;
 }
 
+${selectors(buttonSelectors, button => `${button}:focus`)}
+{
+	outline: 0;
+	border-color: ${TEAL_4};
+}
+
 ${selectors(buttonSelectors, button => `${button}:hover`)}
 {
 	background: ${GRAY_5};
@@ -75,6 +81,33 @@ ${selectors(buttonSelectors, button => `${button}:hover`)}
 ${selectors(buttonSelectors, button => `${button}:active`)}
 {
 	background: ${GRAY_7};
+}
+
+${selectors(buttonSelectors, button => `${button}:disabled`)}
+{
+	background: ${GRAY_7};
+	color: ${rgba(`white`, .2)};
+	cursor: default;
+}
+
+${selectors(buttonSelectors, button => `${button}.${P}--highlighted`)}
+{
+	background: ${GRAY_5};
+}
+
+${selectors(buttonSelectors, button => `${button}.${P}--highlighted:hover`)}
+{
+	background: ${GRAY_4};
+}
+
+${selectors(buttonSelectors, button => `${button}.${P}--highlighted:active`)}
+{
+	background: ${GRAY_7};
+}
+
+${selectors(buttonSelectors, button => `${button}.${P}--highlighted:disabled`)}
+{
+	background: ${GRAY_5};
 }
 `
 }

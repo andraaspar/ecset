@@ -53,6 +53,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 			m(`div`, { 'class': `${P}-form-list` },
 				data.document.strokeIds.map(id => {
 					let stroke = data.document.strokesById[id]
+					let isSelected = !!data.selectedStrokeIds[id]
 					return (
 						m(`div`, {
 							'key': id,
@@ -61,6 +62,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 							m(`button`, {
 								'type': `button`,
 								'class': `${P}-button ${P}-form-list-item-opener`,
+								'disabled': !stroke.childIds.length,
 								'onclick': () => {
 									let stroke = data.document.strokesById[id]
 									if (v.state.editedStrokeIds.has(stroke)) {
@@ -81,7 +83,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 								m(`div`, { 'class': `${P}-buttons` },
 									m(`button`, {
 										'type': `button`,
-										'class': `${P}-button ${P}-form-list-item-name ${stroke.name ? `` : `${P}--unnamed`}`,
+										'class': `${P}-button ${P}-form-list-item-name ${stroke.name ? `` : `${P}--unnamed`} ${isSelected ? `${P}--highlighted`: ``}`,
 										'onclick': () => {
 											deselectAllStrokes(data)
 											selectStroke(data, id)

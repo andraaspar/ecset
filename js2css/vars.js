@@ -19,9 +19,21 @@
 
 global.P = 'e'
 
-global.GRAY_5 = '#555'
+global.GRAY_1 = '#fff'
+global.GRAY_2 = '#ddd'
+global.GRAY_3 = '#aaa'
+global.GRAY_4 = '#888'
+global.GRAY_5 = '#666'
 global.GRAY_6 = '#444'
 global.GRAY_7 = '#333'
+
+global.TEAL_1 = `#e3faff`
+global.TEAL_2 = `#afe8f4`
+global.TEAL_3 = `#7cccdb`
+global.TEAL_4 = `#4998AA`
+global.TEAL_5 = `#206570`
+global.TEAL_6 = `#0e3e46`
+global.TEAL_7 = `#052025`
 
 global.BUTTON_PADDING = '2px 10px 4px'
 global.BUTTON_PADDING_SMALL = '1px 5px 2px'
