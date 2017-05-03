@@ -21,7 +21,6 @@ import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderBezierPathPair } from './IRenderBezierPathPair'
 import { IRenderColorStripPair } from './IRenderColorStripPair'
 import { IRenderTransform } from './IRenderTransform'
-import { IRenderValuePathPair } from './IRenderValuePathPair'
 
 export interface IRenderStroke {
 	id?: string

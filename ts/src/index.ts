@@ -22,10 +22,10 @@ import './statics.ts'
 import * as m from 'mithril'
 
 import { createData, data } from './data/DataMethods'
+import { getIdCountInRenderDocument, getIdCountInViewDocument, viewDocumentToRenderDocument } from './data/DocumentMethods'
 
 import { EcsetComp } from './comp/EcsetComp'
 import { GLOBAL } from 'illa/GLOBAL'
-import { getStrokeUseCountInDocument } from './data/DocumentMethods'
 import jQuery from 'jquery-ts'
 import { render } from './data/RenderMethods'
 
@@ -38,7 +38,8 @@ GLOBAL.m = m
 GLOBAL.e = {
 	data: data,
 	render: render,
-	getStrokeUseCountInDocument: (id: string) => getStrokeUseCountInDocument(data.document, id),
+	getIdCountInRenderDocument: (id: string) => getIdCountInRenderDocument(viewDocumentToRenderDocument(data.document), id),
+	getIdCountInViewDocument: (id: string) => getIdCountInViewDocument(data.document, id),
 }
 
 m.mount(ECSET_ELEMENT, EcsetComp)

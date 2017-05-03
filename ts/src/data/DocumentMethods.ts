@@ -43,9 +43,6 @@ export function createViewDocument(): IViewDocument {
 		strokeIds: [],
 		strokesById: {},
 		transformsById: {},
-		valuePathPairsById: {},
-		valuePathsById: {},
-		valueSegmentsById: {},
 		width: 1000,
 	}
 }
@@ -58,10 +55,14 @@ export function viewDocumentToRenderDocument(d: IViewDocument): IRenderDocument 
 	return result
 }
 
-export function getStrokeUseCountInDocument(d: IViewDocument, id: string) {
-	let result = 0
-	result += deepFind<string>(viewDocumentToRenderDocument(d), (obj, key, parent) => {
+export function getIdCountInRenderDocument(d: IRenderDocument, id: string) {
+	return deepFind<string>(d, (obj, key, parent) => {
 		return key === `id` && obj === id
 	}).length
-	return result
+}
+
+export function getIdCountInViewDocument(d: IViewDocument, id: string) {
+	return deepFind<string>(d, (obj, key, parent) => {
+		return obj === id
+	}).length
 }

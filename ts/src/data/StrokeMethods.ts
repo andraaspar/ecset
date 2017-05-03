@@ -26,7 +26,6 @@ import { getRenderBezierPath } from './BezierPathMethods'
 import { getRenderBezierPathPair } from './BezierPathPairMethods'
 import { getRenderColorStripPair } from './ColorStripPairMethods'
 import { getRenderTransform } from './TransformMethods'
-import { getRenderValuePathPair } from './ValuePathPairMethods'
 
 export function viewStrokeToRenderStroke(d: IViewDocument, s: TSet<IPath>, p: IViewStroke): IRenderStroke {
 	return {

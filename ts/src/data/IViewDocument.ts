@@ -30,9 +30,6 @@ import { IViewColorStripPair } from './IViewColorStripPair'
 import { IViewPoint } from './IViewPoint'
 import { IViewStroke } from './IViewStroke'
 import { IViewTransform } from './IViewTransform'
-import { IViewValuePath } from './IViewValuePath'
-import { IViewValuePathPair } from './IViewValuePathPair'
-import { IViewValueSegment } from './IViewValueSegment'
 
 export interface IViewDocument {
 	aplhaMultipliersById: {[id: string]: IViewAlphaMultiplier}
@@ -51,8 +48,5 @@ export interface IViewDocument {
 	strokeIds: string[]
 	strokesById: {[id: string]: IViewStroke}
 	transformsById: {[id: string]: IViewTransform}
-	valuePathPairsById: {[id: string]: IViewValuePathPair}
-	valuePathsById: {[id: string]: IViewValuePath}
-	valueSegmentsById: {[id: string]: IViewValueSegment}
 	width: number
 }
