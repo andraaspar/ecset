@@ -19,7 +19,9 @@
 
 import * as m from 'mithril'
 
+import { BorderComp } from './BorderComp'
 import { P } from '../statics'
+import { StrokeEditorComp } from './StrokeEditorComp'
 import { StrokeListComp } from './StrokeListComp'
 
 export declare namespace FormComp {
@@ -36,7 +38,8 @@ export const FormComp: m.Comp<FormComp.Attrs, FormComp.State> = {
 	view(v) {
 		return (
 			m(`div`, {'class': `${P}-form-area`},
-				m(StrokeListComp)
+				m(StrokeListComp),
+				m(StrokeEditorComp),
 			)
 		)
 	},
