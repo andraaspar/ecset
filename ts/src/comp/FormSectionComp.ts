@@ -19,26 +19,41 @@
 
 import * as m from 'mithril'
 
+import { BorderComp } from './BorderComp'
 import { P } from '../statics'
-import { StrokeEditorComp } from './StrokeEditorComp'
-import { StrokeListFormComp } from './StrokeListFormComp'
 
-export declare namespace FormComp {
-	interface Attrs { }
+export declare namespace FormSectionComp {
+	interface Attrs {
+		title: m.Children
+		content: m.Children
+		buttons?: m.Children
+	}
 	interface State { }
 }
-type Vnode = m.Vnode<FormComp.Attrs, FormComp.State>
-type VnodeDOM = m.VnodeDOM<FormComp.Attrs, FormComp.State>
+type Vnode = m.Vnode<FormSectionComp.Attrs, FormSectionComp.State>
+type VnodeDOM = m.VnodeDOM<FormSectionComp.Attrs, FormSectionComp.State>
 
-export const FormComp: m.Comp<FormComp.Attrs, FormComp.State> = {
+export const FormSectionComp: m.Comp<FormSectionComp.Attrs, FormSectionComp.State> = {
 
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return (
-			m(`div`, { 'class': `${P}-form-area` },
-				m(StrokeListFormComp),
-				m(StrokeEditorComp),
+			m(`div`, { 'class': `${P}-form-section` },
+				m(`div`, { 'class': `${P}-form-title` },
+					v.attrs.title,
+				),
+				m(BorderComp),
+				v.attrs.content,
+				v.attrs.buttons &&
+				[
+					m(BorderComp),
+					m(`div`, { 'class': `${P}-form-buttons` },
+						m(`div`, { 'class': `${P}-buttons ${P}--1` },
+							v.attrs.buttons,
+						)
+					)
+				]
 			)
 		)
 	},

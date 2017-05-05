@@ -47,6 +47,15 @@ export const StrokeEditorComp: m.Comp<StrokeEditorComp.Attrs, StrokeEditorComp.S
 					[
 						m(`div`, { 'class': `${P}-form-content` },
 							m(`div`, { 'class': `${P}-form-item` },
+								m(`span`, { 'class': `${P}-form-item-label` },
+									`ID:`
+								),
+								` `,
+								m(`span`, { 'class': `${P}-form-item-value` },
+									stroke.id
+								)
+							),
+							m(`div`, { 'class': `${P}-form-item` },
 								m(`div`, { 'class': `${P}-form-item-label` },
 									`Name:`,
 								),
