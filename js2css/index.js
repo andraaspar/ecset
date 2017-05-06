@@ -40,6 +40,7 @@ let imports = [
 	'./regulars/p-border',
 	'./regulars/p-button',
 	'./regulars/p-form',
+	'./regulars/p-window',
 ]
 
 imports.filter(i => !i.endsWith('.css')).forEach(i => require(i))

@@ -19,35 +19,40 @@
 
 import * as m from 'mithril'
 
-import { BorderComp } from './BorderComp'
-import { CanvasComp } from './CanvasComp'
-import { FormComp } from './FormComp'
 import { P } from '../statics'
-import { WindowsComp } from './WindowsComp'
 import { data } from '../data/DataMethods'
+import jQuery from 'jquery-ts'
 
-export declare namespace EcsetComp {
+export declare namespace WindowsComp {
 	interface Attrs { }
 	interface State { }
 }
-type Vnode = m.Vnode<EcsetComp.Attrs, EcsetComp.State>
-type VnodeDOM = m.VnodeDOM<EcsetComp.Attrs, EcsetComp.State>
+type Vnode = m.Vnode<WindowsComp.Attrs, WindowsComp.State>
+type VnodeDOM = m.VnodeDOM<WindowsComp.Attrs, WindowsComp.State>
 
-export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
+export const WindowsComp: m.Comp<WindowsComp.Attrs, WindowsComp.State> = {
 
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		return [
-			m(CanvasComp, {
-				'location': data.canvasLocation,
-				'scale': data.canvasScale,
-				'scaleSetter': (v: number) => data.canvasScale = v,
-			}),
-			m(BorderComp),
-			m(FormComp),
-			m(WindowsComp),
-		]
+		return (
+			m(`div`, { 'class': `${P}-windows` },
+				data.windows.map(w => (
+					m(`div`, {
+						'key': w.id,
+						'class': `${P}-window-modal-mask`,
+						'onclick': (e: MouseEvent) => {
+							if (jQuery(e.target).is(`.${P}-window-modal-mask`)) {
+								let index = data.windows.indexOf(w)
+								if (index >= 0) data.windows.splice(index, 1)
+							}
+						},
+					},
+						w.contentFactory()
+					)
+				))
+			)
+		)
 	},
 	// oncreate(v) {},
 	// onupdate(v) {},

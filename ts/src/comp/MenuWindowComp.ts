@@ -19,35 +19,27 @@
 
 import * as m from 'mithril'
 
-import { BorderComp } from './BorderComp'
-import { CanvasComp } from './CanvasComp'
-import { FormComp } from './FormComp'
 import { P } from '../statics'
-import { WindowsComp } from './WindowsComp'
-import { data } from '../data/DataMethods'
 
-export declare namespace EcsetComp {
-	interface Attrs { }
+export declare namespace MenuWindowComp {
+	interface Attrs {
+		content: m.Comp<any, any>
+	}
 	interface State { }
 }
-type Vnode = m.Vnode<EcsetComp.Attrs, EcsetComp.State>
-type VnodeDOM = m.VnodeDOM<EcsetComp.Attrs, EcsetComp.State>
+type Vnode = m.Vnode<MenuWindowComp.Attrs, MenuWindowComp.State>
+type VnodeDOM = m.VnodeDOM<MenuWindowComp.Attrs, MenuWindowComp.State>
 
-export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
-
+export const MenuWindowComp: m.Comp<MenuWindowComp.Attrs, MenuWindowComp.State> = {
+	
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		return [
-			m(CanvasComp, {
-				'location': data.canvasLocation,
-				'scale': data.canvasScale,
-				'scaleSetter': (v: number) => data.canvasScale = v,
-			}),
-			m(BorderComp),
-			m(FormComp),
-			m(WindowsComp),
-		]
+		return (
+			m(`div`, {'class': `${P}-window ${P}--menu`},
+				v.attrs.content
+			)
+		)
 	},
 	// oncreate(v) {},
 	// onupdate(v) {},

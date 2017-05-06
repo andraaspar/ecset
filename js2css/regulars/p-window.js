@@ -17,35 +17,48 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IData } from './IData'
-import { createViewDocument } from './DocumentMethods'
-
-export let data: IData
-
-export function setData(v: IData) {
-	if (data) throw 'oor9sa'
-	data = v
+module.exports = `
+.${P}-windows
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	pointer-events: none;
 }
 
-export function createData() {
-	setData({
-		document: createViewDocument(),
-		renderers: [],
-		rendererStates: [],
-		maxRenderers: navigator.hardwareConcurrency || 1,
-		lastRenderFinished: 0,
-		pixelsByStrokeId: {},
-		viewsByStrokeId: {},
-		canvasLocation: {
-			x: 0,
-			y: 0,
-		},
-		canvasScale: 1,
-		selectedStrokeIds: {},
-		selectedBezierPathIds: {},
-		selectedBezierPointIds: {},
-		selectedPointIds: {},
-		memorizedStrokeIds: [],
-		windows: [],
-	})
+.${P}-window-modal-mask
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: ${rgba(`black`, .6)};
+	pointer-events: all;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
+
+.${P}-window
+{
+	display: flex;
+	max-width: calc(100% - 20px);
+}
+
+.${P}-window.${P}--menu
+{
+	background: white;
+	color: black;
+	border-radius: 3px;
+	padding: 10px;
+}
+
+.${P}-window *
+{
+	word-break: normal;
+}
+`

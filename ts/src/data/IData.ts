@@ -20,6 +20,7 @@
 import { IPoint } from './IPoint'
 import { IRenderView } from './IRenderView'
 import { IViewDocument } from './IViewDocument'
+import { IWindow } from './IWindow'
 import { RendererState } from './RendererState'
 import { TSet } from './TSet'
 
@@ -38,4 +39,5 @@ export interface IData {
 	selectedBezierPointIds: TSet<boolean>
 	selectedPointIds: TSet<boolean>
 	memorizedStrokeIds: string[]
+	windows: IWindow[]
 }
