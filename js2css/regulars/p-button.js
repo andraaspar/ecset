@@ -29,6 +29,9 @@ ${buttons}
 	flex-shrink: 0;
 	
 	display: flex;
+}
+${buttons}.${P}--wrap
+{
 	flex-wrap: wrap;
 }
 ${rules(distances, distance => `
@@ -40,10 +43,7 @@ ${buttons}.${P}--${distance}
 `)}
 ${selectors(buttonSelectors, button => `${buttons} ${button}`)}
 {
-	flex-shrink: 0;
-	
 	display: flex;
-	flex-wrap: wrap;
 }
 ${rules(distances, distance => `
 ${selectors(buttonSelectors, button => `${buttons}.${P}--${distance} ${button}`)}

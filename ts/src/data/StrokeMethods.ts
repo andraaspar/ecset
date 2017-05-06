@@ -23,6 +23,7 @@ import { deleteColorStripPair, getRenderColorStripPair } from './ColorStripPairM
 import { deleteTransform, getRenderTransform } from './TransformMethods'
 
 import { BezierKind } from './BezierKind'
+import { CircularReferenceError } from '../error/CircularReferenceError'
 import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderStroke } from './IRenderStroke'
@@ -64,6 +65,7 @@ export function deleteStroke(data: IData, stroke: IRenderStroke) {
 	delete data.selectedStrokeIds[stroke.id]
 	delete data.viewsByStrokeId[stroke.id]
 	delete data.document.strokesById[stroke.id]
+	data.memorizedStrokeIds = data.memorizedStrokeIds.filter(id => id != stroke.id)
 	data.document.strokeIds = data.document.strokeIds.filter(anId => anId != stroke.id)
 	let deleteCount
 	do {
@@ -359,7 +361,42 @@ export function createStroke(data: IData) {
 		transformId: transformId,
 	}
 
-	data.document.strokeIds.push(strokeId)
-
 	return strokeId
+}
+
+export function clearMemorizedStrokeIds(data: IData) {
+	data.memorizedStrokeIds = []
+}
+
+export function memorizeStrokeIds(data: IData, id: string, ...ids: string[]) {
+	data.memorizedStrokeIds.push(id, ...ids)
+}
+
+export function getParentStrokeIdChains(d: IViewDocument, targetId: string, strokeIds: string[] = d.strokeIds, currentPath: string[] = [], result: string[][] = []) {
+	for (let strokeId of strokeIds) {
+		if (strokeId == targetId) {
+			result.push(currentPath.concat(targetId))
+		}
+		let stroke = d.strokesById[strokeId]
+		getParentStrokeIdChains(d, targetId, stroke.childIds, currentPath.concat(strokeId))
+	}
+	return result
+}
+
+export function addMemorizedStrokeIdsAsChildren(data: IData, stroke: IViewStroke, index: number = stroke.childIds.length) {
+	let invalidIdsSet: TSet<boolean>
+	let parentStrokeIdChains = getParentStrokeIdChains(data.document, stroke.id)
+	for (let chain of parentStrokeIdChains) {
+		for (let id of chain) {
+			if (data.memorizedStrokeIds.indexOf(id)) {
+				invalidIdsSet[id] = true
+			}
+		}
+	}
+	let invalidIds = Object.keys(invalidIdsSet)
+	if (invalidIds.length) {
+		throw new CircularReferenceError(`opjace`, invalidIds)
+	} else {
+		stroke.childIds.splice(index, 0, ...data.memorizedStrokeIds)
+	}
 }

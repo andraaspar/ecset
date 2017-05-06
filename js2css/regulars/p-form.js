@@ -51,12 +51,27 @@ module.exports = `
 	flex-basis: 20px;
 	flex-shrink: 0;
 	flex-grow: 1;
+	
+	display: flex;
+	flex-direction: column;
 	overflow: auto;
 }
 .${P}-form-buttons
 {
 	flex-shrink: 0;
+	
+	display: flex;
+	flex-direction: column;
 	overflow: hidden;
+}
+.${P}-form-list-placeholder
+{
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	padding: 0;
+	font-size: ${FONT_SIZE_TINY};
+	line-height: 1;
 }
 .${P}-form-list-item
 {
@@ -77,10 +92,15 @@ module.exports = `
 .${P}-form-list-item-name
 {
 	justify-content: flex-start;
+	flex-shrink: 1;
 }
 .${P}-form-list-item-name.${P}--unnamed
 {
 	font-style: italic;
+}
+.${P}-form-list-item-extra-button
+{
+	flex-grow: 0;
 }
 .${P}-form-item,
 .${P}-form-list-item-meta

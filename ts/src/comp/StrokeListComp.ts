@@ -20,14 +20,16 @@
 import * as m from 'mithril'
 
 import { P, get } from '../statics'
-import { deselectAllStrokes, selectStroke } from '../data/StrokeMethods'
+import { addMemorizedStrokeIdsAsChildren, clearMemorizedStrokeIds, createStroke, deselectAllStrokes, memorizeStrokeIds, selectStroke } from '../data/StrokeMethods'
 
 import { BorderComp } from './BorderComp'
 import { IViewStroke } from '../data/IViewStroke'
 import { data } from '../data/DataMethods'
+import { render } from '../data/RenderMethods'
 
 export declare namespace StrokeListComp {
 	interface Attrs {
+		stroke?: IViewStroke
 		strokeIds: string[]
 	}
 	interface State {
@@ -44,7 +46,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 	},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		return (
+		return [
 			v.attrs.strokeIds.map(id => {
 				let stroke = data.document.strokesById[id]
 				let isSelected = !!data.selectedStrokeIds[id]
@@ -73,7 +75,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 						),
 						m(BorderComp),
 						m(`div`, { 'class': `${P}-form-list-item-end` },
-							m(`div`, { 'class': `${P}-buttons` },
+							m(`div`, { 'class': `${P}-buttons ${P}--1` },
 								m(`button`, {
 									'type': `button`,
 									'class': `${P}-button ${P}-form-list-item-name ${stroke.name ? `` : `${P}--unnamed`} ${isSelected ? `${P}--highlighted` : ``}`,
@@ -84,16 +86,49 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 								},
 									stroke.name || `Stroke`
 								),
+								m(`button`, {
+									'type': `button`,
+									'class': `${P}-button ${P}-form-list-item-extra-button`,
+									'onclick': () => {
+										memorizeStrokeIds(data, id)
+									},
+									'title': `Memorize`,
+								},
+									`M`
+								),
 							),
 							v.state.openStrokeIds.has(stroke) && get(() => !!stroke.childIds.length) &&
 							m(StrokeListComp, {
+								'stroke': stroke,
 								'strokeIds': stroke.childIds,
 							})
 						)
 					)
 				)
-			})
-		)
+			}),
+			m('button', {
+				'type': `button`,
+				'class': `${P}-button ${P}-form-list-placeholder`,
+				'title': data.memorizedStrokeIds.length ? `Insert ${data.memorizedStrokeIds.length} memorized` : `Create new`,
+				'onclick': () => {
+					if (data.memorizedStrokeIds.length) {
+						if (v.attrs.stroke) {
+							addMemorizedStrokeIdsAsChildren(data, v.attrs.stroke)
+						} else {
+							data.document.strokeIds.splice(data.document.strokeIds.length, 0, ...data.memorizedStrokeIds)
+						}
+					} else {
+						let id = createStroke(data)
+						data.document.strokeIds.push(id)
+						deselectAllStrokes(data)
+						selectStroke(data, id)
+					}
+					render()
+				},
+			},
+				`+ ${data.memorizedStrokeIds.length || ``}`
+			)
+		]
 	},
 	// oncreate(v) {},
 	// onupdate(v) {},

@@ -20,8 +20,9 @@
 import * as m from 'mithril'
 
 import { P, get } from '../statics'
-import { createStroke, deleteStroke, deselectAllStrokes, getRenderStroke, selectStroke } from '../data/StrokeMethods'
+import { clearMemorizedStrokeIds, createStroke, deleteStroke, deselectAllStrokes, getRenderStroke, selectStroke } from '../data/StrokeMethods'
 
+import { BorderComp } from './BorderComp'
 import { FormSectionComp } from './FormSectionComp'
 import { IPath } from '../data/IPath'
 import { StrokeListComp } from './StrokeListComp'
@@ -49,32 +50,50 @@ export const StrokeListFormComp: m.Comp<StrokeListFormComp.Attrs, StrokeListForm
 					})
 				),
 				buttons: [
-					m(`button`, {
-						'type': `button`,
-						'class': `${P}-button`,
-						'onclick': () => {
-							let id = createStroke(data)
-							deselectAllStrokes(data)
-							selectStroke(data, id)
-							render()
+					m(`div`, { 'class': `${P}-buttons ${P}--1` },
+						m(`button`, {
+							'type': `button`,
+							'class': `${P}-button`,
+							'onclick': () => {
+								let id = createStroke(data)
+								data.document.strokeIds.push(id)
+								deselectAllStrokes(data)
+								selectStroke(data, id)
+								render()
+							},
 						},
-					},
-						m(`span`, `New`)
-					),
-					m(`button`, {
-						'type': `button`,
-						'class': `${P}-button`,
-						'onclick': () => {
-							let s: TSet<IPath> = {}
-							for (let strokeId of Object.keys(data.selectedStrokeIds)) {
-								let renderStroke = getRenderStroke(data.document, s, strokeId)
-								deleteStroke(data, renderStroke)
-							}
-							render()
+							m(`span`, `New`)
+						),
+						m(`button`, {
+							'type': `button`,
+							'class': `${P}-button`,
+							'onclick': () => {
+								let s: TSet<IPath> = {}
+								for (let strokeId of Object.keys(data.selectedStrokeIds)) {
+									let renderStroke = getRenderStroke(data.document, s, strokeId)
+									deleteStroke(data, renderStroke)
+								}
+								render()
+							},
 						},
-					},
-						m(`span`, `Delete`)
+							m(`span`, `Delete`)
+						)
 					),
+					[
+						m(BorderComp),
+						m(`div`, { 'class': `${P}-buttons ${P}--1` },
+							!!data.memorizedStrokeIds.length &&
+							m(`button`, {
+								'type': `button`,
+								'class': `${P}-button`,
+								'onclick': () => {
+									clearMemorizedStrokeIds(data)
+								},
+							},
+								m(`span`, `Forget strokes: ${data.memorizedStrokeIds.length}`)
+							),
+						)
+					]
 				]
 			})
 		)

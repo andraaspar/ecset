@@ -22,6 +22,7 @@ module.exports = () => `
 {
 	box-sizing: content-box;
 	margin-top: 0;
+	word-break: break-all;
 }
 
 html,

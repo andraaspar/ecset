@@ -49,9 +49,7 @@ export const FormSectionComp: m.Comp<FormSectionComp.Attrs, FormSectionComp.Stat
 				[
 					m(BorderComp),
 					m(`div`, { 'class': `${P}-form-buttons` },
-						m(`div`, { 'class': `${P}-buttons ${P}--1` },
-							v.attrs.buttons,
-						)
+						v.attrs.buttons,
 					)
 				]
 			)

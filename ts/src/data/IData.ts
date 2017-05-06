@@ -37,4 +37,5 @@ export interface IData {
 	selectedBezierPathIds: TSet<boolean>
 	selectedBezierPointIds: TSet<boolean>
 	selectedPointIds: TSet<boolean>
+	memorizedStrokeIds: string[]
 }

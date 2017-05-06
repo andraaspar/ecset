@@ -19,23 +19,23 @@
 
 import { isArray, isObjectNotNull } from 'illa/Type'
 
-export function deepFind<T>(o: any, predicate: (o: any, key: string | number, parent: any) => boolean, key?: string | number, parent?: any): T[] {
+export function deepFind<T>(container: any, predicate: (obj: any, key: string | number, parent: any) => boolean, key?: string | number, parent?: any): T[] {
 	let result: T[] = []
-	if (o) {
-		if (predicate(o, key, parent)) {
-			result.push(o)
+	if (container) {
+		if (predicate(container, key, parent)) {
+			result.push(container)
 		}
 	}
-	if (isArray(o)) {
-		for (let i = 0, n = o.length; i < n; i++) {
-			if (o[i]) {
-				result = result.concat(deepFind<T>(o[i], predicate, i, o))
+	if (isArray(container)) {
+		for (let i = 0, n = container.length; i < n; i++) {
+			if (container[i]) {
+				result = result.concat(deepFind<T>(container[i], predicate, i, container))
 			}
 		}
-	} else if (isObjectNotNull(o)) {
-		for (let k of Object.keys(o)) {
-			if (o[k]) {
-				result = result.concat(deepFind<T>(o[k], predicate, k, o))
+	} else if (isObjectNotNull(container)) {
+		for (let k of Object.keys(container)) {
+			if (container[k]) {
+				result = result.concat(deepFind<T>(container[k], predicate, k, container))
 			}
 		}
 	}
