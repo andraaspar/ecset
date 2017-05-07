@@ -368,8 +368,8 @@ export function clearMemorizedStrokeIds(data: IData) {
 	data.memorizedStrokeIds = []
 }
 
-export function memorizeStrokeIds(data: IData, id: string, ...ids: string[]) {
-	data.memorizedStrokeIds.push(id, ...ids)
+export function memorizeStrokeIds(data: IData, ...ids: string[]) {
+	data.memorizedStrokeIds.push(...ids)
 }
 
 export function getParentStrokeIdChains(d: IViewDocument, targetId: string, strokeIds: string[] = d.strokeIds, currentPath: string[] = [], result: string[][] = []) {

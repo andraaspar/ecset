@@ -25,6 +25,7 @@ import { addMemorizedStrokeIdsAsChildren, clearMemorizedStrokeIds, createStroke,
 import { BorderComp } from './BorderComp'
 import { IViewStroke } from '../data/IViewStroke'
 import { MenuWindowComp } from './MenuWindowComp'
+import { StrokeMenuComp } from './StrokeMenuComp'
 import { data } from '../data/DataMethods'
 import { render } from '../data/RenderMethods'
 import { uuid } from 'illa/StringUtil'
@@ -36,6 +37,7 @@ export declare namespace StrokeListComp {
 	}
 	interface State {
 		openStrokeIds?: WeakSet<IViewStroke>
+		onContextMenu?: (e: MouseEvent) => void
 	}
 }
 type Vnode = m.Vnode<StrokeListComp.Attrs, StrokeListComp.State>
@@ -49,7 +51,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return [
-			v.attrs.strokeIds.map(id => {
+			v.attrs.strokeIds.map((id, index) => {
 				let stroke = data.document.strokesById[id]
 				let isSelected = !!data.selectedStrokeIds[id]
 				return (
@@ -76,7 +78,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 							)
 						),
 						m(BorderComp),
-						m(`div`, { 'class': `${P}-form-list-item-end` },
+						m(`div`, { 'class': `${P}-buttons ${P}--1 ${P}--column ${P}-form-list-item-end` },
 							m(`div`, { 'class': `${P}-buttons ${P}--1` },
 								m(`button`, {
 									'type': `button`,
@@ -85,29 +87,27 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 										deselectAllStrokes(data)
 										selectStroke(data, id)
 									},
-									'oncreate': (v: m.VnodeDOM<any, any>) => {
-										console.log('A')
-										v.dom.addEventListener('contextmenu', onContextMenu, true)
+									'oncreate': (v2: m.VnodeDOM<any, any>) => {
+										v2.dom.addEventListener('contextmenu', v.state.onContextMenu = (e: MouseEvent) => {
+											e.preventDefault()
+											data.windows.push({
+												id: uuid(),
+												contentFactory: () => m(StrokeMenuComp, {
+													strokeIds: v.attrs.strokeIds,
+													index: index,
+												}),
+											})
+											m.redraw()
+										}, true)
 									},
 									'onremove': (v: m.VnodeDOM<any, any>) => {
-										console.log('B')
-										v.dom.removeEventListener('contextmenu', onContextMenu, true)
+										v.dom.removeEventListener('contextmenu', v.state.onContextMenu, true)
 									},
 								},
 									stroke.name || `Stroke`
 								),
-								m(`button`, {
-									'type': `button`,
-									'class': `${P}-button ${P}-form-list-item-extra-button`,
-									'onclick': () => {
-										memorizeStrokeIds(data, id)
-									},
-									'title': `Memorize`,
-								},
-									`M`
-								),
 							),
-							v.state.openStrokeIds.has(stroke) && get(() => !!stroke.childIds.length) &&
+							v.state.openStrokeIds.has(stroke) &&
 							m(StrokeListComp, {
 								'stroke': stroke,
 								'strokeIds': stroke.childIds,
@@ -129,7 +129,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 						}
 					} else {
 						let id = createStroke(data)
-						data.document.strokeIds.push(id)
+						v.attrs.strokeIds.push(id)
 						deselectAllStrokes(data)
 						selectStroke(data, id)
 					}
@@ -144,15 +144,4 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 	// onupdate(v) {},
 	// onbeforeremove(v) {},
 	// onremove(v) {}
-}
-
-function onContextMenu(e: MouseEvent) {
-	e.preventDefault()
-	data.windows.push({
-		id: uuid(),
-		contentFactory: () => m(MenuWindowComp, {
-			content: m(`div`, { 'class': `` }, `Yay`)
-		}),
-	})
-	m.redraw()
 }

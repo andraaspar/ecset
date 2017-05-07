@@ -34,6 +34,10 @@ ${buttons}.${P}--wrap
 {
 	flex-wrap: wrap;
 }
+${buttons}.${P}--column
+{
+	flex-direction: column;
+}
 ${rules(distances, distance => `
 ${buttons}.${P}--${distance}
 {
