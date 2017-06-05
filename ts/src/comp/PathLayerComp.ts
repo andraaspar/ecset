@@ -28,6 +28,7 @@ import { IRenderBezierPath } from '../data/IRenderBezierPath'
 import { IRenderPoint } from '../data/IRenderPoint'
 import { IRenderStroke } from '../data/IRenderStroke'
 import { IViewDocument } from '../data/IViewDocument'
+import { IViewStroke } from '../data/IViewStroke'
 import { P } from '../statics'
 import { PathLayerModel } from './PathLayerModel'
 import { TSet } from '../data/TSet'
@@ -50,7 +51,7 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		let s: TSet<IPath> = {}
-		let strokes = data.document.strokeIds.map(id => data.document.strokesById[id])
+		let strokes = flattenStrokes(data.document.strokeIds)
 		return (
 			strokes.sort((a, b) => {
 				let aSelected = data.selectedStrokeIds[a.id]
@@ -68,12 +69,11 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 						'height': data.document.height * data.canvasScale,
 						'key': path.id,
 						'onmousedown': (e: MouseEvent) => {
-							if (data.selectedBezierPathIds[path.id]) {
-								v.state.model.startDrag(path, e)
-							} else {
+							if (!data.selectedBezierPathIds[path.id]) {
 								deselectAllStrokes(data)
 								selectStroke(data, stroke.id)
 							}
+							v.state.model.startDrag(path, e)
 						},
 						'onclick': (e: MouseEvent) => {
 							e.stopPropagation()
@@ -109,4 +109,16 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 	onremove(v) {
 		v.state.model.kill()
 	}
+}
+
+function flattenStrokes(strokeIds: string[]) {
+	let result: IViewStroke[] = []
+	for (let strokeId of strokeIds) {
+		let stroke = data.document.strokesById[strokeId]
+		result.push(stroke)
+		if (stroke.childIds && stroke.childIds.length) {
+			result = result.concat(flattenStrokes(stroke.childIds))
+		}
+	}
+	return result
 }
