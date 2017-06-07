@@ -19,7 +19,7 @@
 
 import { deleteBezierPoint, deselectAllBezierPoints, getRenderBezierPoint, scaleRenderBezierPoint, selectBezierPoint } from './BezierPointMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
@@ -96,18 +96,18 @@ export function getRenderBezierPath(d: IViewDocument, s: TSet<IPath>, id: string
 	return viewBezierPathToRenderBezierPath(d, s, d.bezierPathsById[id])
 }
 
-export function deselectAllBezierPaths(data: IData) {
+export function deselectAllBezierPaths(data: Data) {
 	data.selectedBezierPathIds = {}
 	deselectAllBezierPoints(data)
 }
 
-export function selectBezierPath(data: IData, id: string) {
+export function selectBezierPath(data: Data, id: string) {
 	data.selectedBezierPathIds[id] = true
 	let p = data.document.bezierPathsById[id]
 	p.pointIds.forEach(bp => selectBezierPoint(data, bp))
 }
 
-export function deleteBezierPath(data: IData, path: IRenderBezierPath) {
+export function deleteBezierPath(data: Data, path: IRenderBezierPath) {
 	delete data.selectedBezierPathIds[path.id]
 	delete data.document.bezierPathsById[path.id]
 	let deleteCount

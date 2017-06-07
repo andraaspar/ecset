@@ -19,7 +19,7 @@
 
 import { deleteColor, getRenderColor, sanitizeChannelValue, viewColorToRenderColor } from './ColorMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IRenderColor } from './IRenderColor'
 import { IViewAlphaMultiplier } from './IViewAlphaMultiplier'
 import { IViewDocument } from './IViewDocument'
@@ -36,7 +36,7 @@ export function getRenderColorFromAplhaMultiplier(d: IViewDocument, id: string):
 	return viewAlphaMultiplierToRenderColor(d, d.aplhaMultipliersById[id])
 }
 
-export function deleteAlphaMultiplier(data: IData, color: IRenderColor) {
+export function deleteAlphaMultiplier(data: Data, color: IRenderColor) {
 	delete data.document.aplhaMultipliersById[color.alphaMultiplierId]
 	if (getIdCountInViewDocument(data.document, color.id) == 1) {
 		deleteColor(data, color.id)

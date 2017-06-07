@@ -19,7 +19,7 @@
 
 import { deleteColorStrip, getRenderColorStrip } from './ColorStripMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderColorStripPair } from './IRenderColorStripPair'
 import { IViewColorStripPair } from './IViewColorStripPair'
@@ -39,7 +39,7 @@ export function getRenderColorStripPair(d: IViewDocument, s: TSet<IPath>, id: st
 	return viewColorStripPairToRenderColorStripPair(d, s, d.colorStripPairsById[id])
 }
 
-export function deleteColorStripPair(data: IData, pair: IRenderColorStripPair) {
+export function deleteColorStripPair(data: Data, pair: IRenderColorStripPair) {
 	delete data.document.colorStripPairsById[pair.id]
 	let deleteCount
 	do {

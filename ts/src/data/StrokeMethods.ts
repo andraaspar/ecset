@@ -24,7 +24,7 @@ import { deleteTransform, getRenderTransform } from './TransformMethods'
 
 import { BezierKind } from './BezierKind'
 import { CircularReferenceError } from '../error/CircularReferenceError'
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderStroke } from './IRenderStroke'
 import { IViewDocument } from './IViewDocument'
@@ -49,18 +49,18 @@ export function getRenderStroke(d: IViewDocument, s: TSet<IPath>, id: string): I
 	return viewStrokeToRenderStroke(d, s, d.strokesById[id])
 }
 
-export function deselectAllStrokes(data: IData) {
+export function deselectAllStrokes(data: Data) {
 	data.selectedStrokeIds = {}
 	deselectAllBezierPaths(data)
 }
 
-export function selectStroke(data: IData, id: string) {
+export function selectStroke(data: Data, id: string) {
 	data.selectedStrokeIds[id] = true
 	let s = data.document.strokesById[id]
 	selectBezierPath(data, s.bezierPathId)
 }
 
-export function deleteStroke(data: IData, stroke: IRenderStroke) {
+export function deleteStroke(data: Data, stroke: IRenderStroke) {
 	delete data.pixelsByStrokeId[stroke.id]
 	delete data.selectedStrokeIds[stroke.id]
 	delete data.viewsByStrokeId[stroke.id]
@@ -96,7 +96,7 @@ export function deleteStroke(data: IData, stroke: IRenderStroke) {
 	stroke.stripPair
 }
 
-export function createStroke(data: IData) {
+export function createStroke(data: Data) {
 	let blackId = `13636f84-3fd2-6aae-4230-66a0767cb765`
 	let whiteId = `333b3ea5-9d19-d1ae-4745-b64c98dfabb7`
 	data.document.colorsById[blackId] = createGrayViewColor(data, blackId, 255, 0)
@@ -364,11 +364,11 @@ export function createStroke(data: IData) {
 	return strokeId
 }
 
-export function clearMemorizedStrokeIds(data: IData) {
+export function clearMemorizedStrokeIds(data: Data) {
 	data.memorizedStrokeIds = []
 }
 
-export function memorizeStrokeIds(data: IData, ...ids: string[]) {
+export function memorizeStrokeIds(data: Data, ...ids: string[]) {
 	data.memorizedStrokeIds.push(...ids)
 }
 
@@ -383,7 +383,7 @@ export function getParentStrokeIdChains(d: IViewDocument, targetId: string, stro
 	return result
 }
 
-export function addMemorizedStrokeIdsAsChildren(data: IData, stroke: IViewStroke, index: number = stroke.childIds.length) {
+export function addMemorizedStrokeIdsAsChildren(data: Data, stroke: IViewStroke, index: number = stroke.childIds.length) {
 	let invalidIdsSet: TSet<boolean>
 	let parentStrokeIdChains = getParentStrokeIdChains(data.document, stroke.id)
 	for (let chain of parentStrokeIdChains) {

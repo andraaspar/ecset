@@ -20,7 +20,7 @@
 import { deleteBezierPath, getRenderBezierPath } from './BezierPathMethods'
 import { deleteColorPath, getRenderColorPath } from './ColorPathMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderColorField } from './IRenderColorField'
 import { IViewColorField } from './IViewColorField'
@@ -41,7 +41,7 @@ export function getRenderColorField(d: IViewDocument, s: TSet<IPath>, id: string
 	return viewColorFieldToRenderColorField(d, s, d.colorFieldsById[id])
 }
 
-export function deleteColorField(data: IData, field: IRenderColorField) {
+export function deleteColorField(data: Data, field: IRenderColorField) {
 	delete data.document.colorFieldsById[field.id]
 	let deleteCount
 	do {

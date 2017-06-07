@@ -19,7 +19,7 @@
 
 import { deleteColorSegment, getRenderColorSegment } from './ColorSegmentMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderColorPath } from './IRenderColorPath'
 import { IViewColorPath } from './IViewColorPath'
@@ -38,7 +38,7 @@ export function getRenderColorPath(d: IViewDocument, s: TSet<IPath>, id: string)
 	return viewColorPathToRenderColorPath(d, s, d.colorPathsById[id])
 }
 
-export function deleteColorPath(data: IData, path: IRenderColorPath) {
+export function deleteColorPath(data: Data, path: IRenderColorPath) {
 	delete data.document.colorPathsById[path.id]
 	let deleteCount
 	do {

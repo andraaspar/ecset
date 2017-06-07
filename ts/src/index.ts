@@ -21,17 +21,15 @@ import './statics.ts'
 
 import * as m from 'mithril'
 
-import { createData, data } from './data/DataMethods'
 import { getIdCountInRenderDocument, getIdCountInViewDocument, viewDocumentToRenderDocument } from './data/DocumentMethods'
 
 import { EcsetComp } from './comp/EcsetComp'
 import { GLOBAL } from 'illa/GLOBAL'
+import { data } from './data/DataMethods'
 import jQuery from 'jquery-ts'
 import { render } from './data/RenderMethods'
 
 const ECSET_ELEMENT = document.getElementById('ecset')
-
-createData()
 
 GLOBAL.$ = GLOBAL.jQuery = jQuery
 GLOBAL.m = m

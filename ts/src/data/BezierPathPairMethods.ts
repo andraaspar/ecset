@@ -19,7 +19,7 @@
 
 import { deleteBezierPath, getRenderBezierPath } from './BezierPathMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderBezierPathPair } from './IRenderBezierPathPair'
 import { IViewBezierPathPair } from './IViewBezierPathPair'
@@ -39,7 +39,7 @@ export function getRenderBezierPathPair(d: IViewDocument, s: TSet<IPath>, id: st
 	return viewBezierPathPairToRenderBezierPathPair(d, s, d.bezierPathPairsById[id])
 }
 
-export function deleteBezierPathPair(data: IData, pair: IRenderBezierPathPair) {
+export function deleteBezierPathPair(data: Data, pair: IRenderBezierPathPair) {
 	delete data.document.bezierPathPairsById[pair.id]
 	let deleteCount
 	do {

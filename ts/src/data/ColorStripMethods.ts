@@ -19,7 +19,7 @@
 
 import { deleteColorField, getRenderColorField } from './ColorFieldMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderColorStrip } from './IRenderColorStrip'
 import { IViewColorStrip } from './IViewColorStrip'
@@ -41,7 +41,7 @@ export function getRenderColorStrip(d: IViewDocument, s: TSet<IPath>, id: string
 	return viewColorStripToRenderColorStrip(d, s, d.colorStripsById[id])
 }
 
-export function deleteColorStrip(data: IData, strip: IRenderColorStrip) {
+export function deleteColorStrip(data: Data, strip: IRenderColorStrip) {
 	delete data.document.colorStripsById[strip.id]
 	let deleteCount
 	do {

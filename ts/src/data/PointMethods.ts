@@ -18,7 +18,7 @@
  */
 
 import { Axis2D } from 'illa/Axis2D'
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPoint } from './IPoint'
 import { IRenderPoint } from './IRenderPoint'
 import { IViewDocument } from './IViewDocument'
@@ -117,15 +117,15 @@ export function scaleVector(v: IPoint, scale: number): IPoint {
 	}
 }
 
-export function deselectAllPoints(data: IData) {
+export function deselectAllPoints(data: Data) {
 	data.selectedPointIds = {}
 }
 
-export function selectPoint(data: IData, id: string) {
+export function selectPoint(data: Data, id: string) {
 	data.selectedPointIds[id] = true
 }
 
-export function deletePoint(data: IData, p: IRenderPoint) {
+export function deletePoint(data: Data, p: IRenderPoint) {
 	delete data.selectedPointIds[p.id]
 	delete data.document.pointsById[p.id]
 }

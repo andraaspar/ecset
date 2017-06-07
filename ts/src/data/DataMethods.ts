@@ -17,35 +17,6 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IData } from './IData'
-import { createViewDocument } from './DocumentMethods'
+import { Data } from './Data'
 
-export let data: IData
-
-export function setData(v: IData) {
-	if (data) throw 'oor9sa'
-	data = v
-}
-
-export function createData() {
-	setData({
-		document: createViewDocument(),
-		renderers: [],
-		rendererStates: [],
-		maxRenderers: navigator.hardwareConcurrency || 1,
-		lastRenderFinished: 0,
-		pixelsByStrokeId: {},
-		viewsByStrokeId: {},
-		canvasLocation: {
-			x: 0,
-			y: 0,
-		},
-		canvasScale: 1,
-		selectedStrokeIds: {},
-		selectedBezierPathIds: {},
-		selectedBezierPointIds: {},
-		selectedPointIds: {},
-		memorizedStrokeIds: [],
-		windows: [],
-	})
-}
+export let data = new Data()

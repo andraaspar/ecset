@@ -20,7 +20,7 @@
 import { deleteAlphaMultiplier, getRenderColorFromAplhaMultiplier } from './AlphaMultiplierMethods'
 import { deleteBezierPath, getRenderBezierPath } from './BezierPathMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IPath } from './IPath'
 import { IRenderColorSegment } from './IRenderColorSegment'
 import { IViewColorSegment } from './IViewColorSegment'
@@ -41,7 +41,7 @@ export function getRenderColorSegment(d: IViewDocument, s: TSet<IPath>, id: stri
 	return viewColorSegmentToRenderColorSegment(d, s, d.colorSegmentsById[id])
 }
 
-export function deleteColorSegment(data: IData, segment: IRenderColorSegment) {
+export function deleteColorSegment(data: Data, segment: IRenderColorSegment) {
 	delete data.document.colorSegmentsById[segment.id]
 	let deleteCount
 	do {

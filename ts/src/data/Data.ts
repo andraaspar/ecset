@@ -23,21 +23,25 @@ import { IViewDocument } from './IViewDocument'
 import { IWindow } from './IWindow'
 import { RendererState } from './RendererState'
 import { TSet } from './TSet'
+import { createViewDocument } from './DocumentMethods'
 
-export interface IData {
-	document: IViewDocument
-	renderers: Worker[]
-	rendererStates: RendererState[]
-	maxRenderers: number
-	lastRenderFinished: number
-	pixelsByStrokeId: TSet<Uint8ClampedArray>
-	viewsByStrokeId: TSet<IRenderView>
-	canvasLocation: IPoint
-	canvasScale: number
-	selectedStrokeIds: TSet<boolean>
-	selectedBezierPathIds: TSet<boolean>
-	selectedBezierPointIds: TSet<boolean>
-	selectedPointIds: TSet<boolean>
-	memorizedStrokeIds: string[]
-	windows: IWindow[]
+export class Data {
+	document: IViewDocument = createViewDocument()
+	renderers: Worker[] = []
+	rendererStates: RendererState[] = []
+	maxRenderers: number = navigator.hardwareConcurrency || 1
+	lastRenderFinished: number = 0
+	pixelsByStrokeId: TSet<Uint8ClampedArray> = {}
+	viewsByStrokeId: TSet<IRenderView> = {}
+	canvasLocation: IPoint = {
+		x: 0,
+		y: 0,
+	}
+	canvasScale: number = 1
+	selectedStrokeIds: TSet<boolean> = {}
+	selectedBezierPathIds: TSet<boolean> = {}
+	selectedBezierPointIds: TSet<boolean> = {}
+	selectedPointIds: TSet<boolean> = {}
+	memorizedStrokeIds: string[] = []
+	windows: IWindow[] = []
 }

@@ -17,8 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { Data } from './Data'
 import { IColor } from './IColor'
-import { IData } from './IData'
 import { IPath } from './IPath'
 import { IRenderColor } from './IRenderColor'
 import { IViewColor } from './IViewColor'
@@ -49,7 +49,7 @@ export function getRenderColor(d: IViewDocument, id: string): IRenderColor {
 	return viewColorToRenderColor(d.colorsById[id])
 }
 
-export function createViewColor(data: IData, id: string, alphaValue: number, ...values: number[]) {
+export function createViewColor(data: Data, id: string, alphaValue: number, ...values: number[]) {
 	let result: IViewColor = {
 		id: id,
 		channelValues: [alphaValue].concat(values).map(sanitizeChannelValue),
@@ -58,7 +58,7 @@ export function createViewColor(data: IData, id: string, alphaValue: number, ...
 	return result
 }
 
-export function createGrayViewColor(data: IData, id: string, alphaValue: number, value: number) {
+export function createGrayViewColor(data: Data, id: string, alphaValue: number, value: number) {
 	let values: number[] = []
 	for (let i = 1; i < data.document.channelCount; i++) {
 		values.push(value)
@@ -70,6 +70,6 @@ export function sanitizeChannelValue(v: number) {
 	return Math.max(0, Math.min(255, Math.floor(v)) || 0)
 }
 
-export function deleteColor(data: IData, colorId: string) {
+export function deleteColor(data: Data, colorId: string) {
 	delete data.document.colorsById[colorId]
 }

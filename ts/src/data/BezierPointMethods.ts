@@ -19,7 +19,7 @@
 
 import { deletePoint, deselectAllPoints, getRenderPoint, scaleVector, selectPoint } from './PointMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IViewBezierPoint } from './IViewBezierPoint'
 import { IViewDocument } from './IViewDocument'
@@ -46,18 +46,18 @@ export function getRenderBezierPoint(d: IViewDocument, id: string): IRenderBezie
 	return viewBezierPointToRenderBezierPoint(d, d.bezierPointsById[id], id)
 }
 
-export function deselectAllBezierPoints(data: IData) {
+export function deselectAllBezierPoints(data: Data) {
 	data.selectedBezierPointIds = {}
 	deselectAllPoints(data)
 }
 
-export function selectBezierPoint(data: IData, id: string) {
+export function selectBezierPoint(data: Data, id: string) {
 	data.selectedBezierPointIds[id] = true
 	let bp = data.document.bezierPointsById[id];
 	[bp.centerId, bp.handleInId, bp.handleOutId].forEach(p => selectPoint(data, p))
 }
 
-export function deleteBezierPoint(data: IData, point: IRenderBezierPoint) {
+export function deleteBezierPoint(data: Data, point: IRenderBezierPoint) {
 	delete data.selectedBezierPointIds[point.id]
 	delete data.document.bezierPointsById[point.id]
 	let deleteCount

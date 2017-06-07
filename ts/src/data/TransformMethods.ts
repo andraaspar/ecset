@@ -19,7 +19,7 @@
 
 import { deletePoint, getRenderPoint } from './PointMethods'
 
-import { IData } from './IData'
+import { Data } from './Data'
 import { IRenderPoint } from './IRenderPoint'
 import { IRenderTransform } from './IRenderTransform'
 import { IViewDocument } from './IViewDocument'
@@ -40,7 +40,7 @@ export function getRenderTransform(d: IViewDocument, id: string): IRenderTransfo
 	return viewTransformToRenderTransform(d, d.transformsById[id])
 }
 
-export function deleteTransform(data: IData, transform: IRenderTransform) {
+export function deleteTransform(data: Data, transform: IRenderTransform) {
 	delete data.document.transformsById[transform.id]
 	let deleteCount
 	do {
