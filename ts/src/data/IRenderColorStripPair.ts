@@ -19,8 +19,12 @@
 
 import { IRenderColorStrip } from './IRenderColorStrip'
 
-export interface IRenderColorStripPair {
-	id?: string
-	left: IRenderColorStrip
-	right: IRenderColorStrip
+export class IRenderColorStripPair {
+	constructor(
+		public left: IRenderColorStrip,
+		public right: IRenderColorStrip,
+		public id?: string,
+	) {
+
+	}
 }

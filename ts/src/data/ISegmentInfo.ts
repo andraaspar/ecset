@@ -18,17 +18,21 @@
  */
 
 import { IGainInfo } from './IGainInfo'
-import { IRenderPoint } from './IRenderPoint'
 import { ISegment } from './ISegment'
+import { Point } from './IPoint'
 
-export interface ISegmentInfo {
-	segment: ISegment
-	length: number
-	tGain: IGainInfo
-	originDistance: number
-	distanceChange: IRenderPoint
-	originT: number
-	tChange: IRenderPoint
-	focusDistance: number
-	focusSide: number
+export class ISegmentInfo {
+	constructor(
+		public segment: ISegment,
+		public length: number,
+		public tGain: IGainInfo,
+		public originDistance: number,
+		public distanceChange: Point,
+		public originT: number,
+		public tChange: Point,
+		public focusDistance: number,
+		public focusSide: number,
+	) {
+
+	}
 }

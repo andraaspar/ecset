@@ -20,9 +20,13 @@
 import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderColorPath } from './IRenderColorPath'
 
-export interface IRenderColorField {
-	id?: string
-	a: IRenderColorPath
-	b: IRenderColorPath
-	colorTweenPaths: IRenderBezierPath[]
+export class IRenderColorField {
+	constructor(
+		public a: IRenderColorPath,
+		public b: IRenderColorPath,
+		public colorTweenPaths: IRenderBezierPath[],
+		public id?: string,
+	) {
+
+	}
 }

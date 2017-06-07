@@ -17,9 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPoint } from './IPoint'
+import { Point } from './IPoint'
 
-export interface IPath {
-	points: IPoint[]
-	isLoop: boolean
+export class IPath {
+	constructor(
+		public points: Point[],
+		public isLoop: boolean,
+	) {
+
+	}
 }

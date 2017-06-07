@@ -22,7 +22,7 @@ import * as m from 'mithril'
 import { addPoints, scaleVector, subtractPoints } from '../data/PointMethods'
 
 import { CanvasComp } from './CanvasComp'
-import { IPoint } from '../data/IPoint'
+import { Point } from '../data/IPoint'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
 import jQuery from 'jquery-ts'
@@ -31,8 +31,8 @@ export class CanvasModel {
 	private attrs: CanvasComp.Attrs
 	private areaJq: jQuery.IInstance
 	private canvasJq: jQuery.IInstance
-	private dragStartPoint: IPoint
-	private locationStartPoint: IPoint
+	private dragStartPoint: Point
+	private locationStartPoint: Point
 	private moveHandlersAttached: boolean
 
 	initCanvasModel(elem: Element, attrs: CanvasComp.Attrs) {

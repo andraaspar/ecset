@@ -17,61 +17,25 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { deletePoint, deselectAllPoints, getRenderPoint, scaleVector, selectPoint } from './PointMethods'
+import { clonePoint, scaleVector } from './PointMethods'
 
 import { Data } from './Data'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
-import { IViewBezierPoint } from './IViewBezierPoint'
-import { IViewDocument } from './IViewDocument'
 import { getIdCountInViewDocument } from './DocumentMethods'
+import { uuid } from 'illa/StringUtil'
 
 export function scaleRenderBezierPoint(p: IRenderBezierPoint, scale: number): IRenderBezierPoint {
-	return {
-		handleIn: scaleVector(p.handleIn, scale),
-		center: scaleVector(p.center, scale),
-		handleOut: scaleVector(p.handleOut, scale),
-	}
+	return new IRenderBezierPoint(
+		scaleVector(p.handleIn, scale),
+		scaleVector(p.center, scale),
+		scaleVector(p.handleOut, scale),
+	)
 }
 
-export function viewBezierPointToRenderBezierPoint(d: IViewDocument, p: IViewBezierPoint, id: string): IRenderBezierPoint {
-	return {
-		id: id,
-		center: getRenderPoint(d, p.centerId),
-		handleIn: getRenderPoint(d, p.handleInId),
-		handleOut: getRenderPoint(d, p.handleOutId)
-	}
-}
-
-export function getRenderBezierPoint(d: IViewDocument, id: string): IRenderBezierPoint {
-	return viewBezierPointToRenderBezierPoint(d, d.bezierPointsById[id], id)
-}
-
-export function deselectAllBezierPoints(data: Data) {
-	data.selectedBezierPointIds = {}
-	deselectAllPoints(data)
-}
-
-export function selectBezierPoint(data: Data, id: string) {
-	data.selectedBezierPointIds[id] = true
-	let bp = data.document.bezierPointsById[id];
-	[bp.centerId, bp.handleInId, bp.handleOutId].forEach(p => selectPoint(data, p))
-}
-
-export function deleteBezierPoint(data: Data, point: IRenderBezierPoint) {
-	delete data.selectedBezierPointIds[point.id]
-	delete data.document.bezierPointsById[point.id]
-	let deleteCount
-	do {
-		deleteCount = 0
-		for (let p of [
-			point.center,
-			point.handleIn,
-			point.handleOut,
-		]) {
-			if (getIdCountInViewDocument(data.document, p.id) == 1) {
-				deleteCount++
-				deletePoint(data, p)
-			}
-		}
-	} while (deleteCount)
+export function cloneBezierPoint(p: IRenderBezierPoint): IRenderBezierPoint {
+	return new IRenderBezierPoint(
+		clonePoint(p.center),
+		clonePoint(p.handleIn),
+		clonePoint(p.handleOut),
+	)
 }

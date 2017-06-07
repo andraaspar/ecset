@@ -17,9 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPoint } from './IPoint'
+import { Point } from './IPoint'
 
-export interface ISegment {
-	a: IPoint,
-	b: IPoint
+export class ISegment {
+	constructor(
+		public a: Point,
+		public b: Point,
+	) {
+
+	}
 }

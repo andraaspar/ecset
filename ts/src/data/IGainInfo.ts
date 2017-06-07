@@ -17,7 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export interface IGainInfo {
-	a: number
-	b: number
+export class IGainInfo {
+	constructor(
+		public a: number,
+		public b: number,
+	) {
+
+	}
 }

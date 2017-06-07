@@ -24,11 +24,11 @@ import { deselectAllStrokes, getRenderStroke } from '../data/StrokeMethods'
 import { BezierPointLayerComp } from './BezierPointLayerComp'
 import { CanvasModel } from './CanvasModel'
 import { IPath } from '../data/IPath'
-import { IPoint } from '../data/IPoint'
 import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
 import { PathLayerComp } from './PathLayerComp'
+import { Point } from '../data/IPoint'
 import { PointLayerComp } from './PointLayerComp'
 import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'
@@ -38,7 +38,7 @@ import jQuery from 'jquery-ts'
 
 export declare namespace CanvasComp {
 	interface Attrs {
-		location: IPoint
+		location: Point
 		scale: number
 		scaleSetter: (v: number) => void
 	}

@@ -20,10 +20,10 @@
 import { deletePoint, getRenderPoint } from './PointMethods'
 
 import { Data } from './Data'
-import { IRenderPoint } from './IRenderPoint'
 import { IRenderTransform } from './IRenderTransform'
 import { IViewDocument } from './IViewDocument'
 import { IViewTransform } from './IViewTransform'
+import { RenderPoint } from './IRenderPoint'
 import { getIdCountInViewDocument } from './DocumentMethods'
 
 export function viewTransformToRenderTransform(d: IViewDocument, p: IViewTransform): IRenderTransform {

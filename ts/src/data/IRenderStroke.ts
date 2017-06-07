@@ -22,11 +22,15 @@ import { IRenderBezierPathPair } from './IRenderBezierPathPair'
 import { IRenderColorStripPair } from './IRenderColorStripPair'
 import { IRenderTransform } from './IRenderTransform'
 
-export interface IRenderStroke {
-	id?: string
-	stripPair: IRenderColorStripPair
-	bezierPath: IRenderBezierPath
-	thicknessPair: IRenderBezierPathPair
-	children: IRenderStroke[]
-	transform: IRenderTransform
+export class IRenderStroke {
+	constructor(
+		public stripPair: IRenderColorStripPair,
+		public bezierPath: IRenderBezierPath,
+		public thicknessPair: IRenderBezierPathPair,
+		public children: IRenderStroke[],
+		public transform: IRenderTransform,
+		public id?: string,
+	) {
+
+	}
 }

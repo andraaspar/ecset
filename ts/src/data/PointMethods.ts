@@ -19,113 +19,89 @@
 
 import { Axis2D } from 'illa/Axis2D'
 import { Data } from './Data'
-import { IPoint } from './IPoint'
-import { IRenderPoint } from './IRenderPoint'
-import { IViewDocument } from './IViewDocument'
-import { IViewPoint } from './IViewPoint'
+import { Point } from './IPoint'
+import { uuid } from 'illa/StringUtil'
 
-export function pointPosition(p: IPoint, axis: Axis2D): number {
+export function pointPosition(p: Point, axis: Axis2D): number {
 	switch (axis) {
 		case Axis2D.X: return p.x
 		case Axis2D.Y: return p.y
 	}
 }
 
-export function pointDistance(a: IPoint, b: IPoint): number {
+export function pointDistance(a: Point, b: Point): number {
 	return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2))
 }
 
-export function addPoints(a: IPoint, b: IPoint): IPoint {
-	let result: IPoint = {
-		x: a.x + b.x,
-		y: a.y + b.y
-	}
-	return result
+export function addPoints(a: Point, b: Point): Point {
+	return new Point(
+		a.x + b.x,
+		a.y + b.y,
+	)
 }
 
-export function subtractPoints(a: IPoint, b: IPoint): IPoint {
-	let result: IPoint = {
-		x: a.x - b.x,
-		y: a.y - b.y
-	}
-	return result
+export function subtractPoints(a: Point, b: Point): Point {
+	return new Point(
+		a.x - b.x,
+		a.y - b.y,
+	)
 }
 
-export function perpProduct(a: IPoint, b: IPoint): number {
+export function perpProduct(a: Point, b: Point): number {
 	return a.x * b.y - a.y * b.x
 }
 
-export function perpendicularVector(vector: IPoint, clockwise?: boolean): IPoint {
-	let result: IPoint
+export function perpendicularVector(vector: Point, clockwise?: boolean): Point {
 	if (clockwise) {
-		result = {
-			x: vector.y,
-			y: -vector.x
-		}
+		return new Point(
+			vector.y,
+			-vector.x
+		)
 	} else {
-		result = {
-			x: -vector.y,
-			y: vector.x
-		}
-	}
-	return result
-}
-
-export function reverseVector(vector: IPoint): IPoint {
-	return {
-		x: -vector.x,
-		y: -vector.y
+		return new Point(
+			-vector.y,
+			vector.x
+		)
 	}
 }
 
-export function toUnitVector(vector: IPoint, multiplier = 1): IPoint {
+export function reverseVector(vector: Point): Point {
+	return new Point(
+		-vector.x,
+		-vector.y
+	)
+}
+
+export function toUnitVector(vector: Point, multiplier = 1): Point {
 	let size = vectorSize(vector)
-	return {
-		x: size ? vector.x / size * multiplier : 0,
-		y: size ? vector.y / size * multiplier : 0
-	}
+	return new Point(
+		size ? vector.x / size * multiplier : 0,
+		size ? vector.y / size * multiplier : 0
+	)
 }
 
-export function vectorSize(vector: IPoint): number {
+export function vectorSize(vector: Point): number {
 	return Math.sqrt(vector.x ** 2 + vector.y ** 2)
 }
 
-export function pointsEqual(a: IPoint, b: IPoint): boolean {
+export function pointsEqual(a: Point, b: Point): boolean {
 	return a && b && a.x === b.x && a.y === b.y
 }
 
-export function vectorAngle(vector: IPoint): number {
+export function vectorAngle(vector: Point): number {
 	return Math.atan2(vector.y, vector.x)
 }
 
-export function viewPointToRenderPoint(p: IViewPoint, id: string): IRenderPoint {
-	return {
-		id: id,
-		x: p.x,
-		y: p.y
-	}
+export function scaleVector(v: Point, scale: number): Point {
+	return new Point(
+		v.x * scale,
+		v.y * scale,
+	)
 }
 
-export function getRenderPoint(d: IViewDocument, id: string): IRenderPoint {
-	return viewPointToRenderPoint(d.pointsById[id], id)
-}
-
-export function scaleVector(v: IPoint, scale: number): IPoint {
-	return {
-		x: v.x * scale,
-		y: v.y * scale,
-	}
-}
-
-export function deselectAllPoints(data: Data) {
-	data.selectedPointIds = {}
-}
-
-export function selectPoint(data: Data, id: string) {
-	data.selectedPointIds[id] = true
-}
-
-export function deletePoint(data: Data, p: IRenderPoint) {
-	delete data.selectedPointIds[p.id]
-	delete data.document.pointsById[p.id]
+export function clonePoint(p: Point): Point {
+	return new Point(
+		p.x,
+		p.y,
+	)
 }

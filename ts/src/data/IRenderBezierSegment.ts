@@ -19,7 +19,11 @@
 
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 
-export interface IRenderBezierSegment {
-	a: IRenderBezierPoint
-	b: IRenderBezierPoint
+export class IRenderBezierSegment {
+	constructor(
+		public a: IRenderBezierPoint,
+		public b: IRenderBezierPoint,
+	) {
+
+	}
 }

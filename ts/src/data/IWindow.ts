@@ -19,7 +19,11 @@
 
 import * as m from 'mithril'
 
-export interface IWindow {
-	id: string
-	contentFactory: () => m.Comp<any, any>
+export class IWindow {
+	constructor(
+		public id: string,
+		public contentFactory: () => m.Comp<any, any>,
+	) {
+
+	}
 }

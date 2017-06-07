@@ -25,6 +25,7 @@ import { BezierKind } from '../data/BezierKind'
 import { BezierPointLayerModel } from './BezierPointLayerModel'
 import { P } from '../statics'
 import { data } from '../data/DataMethods'
+import { getBezierPointsFromStrokes } from '../data/DocumentMethods'
 
 export declare namespace BezierPointLayerComp {
 	interface Attrs { }
@@ -41,11 +42,9 @@ export const BezierPointLayerComp: m.Comp<BezierPointLayerComp.Attrs, BezierPoin
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return (
-			Object.keys(data.document.bezierPointsById)
-				.map(id => data.document.bezierPointsById[id])
-				.filter(bezierPoint => data.selectedBezierPointIds[bezierPoint.id] && bezierPoint.kind == BezierKind.ART)
+			getBezierPointsFromStrokes(data.document.strokes)
 				.map(bezierPoint => {
-					let scaledPoint = scaleRenderBezierPoint(getRenderBezierPoint(data.document, bezierPoint.id), data.canvasScale)
+					let scaledPoint = scaleRenderBezierPoint(bezierPoint, data.canvasScale)
 					let handlesD = `M${scaledPoint.handleIn.x},${scaledPoint.handleIn.y}L${scaledPoint.center.x},${scaledPoint.center.y}L${scaledPoint.handleOut.x},${scaledPoint.handleOut.y}`
 					return (
 						m('svg', {

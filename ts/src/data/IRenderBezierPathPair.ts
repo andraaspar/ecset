@@ -19,8 +19,12 @@
 
 import { IRenderBezierPath } from './IRenderBezierPath'
 
-export interface IRenderBezierPathPair {
-	id: string
-	left: IRenderBezierPath
-	right: IRenderBezierPath
+export class IRenderBezierPathPair {
+	constructor(
+		public left: IRenderBezierPath,
+		public right: IRenderBezierPath,
+		public id?: string,
+	) {
+
+	}
 }

@@ -26,10 +26,10 @@ import { IPath } from '../data/IPath'
 import { IRenderBezierPath } from '../data/IRenderBezierPath'
 import { IRenderColorField } from '../data/IRenderColorField'
 import { IRenderColorPath } from '../data/IRenderColorPath'
-import { IRenderPoint } from '../data/IRenderPoint'
 import { IRenderView } from '../data/IRenderView'
 import { ISegment } from '../data/ISegment'
 import { ISegmentInfo } from '../data/ISegmentInfo'
+import { RenderPoint } from '../data/IRenderPoint'
 import { getBySide } from '../data/SideMethods'
 import { interpolateColors } from '../data/ColorMethods'
 import { interpolateValues } from '../data/ValueMethods'
@@ -143,7 +143,7 @@ export class Renderer {
 
 		let prevSegment: ISegment
 		let prevSegmentInfo: ISegmentInfo
-		let prevVector: IRenderPoint
+		let prevVector: RenderPoint
 		for (let i = 0, n = this.segmentCount = pathSegmentCount(this.path); i < n; i++) {
 			let segment = getSegmentOfPath(this.path, i)
 
@@ -181,15 +181,15 @@ export class Renderer {
 				this.calculateFocus(segmentInfo)
 			}
 
-			let origin: IRenderPoint = { id: undefined, x: 0, y: 0 }
+			let origin: RenderPoint = { id: undefined, x: 0, y: 0 }
 			let originDistance = segmentToPointDistance(segment, origin) * segmentPointSide(segment, origin)
 			let originT = segmentPointT(segment, origin)
 
-			let xPoint: IRenderPoint = { id: undefined, x: 1, y: 0 }
+			let xPoint: RenderPoint = { id: undefined, x: 1, y: 0 }
 			let xPointDistance = segmentToPointDistance(segment, xPoint) * segmentPointSide(segment, xPoint)
 			let xPointT = segmentPointT(segment, xPoint)
 
-			let yPoint: IRenderPoint = { id: undefined, x: 0, y: 1 }
+			let yPoint: RenderPoint = { id: undefined, x: 0, y: 1 }
 			let yPointDistance = segmentToPointDistance(segment, yPoint) * segmentPointSide(segment, yPoint)
 			let yPointT = segmentPointT(segment, yPoint)
 
@@ -208,7 +208,7 @@ export class Renderer {
 		return result
 	}
 
-	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: IRenderPoint, vector: IRenderPoint, prevSegment: ISegment, segment: ISegment): void {
+	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: RenderPoint, vector: RenderPoint, prevSegment: ISegment, segment: ISegment): void {
 		prevVector = reverseVector(prevVector)
 
 		let normalVector = addPoints(prevVector, vector)

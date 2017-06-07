@@ -17,12 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { IColor } from './IColor'
 import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderColor } from './IRenderColor'
 
-export interface IRenderColorSegment {
-	id?: string
-	a: IRenderColor
-	b: IRenderColor
-	tweenPath?: IRenderBezierPath
+export class IRenderColorSegment {
+	constructor(
+		public a: IColor,
+		public b: IColor,
+		public id?: string,
+		public tweenPath?: IRenderBezierPath,
+	) {
+
+	}
 }

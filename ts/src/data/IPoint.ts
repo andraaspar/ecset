@@ -17,7 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export interface IPoint {
-	x: number
-	y: number
+export class Point {
+	
+	constructor(
+		public x: number,
+		public y: number,
+		public id?: string,
+	) {
+		
+	}
 }

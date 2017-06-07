@@ -21,12 +21,12 @@ import * as m from 'mithril'
 
 import { GLOBAL } from 'illa/GLOBAL'
 import { IPath } from '../data/IPath'
-import { IPoint } from '../data/IPoint'
 import { IRenderBezierPath } from '../data/IRenderBezierPath'
-import { IRenderPoint } from '../data/IRenderPoint'
 import { IViewBezierPath } from '../data/IViewBezierPath'
 import { IViewPoint } from '../data/IViewPoint'
 import { PathLayerComp } from './PathLayerComp'
+import { Point } from '../data/IPoint'
+import { RenderPoint } from '../data/IRenderPoint'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
 import { getRenderBezierPath } from '../data/BezierPathMethods'
@@ -35,7 +35,7 @@ import { render } from '../data/RenderMethods'
 export class PathLayerModel {
 
 	private selection: IViewBezierPath
-	private startMouse: IPoint
+	private startMouse: Point
 	private startSelection: IRenderBezierPath
 
 	startDrag(path: IViewBezierPath, e: MouseEvent): void {
@@ -63,7 +63,7 @@ export class PathLayerModel {
 
 	protected onMouseMovedBound = bind(this.onMouseMoved, this)
 	protected onMouseMoved(e: MouseEvent): void {
-		let movePoint: IPoint = {
+		let movePoint: Point = {
 			x: (e.pageX - this.startMouse.x) / data.canvasScale,
 			y: (e.pageY - this.startMouse.y) / data.canvasScale,
 		}

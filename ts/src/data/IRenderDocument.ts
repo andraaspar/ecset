@@ -19,6 +19,12 @@
 
 import { IRenderStroke } from './IRenderStroke'
 
-export interface IRenderDocument {
-	strokes: IRenderStroke[]
+export class IRenderDocument {
+	constructor(
+		public width: number,
+		public height: number,
+		public strokes: IRenderStroke[],
+	) {
+
+	}
 }

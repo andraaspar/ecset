@@ -20,10 +20,14 @@
 import { IRenderStroke } from './IRenderStroke'
 import { IRenderTransform } from './IRenderTransform'
 
-export interface IRenderView {
-	channelCount: number
-	stroke: IRenderStroke
-	transforms: IRenderTransform[]
-	width: number
-	height: number
+export class IRenderView {
+	constructor(
+		public channelCount: number,
+		public stroke: IRenderStroke,
+		public transforms: IRenderTransform[],
+		public width: number,
+		public height: number,
+	) {
+
+	}
 }

@@ -18,7 +18,9 @@
  */
 
 import { IPath } from './IPath'
+import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IRenderDocument } from './IRenderDocument'
+import { IRenderStroke } from './IRenderStroke'
 import { IViewDocument } from './IViewDocument'
 import { TSet } from './TSet'
 import { deepFind } from './ObjectMethods'
@@ -65,4 +67,12 @@ export function getIdCountInViewDocument(d: IViewDocument, id: string) {
 	return deepFind<string>(d, (obj, key, parent) => {
 		return obj === id
 	}).length
+}
+
+export function getBezierPointsFromStrokes(strokes: IRenderStroke[]) {
+	let result: IRenderBezierPoint[] = []
+	for (let stroke of strokes) {
+		result = result.concat(stroke.bezierPath.points, getBezierPointsFromStrokes(stroke.children))
+	}
+	return result
 }

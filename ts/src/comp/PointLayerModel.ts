@@ -19,8 +19,8 @@
 
 import * as m from 'mithril'
 
-import { IPoint } from '../data/IPoint'
 import { IViewPoint } from '../data/IViewPoint'
+import { Point } from '../data/IPoint'
 import { PointLayerComp } from './PointLayerComp'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
@@ -30,7 +30,7 @@ import { render } from '../data/RenderMethods'
 export class PointLayerModel {
 
 	private selection: IViewPoint
-	private startMouse: IPoint
+	private startMouse: Point
 	private startSelection: IViewPoint
 
 	startDrag(point: IViewPoint, e: MouseEvent): void {

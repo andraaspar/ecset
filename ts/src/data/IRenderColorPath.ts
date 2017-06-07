@@ -19,7 +19,11 @@
 
 import { IRenderColorSegment } from './IRenderColorSegment'
 
-export interface IRenderColorPath {
-	id?: string
-	segments: IRenderColorSegment[]
+export class IRenderColorPath {
+	constructor(
+		public segments: IRenderColorSegment[],
+		public id?: string,
+	) {
+
+	}
 }

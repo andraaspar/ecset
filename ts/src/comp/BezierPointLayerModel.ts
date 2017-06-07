@@ -19,24 +19,25 @@
 
 import * as m from 'mithril'
 
-import { IPoint } from '../data/IPoint'
+import { cloneBezierPoint, getRenderBezierPoint } from '../data/BezierPointMethods'
+
 import { IRenderBezierPoint } from '../data/IRenderBezierPoint'
 import { IViewBezierPoint } from '../data/IViewBezierPoint'
+import { Point } from '../data/IPoint'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
-import { getRenderBezierPoint } from '../data/BezierPointMethods'
 import { render } from '../data/RenderMethods'
 
 export class BezierPointLayerModel {
 
-	private selection: IViewBezierPoint
-	private startMouse: IPoint
+	private selection: IRenderBezierPoint
+	private startMouse: Point
 	private startSelection: IRenderBezierPoint
 
-	startDrag(bezierPoint: IViewBezierPoint, e: MouseEvent): void {
+	startDrag(bezierPoint: IRenderBezierPoint, e: MouseEvent): void {
 		if (e.button == 0) {
 			this.selection = bezierPoint
-			this.startSelection = getRenderBezierPoint(data.document, bezierPoint.id)
+			this.startSelection = cloneBezierPoint(bezierPoint)
 			this.startMouse = {
 				x: e.pageX,
 				y: e.pageY,
@@ -59,7 +60,7 @@ export class BezierPointLayerModel {
 	protected onMouseMovedBound = bind(this.onMouseMoved, this)
 	protected onMouseMoved(e: MouseEvent): void {
 		// this.selection.x = this.startSelection.x + (e.pageX - this.startMouse.x) / data.canvasScale
-		let movePoint: IPoint = {
+		let movePoint: Point = {
 			x: (e.pageX - this.startMouse.x) / data.canvasScale,
 			y: (e.pageY - this.startMouse.y) / data.canvasScale,
 		};

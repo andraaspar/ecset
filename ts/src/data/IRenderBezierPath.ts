@@ -20,10 +20,14 @@
 import { IPath } from './IPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 
-export interface IRenderBezierPath {
-	id?: string
-	points: IRenderBezierPoint[]
-	isLoop: boolean
-	detail?: number
-	path?: IPath
+export class IRenderBezierPath {
+	constructor(
+		public points: IRenderBezierPoint[],
+		public isLoop: boolean,
+		public detail?: number,
+		public id?: string,
+		public path?: IPath,
+	) {
+
+	}
 }

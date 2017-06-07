@@ -17,12 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderPoint } from './IRenderPoint'
+import { Point } from './IPoint'
 
-export interface IRenderTransform {
-	id?: string
-	offset: IRenderPoint
-	scale: number
-	rotation: number
-	pivot: IRenderPoint
+export class IRenderTransform {
+	constructor(
+		public offset: Point,
+		public scale: number,
+		public rotation: number,
+		public pivot: Point,
+		public id?: string,
+	) {
+
+	}
 }

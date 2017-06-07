@@ -20,10 +20,10 @@
 import * as m from 'mithril'
 
 import { BezierKind } from '../data/BezierKind'
-import { IRenderPoint } from '../data/IRenderPoint'
 import { IViewPoint } from '../data/IViewPoint'
 import { P } from '../statics'
 import { PointLayerModel } from './PointLayerModel'
+import { RenderPoint } from '../data/IRenderPoint'
 import { data } from '../data/DataMethods'
 import { scaleVector } from '../data/PointMethods'
 

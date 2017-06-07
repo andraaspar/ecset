@@ -17,6 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export interface IColor {
-	channelValues: number[]
+export class IColor {
+	constructor(
+		public channelValues: number[],
+		public id?: string,
+		public alphaMultiplierId?: string,
+	) {
+
+	}
 }

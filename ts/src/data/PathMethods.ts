@@ -26,10 +26,10 @@ import { ISegment } from './ISegment'
 import { interpolateValues } from './ValueMethods'
 
 export function getSegmentOfPath(path: IPath, i: number): ISegment {
-	let result = {
-		a: path.points[i],
-		b: path.points[(i + 1) % path.points.length]
-	}
+	let result = new ISegment(
+		path.points[i],
+		path.points[(i + 1) % path.points.length]
+	)
 	if (!result.a || !result.b) return null
 	return result
 }

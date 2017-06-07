@@ -17,11 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderPoint } from './IRenderPoint'
+import { Point } from './IPoint'
 
-export interface IRenderBezierPoint {
-	id?: string
-	center: IRenderPoint
-	handleIn: IRenderPoint
-	handleOut: IRenderPoint
+export class IRenderBezierPoint {
+	constructor(
+		public center: Point,
+		public handleIn: Point,
+		public handleOut: Point,
+		public id?: string,
+	) {
+
+	}
 }
