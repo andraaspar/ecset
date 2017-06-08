@@ -29,6 +29,7 @@ export class IRenderStroke {
 		public thicknessPair: IRenderBezierPathPair,
 		public children: IRenderStroke[],
 		public transform: IRenderTransform,
+		public parent?: IRenderStroke,
 		public id?: string,
 	) {
 

@@ -19,29 +19,28 @@
 
 import { IRenderDocument } from './IRenderDocument'
 import { IRenderView } from './IRenderView'
-import { IViewDocument } from './IViewDocument'
 import { IWindow } from './IWindow'
 import { Point } from './IPoint'
 import { RendererState } from './RendererState'
 import { TSet } from './TSet'
-import { createViewDocument } from './DocumentMethods'
 
 export class Data {
-	document: IRenderDocument = {
-		width: 1024,
-		height: 1024,
-		strokes: [],
-	}
+	document: IRenderDocument = new IRenderDocument(
+		4,
+		1024,
+		1024,
+		[],
+	)
 	renderers: Worker[] = []
 	rendererStates: RendererState[] = []
 	maxRenderers: number = navigator.hardwareConcurrency || 1
 	lastRenderFinished: number = 0
 	pixelsByStrokeId: TSet<Uint8ClampedArray> = {}
 	viewsByStrokeId: TSet<IRenderView> = {}
-	canvasLocation: Point = {
-		x: 0,
-		y: 0,
-	}
+	canvasLocation: Point = new Point(
+		0,
+		0,
+	)
 	canvasScale: number = 1
 	selectedStrokeIds: TSet<boolean> = {}
 	selectedBezierPathIds: TSet<boolean> = {}

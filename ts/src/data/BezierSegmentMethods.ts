@@ -20,10 +20,8 @@
 import { pointDistance, pointPosition, subtractPoints, vectorAngle } from './PointMethods'
 
 import { Axis2D } from 'illa/Axis2D'
-import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { IRenderBezierSegment } from './IRenderBezierSegment'
 import { Point } from './IPoint'
-import { RenderPoint } from './IRenderPoint'
 import { angleDifference } from './AngleMethods'
 import { bezierPosition } from './BezierMethods'
 

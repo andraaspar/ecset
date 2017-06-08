@@ -18,9 +18,7 @@
  */
 
 import { Axis2D } from 'illa/Axis2D'
-import { Data } from './Data'
 import { Point } from './IPoint'
-import { uuid } from 'illa/StringUtil'
 
 export function pointPosition(p: Point, axis: Axis2D): number {
 	switch (axis) {

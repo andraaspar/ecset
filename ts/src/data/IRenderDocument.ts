@@ -21,6 +21,7 @@ import { IRenderStroke } from './IRenderStroke'
 
 export class IRenderDocument {
 	constructor(
+		public channelCount: number,
 		public width: number,
 		public height: number,
 		public strokes: IRenderStroke[],

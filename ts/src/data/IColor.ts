@@ -21,7 +21,6 @@ export class IColor {
 	constructor(
 		public channelValues: number[],
 		public id?: string,
-		public alphaMultiplierId?: string,
 	) {
 
 	}

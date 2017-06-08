@@ -19,10 +19,7 @@
 
 import { clonePoint, scaleVector } from './PointMethods'
 
-import { Data } from './Data'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
-import { getIdCountInViewDocument } from './DocumentMethods'
-import { uuid } from 'illa/StringUtil'
 
 export function scaleRenderBezierPoint(p: IRenderBezierPoint, scale: number): IRenderBezierPoint {
 	return new IRenderBezierPoint(

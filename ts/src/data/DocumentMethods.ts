@@ -17,57 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from './IPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
-import { IRenderDocument } from './IRenderDocument'
 import { IRenderStroke } from './IRenderStroke'
-import { IViewDocument } from './IViewDocument'
-import { TSet } from './TSet'
-import { deepFind } from './ObjectMethods'
-import { getRenderBezierPath } from './BezierPathMethods'
-import { getRenderStroke } from './StrokeMethods'
-
-export function createViewDocument(): IViewDocument {
-	return {
-		aplhaMultipliersById: {},
-		bezierPathPairsById: {},
-		bezierPathsById: {},
-		bezierPointsById: {},
-		channelCount: 4,
-		colorFieldsById: {},
-		colorPathsById: {},
-		colorsById: {},
-		colorSegmentsById: {},
-		colorStripPairsById: {},
-		colorStripsById: {},
-		height: 1000,
-		pointsById: {},
-		strokeIds: [],
-		strokesById: {},
-		transformsById: {},
-		width: 1000,
-	}
-}
-
-export function viewDocumentToRenderDocument(d: IViewDocument): IRenderDocument {
-	let s: TSet<IPath> = {}
-	let result: IRenderDocument = {
-		strokes: d.strokeIds.map(id => getRenderStroke(d, s, id)),
-	}
-	return result
-}
-
-export function getIdCountInRenderDocument(d: IRenderDocument, id: string) {
-	return deepFind<string>(d, (obj, key, parent) => {
-		return key === `id` && obj === id
-	}).length
-}
-
-export function getIdCountInViewDocument(d: IViewDocument, id: string) {
-	return deepFind<string>(d, (obj, key, parent) => {
-		return obj === id
-	}).length
-}
 
 export function getBezierPointsFromStrokes(strokes: IRenderStroke[]) {
 	let result: IRenderBezierPoint[] = []

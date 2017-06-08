@@ -17,15 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AlphaMultiplier } from './AlphaMultiplier'
 import { IColor } from './IColor'
-import { sanitizeChannelValue } from './ColorMethods'
 
-export function alphaMultiplierToColor(a: AlphaMultiplier) {
-	return new IColor(
-		[
-			sanitizeChannelValue(a.color.channelValues[0] * a.alphaMultiplier),
-			...a.color.channelValues.slice(1),
-		]
-	)
+export class AlphaMultiplier {
+	constructor(
+		public color: IColor,
+		public alphaMultiplier: number,
+	) {
+		
+	}
 }

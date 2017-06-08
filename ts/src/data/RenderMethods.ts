@@ -19,21 +19,16 @@
 
 import * as m from 'mithril'
 
-import { isEqual, isEqualWith } from 'lodash'
-
 import { IRenderDocument } from './IRenderDocument'
 import { IRenderStroke } from './IRenderStroke'
 import { IRenderTransform } from './IRenderTransform'
 import { IRenderView } from './IRenderView'
-import { IViewDocument } from './IViewDocument'
 import { RendererState } from './RendererState'
 import { data } from './DataMethods'
-import { get } from '../statics'
-import { viewDocumentToRenderDocument } from './DocumentMethods'
+import { isEqual } from 'lodash'
 
 export function render(force?: boolean) {
-	let renderDocument = viewDocumentToRenderDocument(data.document)
-	let views = createViews(renderDocument, renderDocument.strokes)
+	let views = createViews(data.document, data.document.strokes)
 	if (!force) {
 		views = views.filter(view => {
 			let oldView = data.viewsByStrokeId[view.stroke.id]
@@ -47,7 +42,7 @@ export function render(force?: boolean) {
 	console.info(`Renderers: ${data.renderers.length} Max: ${data.maxRenderers}`)
 	
 	data.renderers.forEach((renderer, index) => {
-		startRender(renderer, index, views, renderDocument)
+		startRender(renderer, index, views, data.document)
 	})
 	m.redraw()
 }

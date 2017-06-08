@@ -21,8 +21,8 @@ import { Point } from './IPoint'
 
 export class IRenderBezierPoint {
 	constructor(
-		public center: Point,
 		public handleIn: Point,
+		public center: Point,
 		public handleOut: Point,
 		public id?: string,
 	) {

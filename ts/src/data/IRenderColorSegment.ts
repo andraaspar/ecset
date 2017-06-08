@@ -17,15 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { AlphaMultiplier } from './AlphaMultiplier'
 import { IColor } from './IColor'
 import { IRenderBezierPath } from './IRenderBezierPath'
 
 export class IRenderColorSegment {
 	constructor(
-		public a: IColor,
-		public b: IColor,
-		public id?: string,
+		public a: AlphaMultiplier,
+		public b: AlphaMultiplier,
 		public tweenPath?: IRenderBezierPath,
+		public id?: string,
 	) {
 
 	}
