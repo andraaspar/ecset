@@ -48,15 +48,15 @@ export class PaintLayerModel {
 
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-			Object.keys(data.document.strokesById).map(id => {
-				let pixels = get(() => data.pixelsByStrokeId[id])
+			for (let stroke of data.document.strokes) {
+				let pixels = get(() => data.pixelsByStrokeId[stroke.id])
 				if (pixels) {
 					imageData.data.set(pixels)
 					this.tempContext.putImageData(imageData, 0, 0)
 
 					this.context.drawImage(this.tempCanvas, 0, 0)
 				}
-			})
+			}
 			
 			this.lastComposited = Date.now()
 		}

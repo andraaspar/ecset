@@ -19,12 +19,9 @@
 
 import * as m from 'mithril'
 
-import { deselectAllStrokes, getRenderStroke } from '../data/StrokeMethods'
-
 import { BezierPointLayerComp } from './BezierPointLayerComp'
 import { CanvasModel } from './CanvasModel'
 import { IPath } from '../data/IPath'
-import { IViewDocument } from '../data/IViewDocument'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
 import { PathLayerComp } from './PathLayerComp'
@@ -32,8 +29,6 @@ import { Point } from '../data/IPoint'
 import { PointLayerComp } from './PointLayerComp'
 import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'
-import { getRenderBezierPath } from '../data/BezierPathMethods'
-import { getRenderPoint } from '../data/PointMethods'
 import jQuery from 'jquery-ts'
 
 export declare namespace CanvasComp {
@@ -59,7 +54,7 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 			m('div', {
 				'class': `${P}-canvas-area`,
 				'onclick': () => {
-					deselectAllStrokes(data)
+					//deselectAllStrokes(data)
 				},
 			},
 				m('div', {

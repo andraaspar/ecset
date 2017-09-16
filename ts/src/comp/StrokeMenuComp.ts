@@ -19,18 +19,15 @@
 
 import * as m from 'mithril'
 
-import { deleteStroke, deselectAllStrokes, getRenderStroke, memorizeStrokeIds } from '../data/StrokeMethods'
-
-import { IViewStroke } from '../data/IViewStroke'
 import { MenuWindowComp } from './MenuWindowComp'
 import { P } from '../statics'
 import { data } from '../data/DataMethods'
-import { getIdCountInViewDocument } from '../data/DocumentMethods'
 import { render } from '../data/RenderMethods'
+import { IRenderStroke } from "../data/IRenderStroke";
 
 export declare namespace StrokeMenuComp {
 	interface Attrs {
-		strokeIds: string[]
+		strokes: IRenderStroke[]
 		index: number
 	}
 	interface State { }
@@ -50,24 +47,15 @@ export const StrokeMenuComp: m.Comp<StrokeMenuComp.Attrs, StrokeMenuComp.State> 
 						'type': `button`,
 						'class': `${P}-button`,
 						'onclick': () => {
-							memorizeStrokeIds(data, ...Object.keys(data.selectedStrokeIds))
-						},
-					},
-						`Memorize selected strokes`,
-					),
-					m(`button`, {
-						'type': `button`,
-						'class': `${P}-button`,
-						'onclick': () => {
-							let selectedStrokeIds = Object.keys(data.selectedStrokeIds)
-							deselectAllStrokes(data)
-							selectedStrokeIds.forEach(strokeId => {
-								v.attrs.strokeIds.splice(v.attrs.index, 1)
-								if (getIdCountInViewDocument(data.document, strokeId) == 1) {
-									deleteStroke(data, getRenderStroke(data.document, {}, strokeId))
-								}
-							})
-							render()
+							//let selectedStrokeIds = Object.keys(data.selectedStrokeIds)
+							//deselectAllStrokes(data)
+							//selectedStrokeIds.forEach(strokeId => {
+							//	v.attrs.strokeIds.splice(v.attrs.index, 1)
+							//	if (getIdCountInViewDocument(data.document, strokeId) == 1) {
+							//		deleteStroke(data, getRenderStroke(data.document, {}, strokeId))
+							//	}
+							//})
+							//render()
 						},
 					},
 						`Delete selected strokes`,

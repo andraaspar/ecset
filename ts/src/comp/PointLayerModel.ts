@@ -19,7 +19,6 @@
 
 import * as m from 'mithril'
 
-import { IViewPoint } from '../data/IViewPoint'
 import { Point } from '../data/IPoint'
 import { PointLayerComp } from './PointLayerComp'
 import { bind } from 'illa/FunctionUtil'
@@ -29,11 +28,11 @@ import { render } from '../data/RenderMethods'
 
 export class PointLayerModel {
 
-	private selection: IViewPoint
+	private selection: Point
 	private startMouse: Point
-	private startSelection: IViewPoint
+	private startSelection: Point
 
-	startDrag(point: IViewPoint, e: MouseEvent): void {
+	startDrag(point: Point, e: MouseEvent): void {
 		if (e.button == 0) {
 			this.selection = point
 			this.startSelection = JSON.parse(JSON.stringify(point))

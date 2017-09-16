@@ -22,26 +22,23 @@ import * as m from 'mithril'
 import { GLOBAL } from 'illa/GLOBAL'
 import { IPath } from '../data/IPath'
 import { IRenderBezierPath } from '../data/IRenderBezierPath'
-import { IViewBezierPath } from '../data/IViewBezierPath'
-import { IViewPoint } from '../data/IViewPoint'
 import { PathLayerComp } from './PathLayerComp'
 import { Point } from '../data/IPoint'
-import { RenderPoint } from '../data/IRenderPoint'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
-import { getRenderBezierPath } from '../data/BezierPathMethods'
 import { render } from '../data/RenderMethods'
+import { cloneBezierPath } from "../data/BezierPathMethods";
 
 export class PathLayerModel {
 
-	private selection: IViewBezierPath
-	private startMouse: Point
+	private selection: IRenderBezierPath
 	private startSelection: IRenderBezierPath
+	private startMouse: Point
 
-	startDrag(path: IViewBezierPath, e: MouseEvent): void {
+	startDrag(path: IRenderBezierPath, e: MouseEvent): void {
 		if (e.button == 0) {
 			this.selection = path
-			this.startSelection = getRenderBezierPath(data.document, {}, path.id)
+			this.startSelection = cloneBezierPath(path)
 			this.startMouse = {
 				x: e.pageX,
 				y: e.pageY,
@@ -55,6 +52,7 @@ export class PathLayerModel {
 	protected stopDrag(e?: MouseEvent): void {
 		if (!e || e.button == 0) {
 			this.selection = null
+			this.startSelection = null
 			document.removeEventListener('mouseup', this.stopDragBound)
 			document.removeEventListener('mousemove', this.onMouseMovedBound)
 			render()
@@ -63,15 +61,19 @@ export class PathLayerModel {
 
 	protected onMouseMovedBound = bind(this.onMouseMoved, this)
 	protected onMouseMoved(e: MouseEvent): void {
-		let movePoint: Point = {
-			x: (e.pageX - this.startMouse.x) / data.canvasScale,
-			y: (e.pageY - this.startMouse.y) / data.canvasScale,
-		}
-		this.startSelection.points.map(bezierPoint => {
-			[bezierPoint.center, bezierPoint.handleIn, bezierPoint.handleOut].forEach(startPoint => {
-				let viewPoint = data.document.pointsById[startPoint.id]
-				viewPoint.x = startPoint.x + movePoint.x
-				viewPoint.y = startPoint.y + movePoint.y
+		let movePoint = new Point(
+			(e.pageX - this.startMouse.x) / data.canvasScale,
+			(e.pageY - this.startMouse.y) / data.canvasScale,
+		)
+		this.startSelection.points.forEach((startBezierPoint, index) => {
+			let bezierPoint = this.selection.points[index]
+			;[
+				[startBezierPoint.center, bezierPoint.center],
+				[startBezierPoint.handleIn, bezierPoint.handleIn],
+				[startBezierPoint.handleOut, bezierPoint.handleOut],
+			].forEach(([startPoint, point]) => {
+				point.x = startPoint.x + movePoint.x
+				point.y = startPoint.y + movePoint.y
 			})
 		})
 		m.redraw()

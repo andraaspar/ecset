@@ -20,23 +20,22 @@
 import * as m from 'mithril'
 
 import { P, get } from '../statics'
-import { addMemorizedStrokeIdsAsChildren, clearMemorizedStrokeIds, createStroke, deselectAllStrokes, memorizeStrokeIds, selectStroke } from '../data/StrokeMethods'
+import { createStroke } from '../data/StrokeMethods'
 
 import { BorderComp } from './BorderComp'
-import { IViewStroke } from '../data/IViewStroke'
 import { MenuWindowComp } from './MenuWindowComp'
 import { StrokeMenuComp } from './StrokeMenuComp'
 import { data } from '../data/DataMethods'
 import { render } from '../data/RenderMethods'
 import { uuid } from 'illa/StringUtil'
+import { IRenderStroke } from '../data/IRenderStroke'
 
 export declare namespace StrokeListComp {
 	interface Attrs {
-		stroke?: IViewStroke
-		strokeIds: string[]
+		stroke?: IRenderStroke
+		strokes: IRenderStroke[]
 	}
 	interface State {
-		openStrokeIds?: WeakSet<IViewStroke>
 		onContextMenu?: (e: MouseEvent) => void
 	}
 }
@@ -45,47 +44,25 @@ type VnodeDOM = m.VnodeDOM<StrokeListComp.Attrs, StrokeListComp.State>
 
 export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> = {
 
-	oninit(v) {
-		v.state.openStrokeIds = new WeakSet<IViewStroke>([])
-	},
+	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		return [
-			v.attrs.strokeIds.map((id, index) => {
-				let stroke = data.document.strokesById[id]
-				let isSelected = !!data.selectedStrokeIds[id]
+			v.attrs.strokes.map((stroke, index) => {
+				//let isSelected = !!data.selectedStrokeIds[id]
 				return (
 					m(`div`, {
-						'key': id,
+						'key': stroke.id,
 						'class': `${P}-form-list-item`,
 					},
-						m(`button`, {
-							'type': `button`,
-							'class': `${P}-button ${P}-form-list-item-opener`,
-							'onclick': () => {
-								let stroke = data.document.strokesById[id]
-								if (v.state.openStrokeIds.has(stroke)) {
-									v.state.openStrokeIds.delete(stroke)
-								} else {
-									v.state.openStrokeIds.add(stroke)
-								}
-							},
-						},
-							(v.state.openStrokeIds.has(stroke) ?
-								`▼`
-								:
-								`►`
-							)
-						),
-						m(BorderComp),
 						m(`div`, { 'class': `${P}-buttons ${P}--1 ${P}--column ${P}-form-list-item-end` },
 							m(`div`, { 'class': `${P}-buttons ${P}--1` },
 								m(`button`, {
 									'type': `button`,
-									'class': `${P}-button ${P}-form-list-item-name ${stroke.name ? `` : `${P}--unnamed`} ${isSelected ? `${P}--highlighted` : ``}`,
+									'class': `${P}-button ${P}-form-list-item-name ${P}--unnamed`,
 									'onclick': (e: MouseEvent) => {
-										deselectAllStrokes(data)
-										selectStroke(data, id)
+										//deselectAllStrokes(data)
+										//selectStroke(data, id)
 									},
 									'oncreate': (v2: m.VnodeDOM<any, any>) => {
 										v2.dom.addEventListener('contextmenu', v.state.onContextMenu = (e: MouseEvent) => {
@@ -93,7 +70,7 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 											data.windows.push({
 												id: uuid(),
 												contentFactory: () => m(StrokeMenuComp, {
-													strokeIds: v.attrs.strokeIds,
+													strokes: v.attrs.strokes,
 													index: index,
 												}),
 											})
@@ -104,14 +81,14 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 										v.dom.removeEventListener('contextmenu', v.state.onContextMenu, true)
 									},
 								},
-									stroke.name || `Stroke`
+									`Stroke`
 								),
 							),
-							v.state.openStrokeIds.has(stroke) &&
-							m(StrokeListComp, {
-								'stroke': stroke,
-								'strokeIds': stroke.childIds,
-							})
+							//v.state.openStrokeIds.has(stroke) &&
+							//m(StrokeListComp, {
+							//	'stroke': stroke,
+							//	'strokeIds': stroke.childIds,
+							//})
 						)
 					)
 				)
@@ -119,24 +96,16 @@ export const StrokeListComp: m.Comp<StrokeListComp.Attrs, StrokeListComp.State> 
 			m('button', {
 				'type': `button`,
 				'class': `${P}-button ${P}-form-list-placeholder`,
-				'title': data.memorizedStrokeIds.length ? `Insert ${data.memorizedStrokeIds.length} memorized` : `Create new`,
+				'title': `Create new`,
 				'onclick': () => {
-					if (data.memorizedStrokeIds.length) {
-						if (v.attrs.stroke) {
-							addMemorizedStrokeIdsAsChildren(data, v.attrs.stroke)
-						} else {
-							data.document.strokeIds.splice(data.document.strokeIds.length, 0, ...data.memorizedStrokeIds)
-						}
-					} else {
-						let id = createStroke(data)
-						v.attrs.strokeIds.push(id)
-						deselectAllStrokes(data)
-						selectStroke(data, id)
-					}
+					let stroke = createStroke(data.document.channelCount)
+					v.attrs.strokes.push(stroke)
+					//deselectAllStrokes(data)
+					//selectStroke(data, id)
 					render()
 				},
 			},
-				`+ ${data.memorizedStrokeIds.length || ``}`
+				`+`
 			)
 		]
 	},

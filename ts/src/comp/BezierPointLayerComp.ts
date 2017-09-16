@@ -19,7 +19,7 @@
 
 import * as m from 'mithril'
 
-import { getRenderBezierPoint, scaleRenderBezierPoint } from '../data/BezierPointMethods'
+import { scaleRenderBezierPoint } from '../data/BezierPointMethods'
 
 import { BezierKind } from '../data/BezierKind'
 import { BezierPointLayerModel } from './BezierPointLayerModel'

@@ -23,6 +23,9 @@ import { IWindow } from './IWindow'
 import { Point } from './IPoint'
 import { RendererState } from './RendererState'
 import { TSet } from './TSet'
+import { IRenderStroke } from "./IRenderStroke";
+import { IRenderBezierPath } from "./IRenderBezierPath";
+import { IRenderBezierPoint } from "./IRenderBezierPoint";
 
 export class Data {
 	document: IRenderDocument = new IRenderDocument(
@@ -42,10 +45,9 @@ export class Data {
 		0,
 	)
 	canvasScale: number = 1
-	selectedStrokeIds: TSet<boolean> = {}
-	selectedBezierPathIds: TSet<boolean> = {}
-	selectedBezierPointIds: TSet<boolean> = {}
-	selectedPointIds: TSet<boolean> = {}
-	memorizedStrokeIds: string[] = []
+	selectedStrokes: IRenderStroke[] = []
+	selectedBezierPaths: IRenderBezierPath[] = []
+	selectedBezierPoints: IRenderBezierPoint[] = []
+	selectedPoints: Point[] = []
 	windows: IWindow[] = []
 }

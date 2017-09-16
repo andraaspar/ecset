@@ -7,7 +7,7 @@ module.exports = {
 		vendor: ['jquery-ts', 'mithril']
 	},
 	resolve: {
-		extensions: ['.ts', '.js'],
+		extensions: ['.tsx', '.ts', '.jsx', '.js'],
 		modules: [
 			'node_modules',
 			'.'
@@ -16,7 +16,7 @@ module.exports = {
 	module: {
 		loaders: [
 			{
-				test: /\.ts$/,
+				test: /\.tsx?$/,
 				loader: 'awesome-typescript-loader'
 			},
 		]
@@ -38,7 +38,7 @@ module.exports = {
 	externals: {
 	},
 	output: {
-		path: path.resolve(__dirname, './kapocs/tmp/asset-templates/script'),
+		path: path.resolve(__dirname, './build'),
 		filename: '[name].js'
 	}
 }

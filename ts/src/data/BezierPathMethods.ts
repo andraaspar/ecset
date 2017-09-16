@@ -21,7 +21,7 @@ import { IPath } from './IPath'
 import { IRenderBezierPath } from './IRenderBezierPath'
 import { IRenderBezierPoint } from './IRenderBezierPoint'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
-import { scaleRenderBezierPoint } from './BezierPointMethods'
+import { scaleRenderBezierPoint, cloneBezierPoint } from './BezierPointMethods'
 
 export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath): IPath {
 	let path: IPath = {
@@ -72,4 +72,14 @@ export function bezierPathToSvg(bezierPath: IRenderBezierPath, scale: number): s
 		result += `C${prevBezierPoint.handleOut.x},${prevBezierPoint.handleOut.y} ${bezierPoint.handleIn.x},${bezierPoint.handleIn.y} ${bezierPoint.center.x},${bezierPoint.center.y}`
 	}
 	return result
+}
+
+export function cloneBezierPath(p: IRenderBezierPath) {
+	return new IRenderBezierPath(
+		p.points.map(cloneBezierPoint),
+		p.isLoop,
+		p.detail,
+		p.id,
+		p.path,
+	)
 }

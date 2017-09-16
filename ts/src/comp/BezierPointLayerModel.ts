@@ -19,10 +19,9 @@
 
 import * as m from 'mithril'
 
-import { cloneBezierPoint, getRenderBezierPoint } from '../data/BezierPointMethods'
+import { cloneBezierPoint } from '../data/BezierPointMethods'
 
 import { IRenderBezierPoint } from '../data/IRenderBezierPoint'
-import { IViewBezierPoint } from '../data/IViewBezierPoint'
 import { Point } from '../data/IPoint'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
@@ -64,10 +63,13 @@ export class BezierPointLayerModel {
 			x: (e.pageX - this.startMouse.x) / data.canvasScale,
 			y: (e.pageY - this.startMouse.y) / data.canvasScale,
 		};
-		[this.startSelection.center, this.startSelection.handleIn, this.startSelection.handleOut].forEach(startPoint => {
-			let viewPoint = data.document.pointsById[startPoint.id]
-			viewPoint.x = startPoint.x + movePoint.x
-			viewPoint.y = startPoint.y + movePoint.y
+		[
+			[this.startSelection.center, this.selection.center],
+			[this.startSelection.handleIn, this.selection.handleIn],
+			[this.startSelection.handleOut, this.selection.handleOut],
+		].forEach(([startPoint, point]) => {
+			point.x = startPoint.x + movePoint.x
+			point.y = startPoint.y + movePoint.y
 		})
 		m.redraw()
 	}

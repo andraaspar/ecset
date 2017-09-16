@@ -21,8 +21,6 @@ import './statics.ts'
 
 import * as m from 'mithril'
 
-import { getIdCountInRenderDocument, getIdCountInViewDocument, viewDocumentToRenderDocument } from './data/DocumentMethods'
-
 import { EcsetComp } from './comp/EcsetComp'
 import { GLOBAL } from 'illa/GLOBAL'
 import { data } from './data/DataMethods'
@@ -36,8 +34,6 @@ GLOBAL.m = m
 GLOBAL.e = {
 	data: data,
 	render: render,
-	getIdCountInRenderDocument: (id: string) => getIdCountInRenderDocument(viewDocumentToRenderDocument(data.document), id),
-	getIdCountInViewDocument: (id: string) => getIdCountInViewDocument(data.document, id),
 }
 
 m.mount(ECSET_ELEMENT, EcsetComp)
