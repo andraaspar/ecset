@@ -19,7 +19,9 @@
 
 import { AlphaMultiplier } from './AlphaMultiplier'
 import { IColor } from './IColor'
-import { sanitizeChannelValue } from './ColorMethods'
+import { sanitizeChannelValue, interpolateColors } from './ColorMethods'
+import { IPath } from "./IPath";
+import { interpolateValues } from "./ValueMethods";
 
 export function alphaMultiplierToColor(a: AlphaMultiplier) {
 	return new IColor(
@@ -27,5 +29,11 @@ export function alphaMultiplierToColor(a: AlphaMultiplier) {
 			sanitizeChannelValue(a.color.channelValues[0] * a.alphaMultiplier),
 			...a.color.channelValues.slice(1),
 		]
+	)
+}
+export function interpolateAlphaMultipliers(a: AlphaMultiplier, b: AlphaMultiplier, t: number, path?: IPath) {
+	return new AlphaMultiplier(
+		interpolateColors(a.color, b.color, t, path),
+		interpolateValues(a.alphaMultiplier, b.alphaMultiplier, t, path),
 	)
 }

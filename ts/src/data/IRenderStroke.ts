@@ -31,6 +31,7 @@ export class IRenderStroke {
 		public transform: IRenderTransform,
 		public parent?: IRenderStroke,
 		public id?: string,
+		public name?: string,
 	) {
 
 	}

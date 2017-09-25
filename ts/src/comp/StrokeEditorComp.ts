@@ -22,6 +22,7 @@ import * as m from 'mithril'
 import { BorderComp } from './BorderComp'
 import { P } from '../statics'
 import { data } from '../data/DataMethods'
+import { IRenderStroke } from "../data/IRenderStroke";
 
 export declare namespace StrokeEditorComp {
 	interface Attrs { }
@@ -35,8 +36,8 @@ export const StrokeEditorComp: m.Comp<StrokeEditorComp.Attrs, StrokeEditorComp.S
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		let selectedStrokeIds = Object.keys(data.selectedStrokeIds)
-		let stroke = selectedStrokeIds.length == 1 ? data.document.strokesById[selectedStrokeIds[0]] : undefined
+		//let selectedStrokeIds = Object.keys(data.selectedStrokeIds)
+		let stroke = undefined as IRenderStroke //selectedStrokeIds.length == 1 ? data.document.strokesById[selectedStrokeIds[0]] : undefined
 		return (
 			m(`div`, { 'class': `${P}-form-section` },
 				m(`div`, { 'class': `${P}-form-title` },
@@ -63,7 +64,7 @@ export const StrokeEditorComp: m.Comp<StrokeEditorComp.Attrs, StrokeEditorComp.S
 									m(`input`, {
 										'class': ``,
 										'value': stroke.name,
-										'oninput': m.withAttr(`value`, value => data.document.strokesById[stroke.id].name = value),
+										'oninput': m.withAttr(`value`, value => stroke.name = value),
 										'placeholder': `Stroke`,
 									})
 								)
@@ -79,7 +80,7 @@ export const StrokeEditorComp: m.Comp<StrokeEditorComp.Attrs, StrokeEditorComp.S
 					:
 					m(`div`, { 'class': `${P}-form-content` },
 						m(`div`, { 'class': `${P}-form-no-items` },
-							selectedStrokeIds.length ? `Multiple strokes selected.` : `No stroke selected.`
+							/*selectedStrokeIds.length ? `Multiple strokes selected.` : */`No stroke selected.`
 						)
 					)
 				)

@@ -29,11 +29,12 @@ import { IRenderColorPath } from '../data/IRenderColorPath'
 import { IRenderView } from '../data/IRenderView'
 import { ISegment } from '../data/ISegment'
 import { ISegmentInfo } from '../data/ISegmentInfo'
-import { RenderPoint } from '../data/IRenderPoint'
 import { getBySide } from '../data/SideMethods'
 import { interpolateColors } from '../data/ColorMethods'
 import { interpolateValues } from '../data/ValueMethods'
 import { itemAndItemT } from '../data/TMethods'
+import { Point } from "../data/IPoint";
+import { alphaMultiplierToColor, interpolateAlphaMultipliers } from "../data/AlphaMultiplierMethods";
 
 export class Renderer {
 
@@ -133,7 +134,7 @@ export class Renderer {
 			let colorPathT = closestDistance / closestThickness
 			let [colorSegment, colorSegmentT] = itemAndItemT(colorPathT, colorPath.segments, colorPathTs)
 
-			result = interpolateColors(colorSegment.a, colorSegment.b, colorSegmentT, colorSegment.tweenPath.path)
+			result = alphaMultiplierToColor(interpolateAlphaMultipliers(colorSegment.a, colorSegment.b, colorSegmentT, colorSegment.tweenPath.path))
 		}
 		return result
 	}
@@ -143,7 +144,7 @@ export class Renderer {
 
 		let prevSegment: ISegment
 		let prevSegmentInfo: ISegmentInfo
-		let prevVector: RenderPoint
+		let prevVector: Point
 		for (let i = 0, n = this.segmentCount = pathSegmentCount(this.path); i < n; i++) {
 			let segment = getSegmentOfPath(this.path, i)
 
@@ -181,15 +182,15 @@ export class Renderer {
 				this.calculateFocus(segmentInfo)
 			}
 
-			let origin: RenderPoint = { id: undefined, x: 0, y: 0 }
+			let origin: Point = { id: undefined, x: 0, y: 0 }
 			let originDistance = segmentToPointDistance(segment, origin) * segmentPointSide(segment, origin)
 			let originT = segmentPointT(segment, origin)
 
-			let xPoint: RenderPoint = { id: undefined, x: 1, y: 0 }
+			let xPoint: Point = { id: undefined, x: 1, y: 0 }
 			let xPointDistance = segmentToPointDistance(segment, xPoint) * segmentPointSide(segment, xPoint)
 			let xPointT = segmentPointT(segment, xPoint)
 
-			let yPoint: RenderPoint = { id: undefined, x: 0, y: 1 }
+			let yPoint: Point = { id: undefined, x: 0, y: 1 }
 			let yPointDistance = segmentToPointDistance(segment, yPoint) * segmentPointSide(segment, yPoint)
 			let yPointT = segmentPointT(segment, yPoint)
 
@@ -208,7 +209,7 @@ export class Renderer {
 		return result
 	}
 
-	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: RenderPoint, vector: RenderPoint, prevSegment: ISegment, segment: ISegment): void {
+	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: Point, vector: Point, prevSegment: ISegment, segment: ISegment): void {
 		prevVector = reverseVector(prevVector)
 
 		let normalVector = addPoints(prevVector, vector)
@@ -251,8 +252,8 @@ export class Renderer {
 			let segmentB = colorField.b.segments[i]
 			let colorTweenPath = colorField.colorTweenPaths[i]
 			result.segments.push({
-				a: interpolateColors(segmentA.a, segmentB.a, t, colorTweenPath.path),
-				b: interpolateColors(segmentA.b, segmentB.b, t, colorTweenPath.path),
+				a: interpolateAlphaMultipliers(segmentA.a, segmentB.a, t, colorTweenPath.path),
+				b: interpolateAlphaMultipliers(segmentA.b, segmentB.b, t, colorTweenPath.path),
 				tweenPath: segmentA.tweenPath,
 			})
 		}
