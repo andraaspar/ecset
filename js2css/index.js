@@ -58,7 +58,7 @@ imports.forEach(i => {
 	}
 })
 
-write('../kapocs/tmp/asset-templates/style/index.css', out)
+write('./index.css', out)
 
 function write(path, out) {
 	require('mkdirp').sync(require('path').dirname(path))

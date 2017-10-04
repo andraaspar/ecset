@@ -17,6 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import '../../js2css/index.css'
+
 import './statics.ts'
 
 import * as m from 'mithril'

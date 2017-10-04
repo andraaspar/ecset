@@ -18,6 +18,7 @@
  */
 
 import * as m from 'mithril'
+import * as RenderWorker from '../worker'
 
 import { IRenderDocument } from './IRenderDocument'
 import { IRenderStroke } from './IRenderStroke'
@@ -59,7 +60,7 @@ function terminateBusyRenderers() {
 
 function createRenderers(count: number) {
 	while (data.renderers.length < count) {
-		data.renderers.push(new Worker('script/◄worker.js►'))
+		data.renderers.push(new (RenderWorker as any)())
 	}
 }
 

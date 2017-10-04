@@ -1,9 +1,4 @@
-/.project
-/.settings/
 /.vscode
-/bower_components/
 /build/
-/kapocs/tmp/
-/lib/
+/js2css/index.css
 /node_modules/
-/tmp/

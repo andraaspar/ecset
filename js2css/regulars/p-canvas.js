@@ -21,7 +21,7 @@ module.exports = `
 .${P}-canvas-area
 {
 	position: relative;
-	background: ${GRAY_7} url('image/◄checkers-10.svg►');
+	background: ${GRAY_7} url('../asset/checkers-10.svg');
 	overflow: hidden;
 	flex-grow: 1;
 	cursor: default;

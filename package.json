@@ -7,16 +7,17 @@
     "awesome-typescript-loader": "3.2.3",
     "color": "^2.0.0",
     "concurrently": "^3.4.0",
+    "css-loader": "^0.28.7",
     "express": "^4.15.2",
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-kapocs": "^2.0.4",
-    "grunt-shell": "^2.1.0",
+    "file-loader": "^1.1.4",
+    "html-webpack-plugin": "^2.30.1",
     "mkdirp": "^0.5.1",
     "nodemon": "^1.11.0",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.18.2",
     "typescript": "^2.2.2",
-    "webpack": "3.5.6"
+    "webpack": "3.5.6",
+    "worker-loader": "^1.0.0"
   },
   "dependencies": {
     "berek": "^7.0.0",
@@ -27,6 +28,10 @@
     "normalize.css": "^7.0.0"
   },
   "scripts": {
-    "compileJs": "webpack --config webpack.index.config.js"
+    "cleanCss": "rimraf js2css/index.css",
+    "compileCss": "npm run cleanCss && cd js2css && node .",
+    "cleanJs": "rimraf build",
+    "compileJs": "npm run cleanJs && webpack --config webpack.index.config.js",
+    "compile": "npm run compileCss && npm run compileJs"
   }
 }
