@@ -25,6 +25,7 @@ import { FormComp } from './FormComp'
 import { P } from '../statics'
 import { WindowsComp } from './WindowsComp'
 import { data } from '../data/DataMethods'
+import { setOut } from "../console";
 
 export declare namespace EcsetComp {
 	interface Attrs { }
@@ -46,6 +47,12 @@ export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
 			}),
 			m(BorderComp),
 			m(FormComp),
+			m('div', {
+				'style': 'width: 200px; height: 300px; overflow: auto',
+				'oncreate': (v) => {
+					setOut(v.dom as HTMLElement)
+				},
+			}),
 			m(WindowsComp),
 		]
 	},

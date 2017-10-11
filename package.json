@@ -6,7 +6,6 @@
     "@types/mithril": "^1.1.1",
     "awesome-typescript-loader": "3.2.3",
     "color": "^2.0.0",
-    "concurrently": "^3.4.0",
     "css-loader": "^0.28.7",
     "express": "^4.15.2",
     "file-loader": "^1.1.4",
@@ -32,6 +31,8 @@
     "compileCss": "npm run cleanCss && cd js2css && node .",
     "cleanJs": "rimraf build",
     "compileJs": "npm run cleanJs && webpack --config webpack.index.config.js",
-    "compile": "npm run compileCss && npm run compileJs"
+    "compile": "npm run compileCss && npm run compileJs",
+    "watchJs": "npm run cleanJs && webpack --watch --config webpack.index.config.js",
+    "watchCss": "npm run cleanCss && cd js2css && nodemon ."
   }
 }

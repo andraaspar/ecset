@@ -1,4 +1,3 @@
-
 let count = 0
 window.onerror = function(m, f, r, c, e) {
 	if (count >= 10) return
@@ -22,7 +21,7 @@ window.onerror = function(m, f, r, c, e) {
 	document.body.appendChild(markup)
 	let handler: EventListener
 	markup.addEventListener('click', handler = (e) => {
-		if ((e.target as HTMLElement).nodeName === 'button') {
+		if ((e.target as HTMLElement).nodeName.toLowerCase() === 'button') {
 			markup.removeEventListener('click', handler)
 			document.body.removeChild(markup)
 		}

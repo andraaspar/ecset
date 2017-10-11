@@ -32,6 +32,7 @@ let imports = [
 	'./vars',
 	'../node_modules/normalize.css/normalize.css',
 	'./elems',
+	'./regulars/error',
 	'./regulars/p-canvas',
 	'./regulars/p-ecset',
 	'./regulars/p-path',
