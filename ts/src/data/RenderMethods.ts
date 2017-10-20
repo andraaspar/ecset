@@ -86,9 +86,17 @@ function startRender(renderer: Worker, index: number, views: IRenderView[], rend
 		data.rendererStates[index] = RendererState.BUSY
 		renderer.postMessage(view)
 		renderer.onmessage = (e) => {
-			data.rendererStates[index] = RendererState.IDLE
-			data.pixelsByStrokeId[view.stroke.id] = e.data.pixels
-			data.viewsByStrokeId[view.stroke.id] = view
+			if (e.data.pixels) {
+				console.log('onmessage')
+				data.rendererStates[index] = RendererState.IDLE
+				data.pixelsByStrokeId[view.stroke.id] = e.data.pixels
+				data.viewsByStrokeId[view.stroke.id] = view
+			} else if (e.data.log) {
+				console.log(e.data.log)
+				return
+			} else {
+				console.error(e.data.error)
+			}
 			startRender(renderer, index, views, renderDocument)
 		}
 	} else {

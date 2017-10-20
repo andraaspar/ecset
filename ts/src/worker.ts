@@ -23,11 +23,18 @@ import { Renderer } from './renderer/Renderer'
 
 // console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
-	// console.log('Render starting...')
-	let view: IRenderView = e.data
-	let renderer = new Renderer(view)
-	renderer.render()
-	// console.log('Render finished.')
+	try {
+		// console.log('Render starting...')
+		GLOBAL.postMessage({ log: 'Render starting...' })
+		let view: IRenderView = e.data
+		var renderer = new Renderer(view)
+		renderer.render()
+		// console.log('Render finished.')
+		GLOBAL.postMessage({ log: 'Render finished.' })
+	} catch (e) {
+		GLOBAL.postMessage({ error: e })
+		return
+	}
 
 	GLOBAL.postMessage({ pixels: renderer.getPixels() })
 }
