@@ -21,20 +21,25 @@ import { GLOBAL } from 'illa/GLOBAL'
 import { IRenderView } from './data/IRenderView'
 import { Renderer } from './renderer/Renderer'
 
+GLOBAL.onerror = function(m: string, f: string, r: number, c: number, e: any) {
+	GLOBAL.postMessage({
+		error: `Error: ${m}
+File: ${f}
+Row:Col: ${r}:${c}
+Stack:
+${e ? e.stack : undefined}`
+	})
+}
+
 // console.log('Web worker starting...')
 export function onMessage(e: MessageEvent) {
-	try {
-		// console.log('Render starting...')
-		GLOBAL.postMessage({ log: 'Render starting...' })
-		let view: IRenderView = e.data
-		var renderer = new Renderer(view)
-		renderer.render()
-		// console.log('Render finished.')
-		GLOBAL.postMessage({ log: 'Render finished.' })
-	} catch (e) {
-		GLOBAL.postMessage({ error: e })
-		return
-	}
+	// console.log('Render starting...')
+	GLOBAL.postMessage({ log: 'Render starting...' })
+	let view: IRenderView = e.data
+	var renderer = new Renderer(view)
+	renderer.render()
+	// console.log('Render finished.')
+	GLOBAL.postMessage({ log: 'Render finished.' })
 
 	GLOBAL.postMessage({ pixels: renderer.getPixels() })
 }

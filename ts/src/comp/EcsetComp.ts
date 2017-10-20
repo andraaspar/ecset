@@ -48,7 +48,7 @@ export const EcsetComp: m.Comp<EcsetComp.Attrs, EcsetComp.State> = {
 			m(BorderComp),
 			m(FormComp),
 			m('div', {
-				'style': 'width: 200px; height: 300px; overflow: auto',
+				'style': 'width: 200px; overflow: auto; font-family: monospace; font-size: 12px; line-height: 1',
 				'oncreate': (v) => {
 					setOut(v.dom as HTMLElement)
 				},
