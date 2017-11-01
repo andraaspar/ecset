@@ -19,15 +19,17 @@
 
 import { BezierPoint } from './BezierPoint'
 import { Path } from './Path'
+import { assign } from 'lodash'
 
 export class BezierPath {
-	constructor(
-		public points: BezierPoint[],
-		public isLoop: boolean,
-		public detail?: number,
-		public id?: string,
-		public path?: Path,
-	) {
-
+	
+	points: BezierPoint[]
+	isLoop: boolean
+	detail?: number
+	id?: string
+	path?: Path
+	
+	constructor(o: BezierPath) {
+		assign(this, o)
 	}
 }

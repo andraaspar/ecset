@@ -23,7 +23,7 @@ import { cloneBezierPoint, scaleRenderBezierPoint } from './BezierPointMethods'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
 import { Path } from './Path'
 
-export function linearizeRenderBezierPath(bezierPath: BezierPath): Path {
+export function bezierPathToPath(bezierPath: BezierPath): Path {
 	let path: Path = {
 		points: [],
 		isLoop: bezierPath.isLoop
@@ -75,11 +75,11 @@ export function bezierPathToSvg(bezierPath: BezierPath, scale: number): string {
 }
 
 export function cloneBezierPath(p: BezierPath) {
-	return new BezierPath(
-		p.points.map(cloneBezierPoint),
-		p.isLoop,
-		p.detail,
-		p.id,
-		p.path,
-	)
+	return new BezierPath({
+		points: p.points.map(cloneBezierPoint),
+		isLoop: p.isLoop,
+		detail: p.detail,
+		id: p.id,
+		path: p.path,
+	})
 }

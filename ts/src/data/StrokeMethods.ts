@@ -41,8 +41,8 @@ export function createStroke(channelCount: number) {
 	let white100 = new AlphaMultiplier(white, 1)
 	let white0 = new AlphaMultiplier(white, 0)
 
-	let linearPath = new BezierPath(
-		[
+	let linearPath = new BezierPath({
+		points: [
 			new BezierPoint(
 				new Point(0, 0),
 				new Point(0, 0),
@@ -54,10 +54,10 @@ export function createStroke(channelCount: number) {
 				new Point(1, 1),
 			),
 		],
-		false
-	)
-	let curvePath = new BezierPath(
-		[
+		isLoop: false,
+	})
+	let curvePath = new BezierPath({
+		points: [
 			new BezierPoint(
 				new Point(100, 100),
 				new Point(300, 80),
@@ -69,8 +69,8 @@ export function createStroke(channelCount: number) {
 				new Point(900, 900),
 			),
 		],
-		false
-	)
+		isLoop: false,
+	})
 
 	let colorSegmentBlack100ToWhite0 = new ColorSegment(
 		black100,
@@ -130,8 +130,8 @@ export function createStroke(channelCount: number) {
 		new Point(1, 0),
 	)
 
-	let thicknessPath = new BezierPath(
-		[
+	let thicknessPath = new BezierPath({
+		points: [
 			new BezierPoint(
 				new Point(0, 0),
 				new Point(0, 0),
@@ -143,8 +143,8 @@ export function createStroke(channelCount: number) {
 				new Point(1, 0),
 			),
 		],
-		false,
-	)
+		isLoop: false,
+	})
 
 	let thicknessPathPair = new BezierPathPair(
 		thicknessPath,
@@ -158,13 +158,13 @@ export function createStroke(channelCount: number) {
 		new Point(0, 0),
 	)
 
-	let stroke = new Stroke(
-		colorStripPair,
-		curvePath,
-		thicknessPathPair,
-		[],
-		transform,
-	)
+	let stroke = new Stroke({
+		stripPair: colorStripPair,
+		bezierPath: curvePath,
+		thicknessPair: thicknessPathPair,
+		children: [],
+		transform: transform,
+	})
 
 	return stroke
 }

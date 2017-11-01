@@ -27,6 +27,9 @@ import { RendererState } from './RendererState'
 import { Stroke } from './Stroke'
 import { Transform } from './Transform'
 import { View } from './View'
+import { BezierPath } from './BezierPath'
+import { findObject } from 'illa/ObjectUtil'
+import { bezierPathToPath } from './BezierPathMethods'
 
 export function render(force?: boolean) {
 	let views = createViews(data.document, data.document.strokes)
@@ -66,6 +69,7 @@ function createRenderers(count: number) {
 
 function createViews(d: Document, strokes: Stroke[], transforms: Transform[] = []) {
 	let views: View[] = []
+	findObject<BezierPath>(strokes, o => o instanceof BezierPath).forEach(p => p.path = bezierPathToPath(p))
 	for (let stroke of strokes) {
 		let view: View = {
 			channelCount: data.document.channelCount,

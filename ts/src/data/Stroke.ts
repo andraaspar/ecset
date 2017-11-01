@@ -21,18 +21,20 @@ import { BezierPath } from './BezierPath'
 import { BezierPathPair } from './BezierPathPair'
 import { ColorStripPair } from './ColorStripPair'
 import { Transform } from './Transform'
+import { assign } from 'lodash';
 
 export class Stroke {
-	constructor(
-		public stripPair: ColorStripPair,
-		public bezierPath: BezierPath,
-		public thicknessPair: BezierPathPair,
-		public children: Stroke[],
-		public transform: Transform,
-		public parent?: Stroke,
-		public id?: string,
-		public name?: string,
-	) {
-
+	
+	stripPair: ColorStripPair
+	bezierPath: BezierPath
+	thicknessPair: BezierPathPair
+	children: Stroke[]
+	transform: Transform
+	parent?: Stroke
+	id?: string
+	name?: string
+	
+	constructor(o: Stroke) {
+		assign(this, o)
 	}
 }
