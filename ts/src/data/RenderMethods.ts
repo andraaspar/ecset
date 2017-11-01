@@ -20,13 +20,13 @@
 import * as m from 'mithril'
 import * as RenderWorker from '../worker'
 
+import { data } from './DataMethods'
 import { Document } from './Document'
+import { isEqual } from 'lodash'
+import { RendererState } from './RendererState'
 import { Stroke } from './Stroke'
 import { Transform } from './Transform'
 import { View } from './View'
-import { RendererState } from './RendererState'
-import { data } from './DataMethods'
-import { isEqual } from 'lodash'
 
 export function render(force?: boolean) {
 	let views = createViews(data.document, data.document.strokes)

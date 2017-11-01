@@ -21,11 +21,10 @@ import * as m from 'mithril'
 
 import { scaleRenderBezierPoint } from '../data/BezierPointMethods'
 
-import { BezierKind } from '../data/BezierKind'
 import { BezierPointLayerModel } from './BezierPointLayerModel'
-import { P } from '../statics'
 import { data } from '../data/DataMethods'
 import { getBezierPointsFromStrokes } from '../data/DocumentMethods'
+import { P } from '../statics'
 
 export declare namespace BezierPointLayerComp {
 	interface Attrs { }

@@ -1,0 +1,34 @@
+{
+    "defaultSeverity": "error",
+    "extends": [],
+    "jsRules": {},
+    "rules": {
+        "no-unused-variable": {
+            "severity": "warning"
+        },
+        "ordered-imports": [
+            true,
+            {
+                "module-source-path": "basename"
+            }
+        ],
+        "semicolon": [
+            true,
+            "never"
+        ],
+        "quotemark": [
+            true,
+            "single",
+            "jsx-single",
+            "avoid-escape"
+        ],
+        "no-string-throw": true,
+        "radix": true,
+        "eofline": true,
+        "indent": [
+            true,
+            "tabs"
+        ]
+    },
+    "rulesDirectory": []
+}

@@ -19,11 +19,11 @@
 
 import { pointDistance, pointPosition, subtractPoints, vectorAngle } from './PointMethods'
 
-import { Axis2D } from 'illa/Axis2D'
-import { BezierSegment } from './BezierSegment'
-import { Point } from './Point'
 import { angleDifference } from './AngleMethods'
 import { bezierPosition } from './BezierMethods'
+import { BezierSegment } from './BezierSegment'
+import { Axis2D } from 'illa/Axis2D'
+import { Point } from './Point'
 
 const AXES = [Axis2D.X, Axis2D.Y]
 const DOUBLE_PI = Math.PI * 2

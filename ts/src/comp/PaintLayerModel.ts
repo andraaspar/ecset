@@ -17,13 +17,10 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as m from 'mithril'
 
-import { PaintLayerComp } from './PaintLayerComp'
-import { RendererState } from '../data/RendererState'
 import { data } from '../data/DataMethods'
+import { RendererState } from '../data/RendererState'
 import { get } from '../statics'
-import jQuery from 'jquery-ts'
 
 export class PaintLayerModel {
 

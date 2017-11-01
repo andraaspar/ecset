@@ -18,25 +18,18 @@
  */
 
 import { AlphaMultiplier } from './AlphaMultiplier'
-import { BezierKind } from './BezierKind'
-import { CircularReferenceError } from '../error/CircularReferenceError'
-import { Data } from './Data'
-import { Color } from './Color'
-import { Path } from './Path'
 import { BezierPath } from './BezierPath'
 import { BezierPathPair } from './BezierPathPair'
 import { BezierPoint } from './BezierPoint'
 import { ColorField } from './ColorField'
+import { createGrayViewColor } from './ColorMethods'
 import { ColorPath } from './ColorPath'
 import { ColorSegment } from './ColorSegment'
 import { ColorStrip } from './ColorStrip'
 import { ColorStripPair } from './ColorStripPair'
+import { Point } from './Point'
 import { Stroke } from './Stroke'
 import { Transform } from './Transform'
-import { Point } from './Point'
-import { TSet } from './TSet'
-import { createGrayViewColor } from './ColorMethods'
-import { uuid } from 'illa/StringUtil'
 
 export function createStroke(channelCount: number) {
 

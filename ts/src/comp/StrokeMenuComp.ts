@@ -21,9 +21,7 @@ import * as m from 'mithril'
 
 import { MenuWindowComp } from './MenuWindowComp'
 import { P } from '../statics'
-import { data } from '../data/DataMethods'
-import { render } from '../data/RenderMethods'
-import { Stroke } from "../data/Stroke";
+import { Stroke } from '../data/Stroke'
 
 export declare namespace StrokeMenuComp {
 	interface Attrs {

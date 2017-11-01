@@ -18,7 +18,6 @@
  */
 
 import { AlphaMultiplier } from './AlphaMultiplier'
-import { Color } from './Color'
 import { BezierPath } from './BezierPath'
 
 export class ColorSegment {

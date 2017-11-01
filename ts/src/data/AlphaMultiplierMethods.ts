@@ -19,9 +19,9 @@
 
 import { AlphaMultiplier } from './AlphaMultiplier'
 import { Color } from './Color'
-import { sanitizeChannelValue, interpolateColors } from './ColorMethods'
-import { Path } from "./Path";
-import { interpolateValues } from "./ValueMethods";
+import { interpolateColors, sanitizeChannelValue } from './ColorMethods'
+import { Path } from './Path'
+import { interpolateValues } from './ValueMethods'
 
 export function alphaMultiplierToColor(a: AlphaMultiplier) {
 	return new Color(

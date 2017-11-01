@@ -21,15 +21,14 @@ import * as m from 'mithril'
 
 import { BezierPointLayerComp } from './BezierPointLayerComp'
 import { CanvasModel } from './CanvasModel'
-import { Path } from '../data/Path'
-import { P } from '../statics'
+import { data } from '../data/DataMethods'
 import { PaintLayerComp } from './PaintLayerComp'
+import { Path } from '../data/Path'
 import { PathLayerComp } from './PathLayerComp'
 import { Point } from '../data/Point'
 import { PointLayerComp } from './PointLayerComp'
+import { P } from '../statics'
 import { TSet } from '../data/TSet'
-import { data } from '../data/DataMethods'
-import jQuery from 'jquery-ts'
 
 export declare namespace CanvasComp {
 	interface Attrs {

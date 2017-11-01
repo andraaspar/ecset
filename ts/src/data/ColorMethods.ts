@@ -38,7 +38,7 @@ export function createViewColor(channelCount: number, alphaValue: number, ...val
 	let result: Color = new Color(
 		[alphaValue].concat(values).map(sanitizeChannelValue),
 	)
-	if (channelCount != result.channelValues.length) throw 'oorba3'
+	if (channelCount != result.channelValues.length) throw new Error('oorba3')
 	return result
 }
 

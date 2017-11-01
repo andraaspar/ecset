@@ -23,9 +23,9 @@ import './statics.ts'
 
 import * as m from 'mithril'
 
+import { data } from './data/DataMethods'
 import { EcsetComp } from './comp/EcsetComp'
 import { GLOBAL } from 'illa/GLOBAL'
-import { data } from './data/DataMethods'
 import jQuery from 'jquery-ts'
 import { render } from './data/RenderMethods'
 

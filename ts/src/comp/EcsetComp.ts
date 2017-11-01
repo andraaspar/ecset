@@ -21,11 +21,10 @@ import * as m from 'mithril'
 
 import { BorderComp } from './BorderComp'
 import { CanvasComp } from './CanvasComp'
-import { FormComp } from './FormComp'
-import { P } from '../statics'
-import { WindowsComp } from './WindowsComp'
+import { setOut } from '../console'
 import { data } from '../data/DataMethods'
-import { setOut } from "../console";
+import { FormComp } from './FormComp'
+import { WindowsComp } from './WindowsComp'
 
 export declare namespace EcsetComp {
 	interface Attrs { }

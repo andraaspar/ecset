@@ -22,9 +22,9 @@ import * as m from 'mithril'
 import { cloneBezierPoint } from '../data/BezierPointMethods'
 
 import { BezierPoint } from '../data/BezierPoint'
-import { Point } from '../data/Point'
-import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
+import { bind } from 'illa/FunctionUtil'
+import { Point } from '../data/Point'
 import { render } from '../data/RenderMethods'
 
 export class BezierPointLayerModel {

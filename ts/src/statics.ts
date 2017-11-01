@@ -17,9 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as m from 'mithril'
 
-import { GLOBAL } from 'illa/GLOBAL'
 import { isFunction } from 'illa/Type'
 
 export const P = 'e'

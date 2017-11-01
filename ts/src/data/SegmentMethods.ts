@@ -17,11 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { addPoints, perpProduct, perpendicularVector, pointDistance, subtractPoints, vectorAngle } from './PointMethods'
+import { addPoints, perpendicularVector, perpProduct, pointDistance, subtractPoints, vectorAngle } from './PointMethods'
 
-import { Segment } from './Segment'
-import { Point } from './Point'
 import { angleSide } from './AngleMethods'
+import { Point } from './Point'
+import { Segment } from './Segment'
 
 export function segmentLength(segment: Segment): number {
 	return pointDistance(segment.a, segment.b)

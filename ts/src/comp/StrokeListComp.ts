@@ -19,16 +19,14 @@
 
 import * as m from 'mithril'
 
-import { P, get } from '../statics'
+import { P } from '../statics'
 import { createStroke } from '../data/StrokeMethods'
 
-import { BorderComp } from './BorderComp'
-import { MenuWindowComp } from './MenuWindowComp'
-import { StrokeMenuComp } from './StrokeMenuComp'
 import { data } from '../data/DataMethods'
-import { render } from '../data/RenderMethods'
 import { uuid } from 'illa/StringUtil'
+import { render } from '../data/RenderMethods'
 import { Stroke } from '../data/Stroke'
+import { StrokeMenuComp } from './StrokeMenuComp'
 
 export declare namespace StrokeListComp {
 	interface Attrs {

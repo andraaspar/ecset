@@ -19,9 +19,9 @@
 
 import * as m from 'mithril'
 
-import { P } from '../statics'
-import { PaintLayerModel } from './PaintLayerModel'
 import { data } from '../data/DataMethods'
+import { PaintLayerModel } from './PaintLayerModel'
+import { P } from '../statics'
 
 export declare namespace PaintLayerComp {
 	interface Attrs {}

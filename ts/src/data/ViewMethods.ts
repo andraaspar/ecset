@@ -17,7 +17,7 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { isEqual, isEqualWith } from 'lodash'
+import { isEqualWith } from 'lodash'
 
 import { View } from './View'
 

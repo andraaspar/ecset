@@ -19,11 +19,9 @@
 
 import * as m from 'mithril'
 
-import { Point } from '../data/Point'
-import { PointLayerComp } from './PointLayerComp'
-import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
-import jQuery from 'jquery-ts'
+import { bind } from 'illa/FunctionUtil'
+import { Point } from '../data/Point'
 import { render } from '../data/RenderMethods'
 
 export class PointLayerModel {

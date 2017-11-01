@@ -19,16 +19,13 @@
 
 import * as m from 'mithril'
 
-import { P, get } from '../statics'
+import { get, P } from '../statics'
 import { createStroke } from '../data/StrokeMethods'
 
-import { BorderComp } from './BorderComp'
-import { FormSectionComp } from './FormSectionComp'
-import { Path } from '../data/Path'
-import { StrokeListComp } from './StrokeListComp'
-import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'
+import { FormSectionComp } from './FormSectionComp'
 import { render } from '../data/RenderMethods'
+import { StrokeListComp } from './StrokeListComp'
 
 export declare namespace StrokeListFormComp {
 	interface Attrs { }

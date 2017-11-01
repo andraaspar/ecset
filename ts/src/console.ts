@@ -1,6 +1,6 @@
+import { throttle } from 'illa/FunctionUtil'
 import { GLOBAL } from 'illa/GLOBAL'
 import { escapeHtml } from 'illa/StringUtil'
-import { throttle } from "illa/FunctionUtil";
 
 let out: HTMLElement
 let messages: string[] = []

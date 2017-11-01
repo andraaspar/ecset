@@ -18,8 +18,8 @@
  */
 
 import { GainInfo } from './GainInfo'
-import { Segment } from './Segment'
 import { Point } from './Point'
+import { Segment } from './Segment'
 
 export class SegmentInfo {
 	constructor(

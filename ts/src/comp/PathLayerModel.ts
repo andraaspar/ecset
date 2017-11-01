@@ -19,15 +19,12 @@
 
 import * as m from 'mithril'
 
-import { GLOBAL } from 'illa/GLOBAL'
-import { Path } from '../data/Path'
 import { BezierPath } from '../data/BezierPath'
-import { PathLayerComp } from './PathLayerComp'
-import { Point } from '../data/Point'
-import { bind } from 'illa/FunctionUtil'
+import { cloneBezierPath } from '../data/BezierPathMethods'
 import { data } from '../data/DataMethods'
+import { bind } from 'illa/FunctionUtil'
+import { Point } from '../data/Point'
 import { render } from '../data/RenderMethods'
-import { cloneBezierPath } from "../data/BezierPathMethods";
 
 export class PathLayerModel {
 

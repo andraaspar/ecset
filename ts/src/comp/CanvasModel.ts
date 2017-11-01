@@ -22,10 +22,10 @@ import * as m from 'mithril'
 import { addPoints, scaleVector, subtractPoints } from '../data/PointMethods'
 
 import { CanvasComp } from './CanvasComp'
-import { Point } from '../data/Point'
-import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
+import { bind } from 'illa/FunctionUtil'
 import jQuery from 'jquery-ts'
+import { Point } from '../data/Point'
 
 export class CanvasModel {
 	private attrs: CanvasComp.Attrs

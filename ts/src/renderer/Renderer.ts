@@ -17,24 +17,22 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { addPoints, reverseVector, toUnitVector } from '../data/PointMethods'
 import { getSegmentOfPath, pathLength, pathSegmentCount, pathYForX } from '../data/PathMethods'
+import { addPoints, reverseVector, toUnitVector } from '../data/PointMethods'
 import { segmentLength, segmentPointSide, segmentPointT, segmentToPointDistance, segmentToVector } from '../data/SegmentMethods'
 
-import { Color } from '../data/Color'
-import { Path } from '../data/Path'
+import { alphaMultiplierToColor, interpolateAlphaMultipliers } from '../data/AlphaMultiplierMethods'
 import { BezierPath } from '../data/BezierPath'
+import { Color } from '../data/Color'
 import { ColorField } from '../data/ColorField'
 import { ColorPath } from '../data/ColorPath'
-import { View } from '../data/View'
+import { Path } from '../data/Path'
+import { Point } from '../data/Point'
 import { Segment } from '../data/Segment'
 import { SegmentInfo } from '../data/SegmentInfo'
 import { getBySide } from '../data/SideMethods'
-import { interpolateColors } from '../data/ColorMethods'
-import { interpolateValues } from '../data/ValueMethods'
 import { itemAndItemT } from '../data/TMethods'
-import { Point } from "../data/Point";
-import { alphaMultiplierToColor, interpolateAlphaMultipliers } from "../data/AlphaMultiplierMethods";
+import { View } from '../data/View'
 
 export class Renderer {
 

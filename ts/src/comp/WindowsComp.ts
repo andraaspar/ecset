@@ -19,9 +19,9 @@
 
 import * as m from 'mithril'
 
-import { P } from '../statics'
 import { data } from '../data/DataMethods'
 import jQuery from 'jquery-ts'
+import { P } from '../statics'
 
 export declare namespace WindowsComp {
 	interface Attrs { }

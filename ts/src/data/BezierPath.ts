@@ -17,8 +17,8 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Path } from './Path'
 import { BezierPoint } from './BezierPoint'
+import { Path } from './Path'
 
 export class BezierPath {
 	constructor(

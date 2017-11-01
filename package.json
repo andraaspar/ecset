@@ -24,7 +24,8 @@
     "jquery-ts": "^2.1.1",
     "lodash": "^4.17.4",
     "mithril": "1.1.3",
-    "normalize.css": "^7.0.0"
+    "normalize.css": "^7.0.0",
+    "tslint": "^5.8.0"
   },
   "scripts": {
     "cleanCss": "rimraf js2css/index.css",
@@ -33,6 +34,7 @@
     "compileJs": "npm run cleanJs && webpack --config webpack.index.config.js",
     "compile": "npm run compileCss && npm run compileJs",
     "watchJs": "npm run cleanJs && webpack --watch --config webpack.index.config.js",
-    "watchCss": "npm run cleanCss && cd js2css && nodemon ."
+    "watchCss": "npm run cleanCss && cd js2css && nodemon .",
+    "lint": "tslint --project . --fix"
   }
 }

@@ -17,15 +17,15 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { BezierPath } from './BezierPath'
+import { BezierPoint } from './BezierPoint'
 import { Document } from './Document'
-import { View } from './View'
-import { Window } from './Window'
 import { Point } from './Point'
 import { RendererState } from './RendererState'
+import { Stroke } from './Stroke'
 import { TSet } from './TSet'
-import { Stroke } from "./Stroke";
-import { BezierPath } from "./BezierPath";
-import { BezierPoint } from "./BezierPoint";
+import { View } from './View'
+import { Window } from './Window'
 
 export class Data {
 	document: Document = new Document(

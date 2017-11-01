@@ -18,8 +18,8 @@
  */
 
 import { GLOBAL } from 'illa/GLOBAL'
-import { View } from './data/View'
 import { Renderer } from './renderer/Renderer'
+import { View } from './data/View'
 
 GLOBAL.onerror = function(m: string, f: string, r: number, c: number, e: any) {
 	GLOBAL.postMessage({

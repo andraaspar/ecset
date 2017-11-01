@@ -21,8 +21,7 @@ import * as m from 'mithril'
 
 import { BorderComp } from './BorderComp'
 import { P } from '../statics'
-import { data } from '../data/DataMethods'
-import { Stroke } from "../data/Stroke";
+import { Stroke } from '../data/Stroke'
 
 export declare namespace StrokeEditorComp {
 	interface Attrs { }

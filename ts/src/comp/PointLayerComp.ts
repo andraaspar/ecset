@@ -19,11 +19,9 @@
 
 import * as m from 'mithril'
 
-import { BezierKind } from '../data/BezierKind'
-import { P } from '../statics'
-import { PointLayerModel } from './PointLayerModel'
 import { data } from '../data/DataMethods'
-import { scaleVector } from '../data/PointMethods'
+import { PointLayerModel } from './PointLayerModel'
+import { P } from '../statics'
 
 export declare namespace PointLayerComp {
 	interface Attrs { }

@@ -17,11 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Path } from './Path'
 import { BezierPath } from './BezierPath'
 import { BezierPoint } from './BezierPoint'
+import { cloneBezierPoint, scaleRenderBezierPoint } from './BezierPointMethods'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
-import { scaleRenderBezierPoint, cloneBezierPoint } from './BezierPointMethods'
+import { Path } from './Path'
 
 export function linearizeRenderBezierPath(bezierPath: BezierPath): Path {
 	let path: Path = {

@@ -21,16 +21,11 @@ import * as m from 'mithril'
 
 import { bezierPathToSvg } from '../data/BezierPathMethods'
 
-import { BezierKind } from '../data/BezierKind'
-import { Path } from '../data/Path'
-import { BezierPath } from '../data/BezierPath'
-import { Stroke } from '../data/Stroke'
-import { P } from '../statics'
-import { PathLayerModel } from './PathLayerModel'
-import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'
-import { scaleRenderBezierPoint } from '../data/BezierPointMethods'
-import { vectorAngle } from '../data/PointMethods'
+import { Path } from '../data/Path'
+import { PathLayerModel } from './PathLayerModel'
+import { P } from '../statics'
+import { TSet } from '../data/TSet'
 
 export declare namespace PathLayerComp {
 	interface Attrs { }
