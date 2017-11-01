@@ -17,16 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { RenderStroke } from './RenderStroke'
-import { RenderTransform } from './RenderTransform'
+import { AlphaMultiplier } from './AlphaMultiplier'
+import { Color } from './Color'
+import { BezierPath } from './BezierPath'
 
-export class RenderView {
+export class ColorSegment {
 	constructor(
-		public channelCount: number,
-		public stroke: RenderStroke,
-		public transforms: RenderTransform[],
-		public width: number,
-		public height: number,
+		public a: AlphaMultiplier,
+		public b: AlphaMultiplier,
+		public tweenPath?: BezierPath,
+		public id?: string,
 	) {
 
 	}

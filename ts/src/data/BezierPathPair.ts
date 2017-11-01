@@ -17,12 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { RenderBezierPoint } from './RenderBezierPoint'
+import { BezierPath } from './BezierPath'
 
-export class RenderBezierSegment {
+export class BezierPathPair {
 	constructor(
-		public a: RenderBezierPoint,
-		public b: RenderBezierPoint,
+		public left: BezierPath,
+		public right: BezierPath,
+		public id?: string,
 	) {
 
 	}

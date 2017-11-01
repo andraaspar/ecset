@@ -19,9 +19,9 @@
 
 import { isEqual, isEqualWith } from 'lodash'
 
-import { RenderView } from './RenderView'
+import { View } from './View'
 
-export function viewsEqual(a: RenderView, b: RenderView) {
+export function viewsEqual(a: View, b: View) {
 	if (!isEqualWith(a, b, (a, b, key) => key === 'pathsById' ? true : undefined)) {
 		return false
 	}

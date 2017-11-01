@@ -18,7 +18,7 @@
  */
 
 import { GLOBAL } from 'illa/GLOBAL'
-import { RenderView } from './data/RenderView'
+import { View } from './data/View'
 import { Renderer } from './renderer/Renderer'
 
 GLOBAL.onerror = function(m: string, f: string, r: number, c: number, e: any) {
@@ -35,7 +35,7 @@ ${e ? e.stack : undefined}`
 export function onMessage(e: MessageEvent) {
 	// console.log('Render starting...')
 	GLOBAL.postMessage({ log: 'Render starting...' })
-	let view: RenderView = e.data
+	let view: View = e.data
 	var renderer = new Renderer(view)
 	renderer.render()
 	// console.log('Render finished.')

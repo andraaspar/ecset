@@ -17,15 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Point } from './Point'
+import { Stroke } from './Stroke'
 
-export class RenderTransform {
+export class Document {
 	constructor(
-		public offset: Point,
-		public scale: number,
-		public rotation: number,
-		public pivot: Point,
-		public id?: string,
+		public channelCount: number,
+		public width: number,
+		public height: number,
+		public strokes: Stroke[],
 	) {
 
 	}

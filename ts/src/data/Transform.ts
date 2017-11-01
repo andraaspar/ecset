@@ -19,11 +19,12 @@
 
 import { Point } from './Point'
 
-export class RenderBezierPoint {
+export class Transform {
 	constructor(
-		public handleIn: Point,
-		public center: Point,
-		public handleOut: Point,
+		public offset: Point,
+		public scale: number,
+		public rotation: number,
+		public pivot: Point,
 		public id?: string,
 	) {
 

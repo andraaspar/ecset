@@ -21,7 +21,7 @@ import * as m from 'mithril'
 
 import { GLOBAL } from 'illa/GLOBAL'
 import { Path } from '../data/Path'
-import { RenderBezierPath } from '../data/RenderBezierPath'
+import { BezierPath } from '../data/BezierPath'
 import { PathLayerComp } from './PathLayerComp'
 import { Point } from '../data/Point'
 import { bind } from 'illa/FunctionUtil'
@@ -31,11 +31,11 @@ import { cloneBezierPath } from "../data/BezierPathMethods";
 
 export class PathLayerModel {
 
-	private selection: RenderBezierPath
-	private startSelection: RenderBezierPath
+	private selection: BezierPath
+	private startSelection: BezierPath
 	private startMouse: Point
 
-	startDrag(path: RenderBezierPath, e: MouseEvent): void {
+	startDrag(path: BezierPath, e: MouseEvent): void {
 		if (e.button == 0) {
 			this.selection = path
 			this.startSelection = cloneBezierPath(path)

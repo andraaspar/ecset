@@ -17,15 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AlphaMultiplier } from './AlphaMultiplier'
-import { Color } from './Color'
-import { RenderBezierPath } from './RenderBezierPath'
+import { BezierPath } from './BezierPath'
+import { ColorPath } from './ColorPath'
 
-export class RenderColorSegment {
+export class ColorField {
 	constructor(
-		public a: AlphaMultiplier,
-		public b: AlphaMultiplier,
-		public tweenPath?: RenderBezierPath,
+		public a: ColorPath,
+		public b: ColorPath,
+		public colorTweenPaths: BezierPath[],
 		public id?: string,
 	) {
 

@@ -20,7 +20,7 @@
 import { pointDistance, pointPosition, subtractPoints, vectorAngle } from './PointMethods'
 
 import { Axis2D } from 'illa/Axis2D'
-import { RenderBezierSegment } from './RenderBezierSegment'
+import { BezierSegment } from './BezierSegment'
 import { Point } from './Point'
 import { angleDifference } from './AngleMethods'
 import { bezierPosition } from './BezierMethods'
@@ -28,7 +28,7 @@ import { bezierPosition } from './BezierMethods'
 const AXES = [Axis2D.X, Axis2D.Y]
 const DOUBLE_PI = Math.PI * 2
 
-export function linearizeBezierSegment(segment: RenderBezierSegment, detailMultiplier: number): Point[] {
+export function linearizeBezierSegment(segment: BezierSegment, detailMultiplier: number): Point[] {
 	let result: Point[] = []
 	let positionsX: number[] = []
 	

@@ -23,10 +23,10 @@ import { segmentLength, segmentPointSide, segmentPointT, segmentToPointDistance,
 
 import { Color } from '../data/Color'
 import { Path } from '../data/Path'
-import { RenderBezierPath } from '../data/RenderBezierPath'
-import { RenderColorField } from '../data/RenderColorField'
-import { RenderColorPath } from '../data/RenderColorPath'
-import { RenderView } from '../data/RenderView'
+import { BezierPath } from '../data/BezierPath'
+import { ColorField } from '../data/ColorField'
+import { ColorPath } from '../data/ColorPath'
+import { View } from '../data/View'
 import { Segment } from '../data/Segment'
 import { SegmentInfo } from '../data/SegmentInfo'
 import { getBySide } from '../data/SideMethods'
@@ -45,7 +45,7 @@ export class Renderer {
 	private pixels: Uint8ClampedArray
 
 	constructor(
-		private view: RenderView
+		private view: View
 	) {
 		this.path = this.view.stroke.bezierPath.path
 	}
@@ -242,8 +242,8 @@ export class Renderer {
 		info.focusDistance = totalTGain ? Math.abs(1 / totalTGain) : 0
 	}
 
-	getRenderColorPathAtT(colorField: RenderColorField, t: number): RenderColorPath {
-		let result: RenderColorPath = {
+	getRenderColorPathAtT(colorField: ColorField, t: number): ColorPath {
+		let result: ColorPath = {
 			segments: [],
 		}
 		let segmentTs: number[] = []
@@ -264,7 +264,7 @@ export class Renderer {
 		return this.pixels
 	}
 	
-	getColorPathTsAtT(parallelPaths: RenderBezierPath[], pathT: number) {
+	getColorPathTsAtT(parallelPaths: BezierPath[], pathT: number) {
 		let result = parallelPaths.map(path => pathYForX(path.path, pathT))
 		let total = result.reduce((sum, value) => sum + value)
 		let lastValue = 0

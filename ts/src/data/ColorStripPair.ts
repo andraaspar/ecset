@@ -17,21 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { RenderBezierPath } from './RenderBezierPath'
-import { RenderBezierPathPair } from './RenderBezierPathPair'
-import { RenderColorStripPair } from './RenderColorStripPair'
-import { RenderTransform } from './RenderTransform'
+import { ColorStrip } from './ColorStrip'
 
-export class RenderStroke {
+export class ColorStripPair {
 	constructor(
-		public stripPair: RenderColorStripPair,
-		public bezierPath: RenderBezierPath,
-		public thicknessPair: RenderBezierPathPair,
-		public children: RenderStroke[],
-		public transform: RenderTransform,
-		public parent?: RenderStroke,
+		public left: ColorStrip,
+		public right: ColorStrip,
 		public id?: string,
-		public name?: string,
 	) {
 
 	}

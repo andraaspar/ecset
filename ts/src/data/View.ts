@@ -17,12 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { RenderColorSegment } from './RenderColorSegment'
+import { Stroke } from './Stroke'
+import { Transform } from './Transform'
 
-export class RenderColorPath {
+export class View {
 	constructor(
-		public segments: RenderColorSegment[],
-		public id?: string,
+		public channelCount: number,
+		public stroke: Stroke,
+		public transforms: Transform[],
+		public width: number,
+		public height: number,
 	) {
 
 	}

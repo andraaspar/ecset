@@ -17,14 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { RenderStroke } from './RenderStroke'
+import { BezierPath } from './BezierPath'
+import { BezierPathPair } from './BezierPathPair'
+import { ColorStripPair } from './ColorStripPair'
+import { Transform } from './Transform'
 
-export class RenderDocument {
+export class Stroke {
 	constructor(
-		public channelCount: number,
-		public width: number,
-		public height: number,
-		public strokes: RenderStroke[],
+		public stripPair: ColorStripPair,
+		public bezierPath: BezierPath,
+		public thicknessPair: BezierPathPair,
+		public children: Stroke[],
+		public transform: Transform,
+		public parent?: Stroke,
+		public id?: string,
+		public name?: string,
 	) {
 
 	}

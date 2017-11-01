@@ -21,7 +21,7 @@ import * as m from 'mithril'
 
 import { cloneBezierPoint } from '../data/BezierPointMethods'
 
-import { RenderBezierPoint } from '../data/RenderBezierPoint'
+import { BezierPoint } from '../data/BezierPoint'
 import { Point } from '../data/Point'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'
@@ -29,11 +29,11 @@ import { render } from '../data/RenderMethods'
 
 export class BezierPointLayerModel {
 
-	private selection: RenderBezierPoint
+	private selection: BezierPoint
 	private startMouse: Point
-	private startSelection: RenderBezierPoint
+	private startSelection: BezierPoint
 
-	startDrag(bezierPoint: RenderBezierPoint, e: MouseEvent): void {
+	startDrag(bezierPoint: BezierPoint, e: MouseEvent): void {
 		if (e.button == 0) {
 			this.selection = bezierPoint
 			this.startSelection = cloneBezierPoint(bezierPoint)
