@@ -21,12 +21,12 @@ import { pointDistance, pointPosition } from './PointMethods'
 
 import { Axis2D } from 'illa/Axis2D'
 import { End } from 'illa/End'
-import { IPath } from './IPath'
-import { ISegment } from './ISegment'
+import { Path } from './Path'
+import { Segment } from './Segment'
 import { interpolateValues } from './ValueMethods'
 
-export function getSegmentOfPath(path: IPath, i: number): ISegment {
-	let result = new ISegment(
+export function getSegmentOfPath(path: Path, i: number): Segment {
+	let result = new Segment(
 		path.points[i],
 		path.points[(i + 1) % path.points.length]
 	)
@@ -34,15 +34,15 @@ export function getSegmentOfPath(path: IPath, i: number): ISegment {
 	return result
 }
 
-export function pathSegmentCount(path: IPath): number {
+export function pathSegmentCount(path: Path): number {
 	return path.points.length - (path.isLoop ? 0 : 1)
 }
 
-export function pathSize(path: IPath, axis: Axis2D): number {
+export function pathSize(path: Path, axis: Axis2D): number {
 	return pathPosition(path, axis, End.MAX) - pathPosition(path, axis, End.MIN)
 }
 
-export function pathPosition(path: IPath, axis: Axis2D, end: End): number {
+export function pathPosition(path: Path, axis: Axis2D, end: End): number {
 	let result = end == End.MIN ? Infinity : -Infinity
 	let test = end == End.MIN ? Math.min : Math.max
 
@@ -57,7 +57,7 @@ export function pathPosition(path: IPath, axis: Axis2D, end: End): number {
 	return result
 }
 
-export function pathLength(path: IPath): number {
+export function pathLength(path: Path): number {
 	let result = 0
 	let pointCount = path.points.length
 	if (pointCount) {
@@ -71,7 +71,7 @@ export function pathLength(path: IPath): number {
 	return result
 }
 
-export function pathYForX(path: IPath, x: number) {
+export function pathYForX(path: Path, x: number) {
 	let pointA = path.points[0]
 	if (x < pointA.x) return pointA.y
 	for (let i = 1, n = path.points.length; i < n; i++) {

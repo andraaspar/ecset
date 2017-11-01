@@ -17,12 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Point } from './IPoint'
+import { AlphaMultiplier } from './AlphaMultiplier'
+import { Color } from './Color'
+import { RenderBezierPath } from './RenderBezierPath'
 
-export class ISegment {
+export class RenderColorSegment {
 	constructor(
-		public a: Point,
-		public b: Point,
+		public a: AlphaMultiplier,
+		public b: AlphaMultiplier,
+		public tweenPath?: RenderBezierPath,
+		public id?: string,
 	) {
 
 	}

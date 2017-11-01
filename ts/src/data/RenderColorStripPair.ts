@@ -17,12 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPoint } from './IRenderBezierPoint'
+import { RenderColorStrip } from './RenderColorStrip'
 
-export class IRenderBezierSegment {
+export class RenderColorStripPair {
 	constructor(
-		public a: IRenderBezierPoint,
-		public b: IRenderBezierPoint,
+		public left: RenderColorStrip,
+		public right: RenderColorStrip,
+		public id?: string,
 	) {
 
 	}

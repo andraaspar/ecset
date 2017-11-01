@@ -17,15 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Point } from './IPoint'
+import { Point } from './Point'
 
-export class IRenderTransform {
+export class Segment {
 	constructor(
-		public offset: Point,
-		public scale: number,
-		public rotation: number,
-		public pivot: Point,
-		public id?: string,
+		public a: Point,
+		public b: Point,
 	) {
 
 	}

@@ -22,7 +22,7 @@ import * as m from 'mithril'
 import { BorderComp } from './BorderComp'
 import { P } from '../statics'
 import { data } from '../data/DataMethods'
-import { IRenderStroke } from "../data/IRenderStroke";
+import { RenderStroke } from "../data/RenderStroke";
 
 export declare namespace StrokeEditorComp {
 	interface Attrs { }
@@ -37,7 +37,7 @@ export const StrokeEditorComp: m.Comp<StrokeEditorComp.Attrs, StrokeEditorComp.S
 	// onbeforeupdate(v, o) {},
 	view(v) {
 		//let selectedStrokeIds = Object.keys(data.selectedStrokeIds)
-		let stroke = undefined as IRenderStroke //selectedStrokeIds.length == 1 ? data.document.strokesById[selectedStrokeIds[0]] : undefined
+		let stroke = undefined as RenderStroke //selectedStrokeIds.length == 1 ? data.document.strokesById[selectedStrokeIds[0]] : undefined
 		return (
 			m(`div`, { 'class': `${P}-form-section` },
 				m(`div`, { 'class': `${P}-form-title` },

@@ -28,12 +28,12 @@ import { StrokeMenuComp } from './StrokeMenuComp'
 import { data } from '../data/DataMethods'
 import { render } from '../data/RenderMethods'
 import { uuid } from 'illa/StringUtil'
-import { IRenderStroke } from '../data/IRenderStroke'
+import { RenderStroke } from '../data/RenderStroke'
 
 export declare namespace StrokeListComp {
 	interface Attrs {
-		stroke?: IRenderStroke
-		strokes: IRenderStroke[]
+		stroke?: RenderStroke
+		strokes: RenderStroke[]
 	}
 	interface State {
 		onContextMenu?: (e: MouseEvent) => void

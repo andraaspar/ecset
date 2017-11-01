@@ -22,9 +22,9 @@ import * as m from 'mithril'
 import { bezierPathToSvg } from '../data/BezierPathMethods'
 
 import { BezierKind } from '../data/BezierKind'
-import { IPath } from '../data/IPath'
-import { IRenderBezierPath } from '../data/IRenderBezierPath'
-import { IRenderStroke } from '../data/IRenderStroke'
+import { Path } from '../data/Path'
+import { RenderBezierPath } from '../data/RenderBezierPath'
+import { RenderStroke } from '../data/RenderStroke'
 import { P } from '../statics'
 import { PathLayerModel } from './PathLayerModel'
 import { TSet } from '../data/TSet'
@@ -46,7 +46,7 @@ export const PathLayerComp: m.Comp<PathLayerComp.Attrs, PathLayerComp.State> = {
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		let s: TSet<IPath> = {}
+		let s: TSet<Path> = {}
 		let strokes = data.document.strokes
 		return (
 			strokes.sort((a, b) => {

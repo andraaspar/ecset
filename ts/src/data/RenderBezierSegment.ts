@@ -17,16 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from './IPath'
-import { IRenderBezierPoint } from './IRenderBezierPoint'
+import { RenderBezierPoint } from './RenderBezierPoint'
 
-export class IRenderBezierPath {
+export class RenderBezierSegment {
 	constructor(
-		public points: IRenderBezierPoint[],
-		public isLoop: boolean,
-		public detail?: number,
-		public id?: string,
-		public path?: IPath,
+		public a: RenderBezierPoint,
+		public b: RenderBezierPoint,
 	) {
 
 	}

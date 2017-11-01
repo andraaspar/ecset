@@ -17,12 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderColorSegment } from './IRenderColorSegment'
+import { Point } from './Point'
 
-export class IRenderColorPath {
+export class Path {
 	constructor(
-		public segments: IRenderColorSegment[],
-		public id?: string,
+		public points: Point[],
+		public isLoop: boolean,
 	) {
 
 	}

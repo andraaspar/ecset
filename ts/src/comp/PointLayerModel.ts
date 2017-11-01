@@ -19,7 +19,7 @@
 
 import * as m from 'mithril'
 
-import { Point } from '../data/IPoint'
+import { Point } from '../data/Point'
 import { PointLayerComp } from './PointLayerComp'
 import { bind } from 'illa/FunctionUtil'
 import { data } from '../data/DataMethods'

@@ -17,13 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IColor } from './IColor'
-import { IPath } from './IPath'
+import { Color } from './Color'
+import { Path } from './Path'
 import { interpolateValues } from './ValueMethods'
 
-export function interpolateColors(a: IColor, b: IColor, t: number, path?: IPath): IColor {
+export function interpolateColors(a: Color, b: Color, t: number, path?: Path): Color {
 	let length = Math.max(a.channelValues.length, b.channelValues.length)
-	let result: IColor = {
+	let result: Color = {
 		channelValues: [],
 	}
 	for (let i = 0; i < length; i++) {
@@ -35,7 +35,7 @@ export function interpolateColors(a: IColor, b: IColor, t: number, path?: IPath)
 }
 
 export function createViewColor(channelCount: number, alphaValue: number, ...values: number[]) {
-	let result: IColor = new IColor(
+	let result: Color = new Color(
 		[alphaValue].concat(values).map(sanitizeChannelValue),
 	)
 	if (channelCount != result.channelValues.length) throw 'oorba3'

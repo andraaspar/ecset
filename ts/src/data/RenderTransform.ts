@@ -17,14 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderColorPath } from './IRenderColorPath'
+import { Point } from './Point'
 
-export class IRenderColorField {
+export class RenderTransform {
 	constructor(
-		public a: IRenderColorPath,
-		public b: IRenderColorPath,
-		public colorTweenPaths: IRenderBezierPath[],
+		public offset: Point,
+		public scale: number,
+		public rotation: number,
+		public pivot: Point,
 		public id?: string,
 	) {
 

@@ -17,11 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPoint } from './IRenderBezierPoint'
-import { IRenderStroke } from './IRenderStroke'
+import { RenderBezierPoint } from './RenderBezierPoint'
+import { RenderStroke } from './RenderStroke'
 
-export function getBezierPointsFromStrokes(strokes: IRenderStroke[]) {
-	let result: IRenderBezierPoint[] = []
+export function getBezierPointsFromStrokes(strokes: RenderStroke[]) {
+	let result: RenderBezierPoint[] = []
 	for (let stroke of strokes) {
 		result = result.concat(stroke.bezierPath.points, getBezierPointsFromStrokes(stroke.children))
 	}

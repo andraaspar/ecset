@@ -20,10 +20,10 @@
 import * as m from 'mithril'
 import * as RenderWorker from '../worker'
 
-import { IRenderDocument } from './IRenderDocument'
-import { IRenderStroke } from './IRenderStroke'
-import { IRenderTransform } from './IRenderTransform'
-import { IRenderView } from './IRenderView'
+import { RenderDocument } from './RenderDocument'
+import { RenderStroke } from './RenderStroke'
+import { RenderTransform } from './RenderTransform'
+import { RenderView } from './RenderView'
 import { RendererState } from './RendererState'
 import { data } from './DataMethods'
 import { isEqual } from 'lodash'
@@ -64,10 +64,10 @@ function createRenderers(count: number) {
 	}
 }
 
-function createViews(d: IRenderDocument, strokes: IRenderStroke[], transforms: IRenderTransform[] = []) {
-	let views: IRenderView[] = []
+function createViews(d: RenderDocument, strokes: RenderStroke[], transforms: RenderTransform[] = []) {
+	let views: RenderView[] = []
 	for (let stroke of strokes) {
-		let view: IRenderView = {
+		let view: RenderView = {
 			channelCount: data.document.channelCount,
 			height: data.document.height,
 			stroke: stroke,
@@ -80,7 +80,7 @@ function createViews(d: IRenderDocument, strokes: IRenderStroke[], transforms: I
 	return views
 }
 
-function startRender(renderer: Worker, index: number, views: IRenderView[], renderDocument: IRenderDocument) {
+function startRender(renderer: Worker, index: number, views: RenderView[], renderDocument: RenderDocument) {
 	let view = views.pop()
 	if (view) {
 		data.rendererStates[index] = RendererState.BUSY

@@ -17,16 +17,10 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderStroke } from './IRenderStroke'
-import { IRenderTransform } from './IRenderTransform'
-
-export class IRenderView {
+export class GainInfo {
 	constructor(
-		public channelCount: number,
-		public stroke: IRenderStroke,
-		public transforms: IRenderTransform[],
-		public width: number,
-		public height: number,
+		public a: number,
+		public b: number,
 	) {
 
 	}

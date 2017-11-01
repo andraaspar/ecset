@@ -17,14 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderStroke } from './IRenderStroke'
+import { RenderStroke } from './RenderStroke'
 
-export class IRenderDocument {
+export class RenderDocument {
 	constructor(
 		public channelCount: number,
 		public width: number,
 		public height: number,
-		public strokes: IRenderStroke[],
+		public strokes: RenderStroke[],
 	) {
 
 	}

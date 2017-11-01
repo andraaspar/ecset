@@ -17,21 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderBezierPathPair } from './IRenderBezierPathPair'
-import { IRenderColorStripPair } from './IRenderColorStripPair'
-import { IRenderTransform } from './IRenderTransform'
+import { Path } from './Path'
+import { RenderBezierPoint } from './RenderBezierPoint'
 
-export class IRenderStroke {
+export class RenderBezierPath {
 	constructor(
-		public stripPair: IRenderColorStripPair,
-		public bezierPath: IRenderBezierPath,
-		public thicknessPair: IRenderBezierPathPair,
-		public children: IRenderStroke[],
-		public transform: IRenderTransform,
-		public parent?: IRenderStroke,
+		public points: RenderBezierPoint[],
+		public isLoop: boolean,
+		public detail?: number,
 		public id?: string,
-		public name?: string,
+		public path?: Path,
 	) {
 
 	}

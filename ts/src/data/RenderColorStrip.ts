@@ -17,12 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IRenderBezierPath } from './IRenderBezierPath'
+import { RenderBezierPath } from './RenderBezierPath'
+import { RenderColorField } from './RenderColorField'
 
-export class IRenderBezierPathPair {
+export class RenderColorStrip {
 	constructor(
-		public left: IRenderBezierPath,
-		public right: IRenderBezierPath,
+		public colorFields: RenderColorField[],
+		public colorFieldTs: number[],
+		public parallelTPaths: RenderBezierPath[],
 		public id?: string,
 	) {
 

@@ -17,14 +17,14 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from './IPath'
-import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderBezierPoint } from './IRenderBezierPoint'
+import { Path } from './Path'
+import { RenderBezierPath } from './RenderBezierPath'
+import { RenderBezierPoint } from './RenderBezierPoint'
 import { linearizeBezierSegment } from './BezierSegmentMethods'
 import { scaleRenderBezierPoint, cloneBezierPoint } from './BezierPointMethods'
 
-export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath): IPath {
-	let path: IPath = {
+export function linearizeRenderBezierPath(bezierPath: RenderBezierPath): Path {
+	let path: Path = {
 		points: [],
 		isLoop: bezierPath.isLoop
 	}
@@ -55,9 +55,9 @@ export function linearizeRenderBezierPath(bezierPath: IRenderBezierPath): IPath 
 	return path
 }
 
-export function bezierPathToSvg(bezierPath: IRenderBezierPath, scale: number): string {
+export function bezierPathToSvg(bezierPath: RenderBezierPath, scale: number): string {
 	let result = ''
-	let prevBezierPoint: IRenderBezierPoint
+	let prevBezierPoint: RenderBezierPoint
 	for (let i = 0, n = bezierPath.points.length; i < n; i++) {
 		let bezierPoint = scaleRenderBezierPoint(bezierPath.points[i], scale)
 		if (i == 0) {
@@ -74,8 +74,8 @@ export function bezierPathToSvg(bezierPath: IRenderBezierPath, scale: number): s
 	return result
 }
 
-export function cloneBezierPath(p: IRenderBezierPath) {
-	return new IRenderBezierPath(
+export function cloneBezierPath(p: RenderBezierPath) {
+	return new RenderBezierPath(
 		p.points.map(cloneBezierPoint),
 		p.isLoop,
 		p.detail,

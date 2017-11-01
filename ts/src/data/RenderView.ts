@@ -17,10 +17,16 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export class IGainInfo {
+import { RenderStroke } from './RenderStroke'
+import { RenderTransform } from './RenderTransform'
+
+export class RenderView {
 	constructor(
-		public a: number,
-		public b: number,
+		public channelCount: number,
+		public stroke: RenderStroke,
+		public transforms: RenderTransform[],
+		public width: number,
+		public height: number,
 	) {
 
 	}

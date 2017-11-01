@@ -23,11 +23,11 @@ import { MenuWindowComp } from './MenuWindowComp'
 import { P } from '../statics'
 import { data } from '../data/DataMethods'
 import { render } from '../data/RenderMethods'
-import { IRenderStroke } from "../data/IRenderStroke";
+import { RenderStroke } from "../data/RenderStroke";
 
 export declare namespace StrokeMenuComp {
 	interface Attrs {
-		strokes: IRenderStroke[]
+		strokes: RenderStroke[]
 		index: number
 	}
 	interface State { }

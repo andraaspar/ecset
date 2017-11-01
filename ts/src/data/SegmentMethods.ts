@@ -19,22 +19,22 @@
 
 import { addPoints, perpProduct, perpendicularVector, pointDistance, subtractPoints, vectorAngle } from './PointMethods'
 
-import { ISegment } from './ISegment'
-import { Point } from './IPoint'
+import { Segment } from './Segment'
+import { Point } from './Point'
 import { angleSide } from './AngleMethods'
 
-export function segmentLength(segment: ISegment): number {
+export function segmentLength(segment: Segment): number {
 	return pointDistance(segment.a, segment.b)
 }
 
-export function segmentToPointDistance(segment: ISegment, point: Point): number {
+export function segmentToPointDistance(segment: Segment, point: Point): number {
 	// http://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
 	let distance = Math.abs((segment.b.y - segment.a.y) * point.x - (segment.b.x - segment.a.x) * point.y + segment.b.x * segment.a.y - segment.b.y * segment.a.x) / Math.sqrt(Math.pow(segment.b.y - segment.a.y, 2) + Math.pow(segment.b.x - segment.a.x, 2))
 	// distance *= pointSide(segment, point)
 	return distance
 }
 
-export function segmentPointSide(segment: ISegment, point: Point): number {
+export function segmentPointSide(segment: Segment, point: Point): number {
 	let segmentVector = segmentToVector(segment)
 	let pointVector = subtractPoints(point, segment.a)
 	let segmentAngle = vectorAngle(segmentVector)
@@ -42,16 +42,16 @@ export function segmentPointSide(segment: ISegment, point: Point): number {
 	return angleSide(segmentAngle, pointAngle)
 }
 
-export function segmentPointT(segment: ISegment, point: Point): number {
+export function segmentPointT(segment: Segment, point: Point): number {
 	let ps = perpendicularSegment(segment, point)
 	return segmentIntersectionT(segment, ps)
 }
 
-export function segmentToVector(segment: ISegment): Point {
+export function segmentToVector(segment: Segment): Point {
 	return subtractPoints(segment.b, segment.a)
 }
 
-export function segmentIntersectionT(a: ISegment, b: ISegment): number {
+export function segmentIntersectionT(a: Segment, b: Segment): number {
 	let v1 = segmentToVector(b)
 	let v2 = segmentToVector(a)
 	let v3 = subtractPoints(b.a, a.a)
@@ -59,8 +59,8 @@ export function segmentIntersectionT(a: ISegment, b: ISegment): number {
 	return perpProduct(v3, v1) / perpProduct(v2, v1)
 }
 
-export function perpendicularSegment(segment: ISegment, a: Point, clockwise?: boolean): ISegment {
-	let result: ISegment = {
+export function perpendicularSegment(segment: Segment, a: Point, clockwise?: boolean): Segment {
+	let result: Segment = {
 		a: a,
 		b: addPoints(a, perpendicularVector(segmentToVector(segment), clockwise))
 	}

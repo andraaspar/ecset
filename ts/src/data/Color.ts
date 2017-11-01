@@ -17,12 +17,10 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as m from 'mithril'
-
-export class IWindow {
+export class Color {
 	constructor(
-		public id: string,
-		public contentFactory: () => m.Comp<any, any>,
+		public channelValues: number[],
+		public id?: string,
 	) {
 
 	}

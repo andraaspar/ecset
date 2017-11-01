@@ -17,9 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export class IColor {
+import { Point } from './Point'
+
+export class RenderBezierPoint {
 	constructor(
-		public channelValues: number[],
+		public handleIn: Point,
+		public center: Point,
+		public handleOut: Point,
 		public id?: string,
 	) {
 

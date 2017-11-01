@@ -17,14 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Point } from './IPoint'
+import { GainInfo } from './GainInfo'
+import { Segment } from './Segment'
+import { Point } from './Point'
 
-export class IRenderBezierPoint {
+export class SegmentInfo {
 	constructor(
-		public handleIn: Point,
-		public center: Point,
-		public handleOut: Point,
-		public id?: string,
+		public segment: Segment,
+		public length: number,
+		public tGain: GainInfo,
+		public originDistance: number,
+		public distanceChange: Point,
+		public originT: number,
+		public tChange: Point,
+		public focusDistance: number,
+		public focusSide: number,
 	) {
 
 	}

@@ -24,7 +24,7 @@ import { createStroke } from '../data/StrokeMethods'
 
 import { BorderComp } from './BorderComp'
 import { FormSectionComp } from './FormSectionComp'
-import { IPath } from '../data/IPath'
+import { Path } from '../data/Path'
 import { StrokeListComp } from './StrokeListComp'
 import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'

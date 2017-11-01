@@ -17,12 +17,12 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Point } from './IPoint'
+import * as m from 'mithril'
 
-export class IPath {
+export class Window {
 	constructor(
-		public points: Point[],
-		public isLoop: boolean,
+		public id: string,
+		public contentFactory: () => m.Comp<any, any>,
 	) {
 
 	}

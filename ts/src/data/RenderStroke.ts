@@ -17,16 +17,21 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AlphaMultiplier } from './AlphaMultiplier'
-import { IColor } from './IColor'
-import { IRenderBezierPath } from './IRenderBezierPath'
+import { RenderBezierPath } from './RenderBezierPath'
+import { RenderBezierPathPair } from './RenderBezierPathPair'
+import { RenderColorStripPair } from './RenderColorStripPair'
+import { RenderTransform } from './RenderTransform'
 
-export class IRenderColorSegment {
+export class RenderStroke {
 	constructor(
-		public a: AlphaMultiplier,
-		public b: AlphaMultiplier,
-		public tweenPath?: IRenderBezierPath,
+		public stripPair: RenderColorStripPair,
+		public bezierPath: RenderBezierPath,
+		public thicknessPair: RenderBezierPathPair,
+		public children: RenderStroke[],
+		public transform: RenderTransform,
+		public parent?: RenderStroke,
 		public id?: string,
+		public name?: string,
 	) {
 
 	}

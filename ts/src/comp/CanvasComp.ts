@@ -21,11 +21,11 @@ import * as m from 'mithril'
 
 import { BezierPointLayerComp } from './BezierPointLayerComp'
 import { CanvasModel } from './CanvasModel'
-import { IPath } from '../data/IPath'
+import { Path } from '../data/Path'
 import { P } from '../statics'
 import { PaintLayerComp } from './PaintLayerComp'
 import { PathLayerComp } from './PathLayerComp'
-import { Point } from '../data/IPoint'
+import { Point } from '../data/Point'
 import { PointLayerComp } from './PointLayerComp'
 import { TSet } from '../data/TSet'
 import { data } from '../data/DataMethods'
@@ -49,7 +49,7 @@ export const CanvasComp: m.Comp<CanvasComp.Attrs, CanvasComp.State> = {
 	// oninit(v) {},
 	// onbeforeupdate(v, o) {},
 	view(v) {
-		let s: TSet<IPath> = {}
+		let s: TSet<Path> = {}
 		return (
 			m('div', {
 				'class': `${P}-canvas-area`,

@@ -17,11 +17,11 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IColor } from './IColor'
+import { Color } from './Color'
 
 export class AlphaMultiplier {
 	constructor(
-		public color: IColor,
+		public color: Color,
 		public alphaMultiplier: number,
 	) {
 		

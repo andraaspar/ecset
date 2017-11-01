@@ -21,19 +21,19 @@ import { AlphaMultiplier } from './AlphaMultiplier'
 import { BezierKind } from './BezierKind'
 import { CircularReferenceError } from '../error/CircularReferenceError'
 import { Data } from './Data'
-import { IColor } from './IColor'
-import { IPath } from './IPath'
-import { IRenderBezierPath } from './IRenderBezierPath'
-import { IRenderBezierPathPair } from './IRenderBezierPathPair'
-import { IRenderBezierPoint } from './IRenderBezierPoint'
-import { IRenderColorField } from './IRenderColorField'
-import { IRenderColorPath } from './IRenderColorPath'
-import { IRenderColorSegment } from './IRenderColorSegment'
-import { IRenderColorStrip } from './IRenderColorStrip'
-import { IRenderColorStripPair } from './IRenderColorStripPair'
-import { IRenderStroke } from './IRenderStroke'
-import { IRenderTransform } from './IRenderTransform'
-import { Point } from './IPoint'
+import { Color } from './Color'
+import { Path } from './Path'
+import { RenderBezierPath } from './RenderBezierPath'
+import { RenderBezierPathPair } from './RenderBezierPathPair'
+import { RenderBezierPoint } from './RenderBezierPoint'
+import { RenderColorField } from './RenderColorField'
+import { RenderColorPath } from './RenderColorPath'
+import { RenderColorSegment } from './RenderColorSegment'
+import { RenderColorStrip } from './RenderColorStrip'
+import { RenderColorStripPair } from './RenderColorStripPair'
+import { RenderStroke } from './RenderStroke'
+import { RenderTransform } from './RenderTransform'
+import { Point } from './Point'
 import { TSet } from './TSet'
 import { createGrayViewColor } from './ColorMethods'
 import { uuid } from 'illa/StringUtil'
@@ -48,14 +48,14 @@ export function createStroke(channelCount: number) {
 	let white100 = new AlphaMultiplier(white, 1)
 	let white0 = new AlphaMultiplier(white, 0)
 
-	let linearPath = new IRenderBezierPath(
+	let linearPath = new RenderBezierPath(
 		[
-			new IRenderBezierPoint(
+			new RenderBezierPoint(
 				new Point(0, 0),
 				new Point(0, 0),
 				new Point(0, 0),
 			),
-			new IRenderBezierPoint(
+			new RenderBezierPoint(
 				new Point(1, 1),
 				new Point(1, 1),
 				new Point(1, 1),
@@ -63,14 +63,14 @@ export function createStroke(channelCount: number) {
 		],
 		false
 	)
-	let curvePath = new IRenderBezierPath(
+	let curvePath = new RenderBezierPath(
 		[
-			new IRenderBezierPoint(
+			new RenderBezierPoint(
 				new Point(100, 100),
 				new Point(300, 80),
 				new Point(400, 100),
 			),
-			new IRenderBezierPoint(
+			new RenderBezierPoint(
 				new Point(600, 900),
 				new Point(700, 920),
 				new Point(900, 900),
@@ -79,30 +79,30 @@ export function createStroke(channelCount: number) {
 		false
 	)
 
-	let colorSegmentBlack100ToWhite0 = new IRenderColorSegment(
+	let colorSegmentBlack100ToWhite0 = new RenderColorSegment(
 		black100,
 		white0,
 		linearPath,
 	)
-	let colorSegmentWhite100ToBlack0 = new IRenderColorSegment(
+	let colorSegmentWhite100ToBlack0 = new RenderColorSegment(
 		white100,
 		black0,
 		linearPath,
 	)
-	let colorPathBlack100ToWhite0 = new IRenderColorPath(
+	let colorPathBlack100ToWhite0 = new RenderColorPath(
 		[
 			colorSegmentBlack100ToWhite0,
 			colorSegmentWhite100ToBlack0,
 		]
 	)
-	let colorPathWhite100ToBlack0 = new IRenderColorPath(
+	let colorPathWhite100ToBlack0 = new RenderColorPath(
 		[
 			colorSegmentWhite100ToBlack0,
 			colorSegmentBlack100ToWhite0,
 		]
 	)
 
-	let colorField = new IRenderColorField(
+	let colorField = new RenderColorField(
 		colorPathBlack100ToWhite0,
 		colorPathWhite100ToBlack0,
 		[
@@ -110,7 +110,7 @@ export function createStroke(channelCount: number) {
 		]
 	)
 
-	let colorStrip = new IRenderColorStrip(
+	let colorStrip = new RenderColorStrip(
 		[
 			colorField,
 		],
@@ -121,30 +121,30 @@ export function createStroke(channelCount: number) {
 			linearPath,
 		]
 	)
-	let colorStripPair = new IRenderColorStripPair(
+	let colorStripPair = new RenderColorStripPair(
 		colorStrip,
 		colorStrip,
 	)
 
-	let thicknessBezierPointA = new IRenderBezierPoint(
+	let thicknessBezierPointA = new RenderBezierPoint(
 		new Point(0, 0),
 		new Point(0, 0),
 		new Point(.25, 100),
 	)
-	let thicknessBezierPointB = new IRenderBezierPoint(
+	let thicknessBezierPointB = new RenderBezierPoint(
 		new Point(.75, 100),
 		new Point(1, 0),
 		new Point(1, 0),
 	)
 
-	let thicknessPath = new IRenderBezierPath(
+	let thicknessPath = new RenderBezierPath(
 		[
-			new IRenderBezierPoint(
+			new RenderBezierPoint(
 				new Point(0, 0),
 				new Point(0, 0),
 				new Point(.25, 100),
 			),
-			new IRenderBezierPoint(
+			new RenderBezierPoint(
 				new Point(.75, 100),
 				new Point(1, 0),
 				new Point(1, 0),
@@ -153,19 +153,19 @@ export function createStroke(channelCount: number) {
 		false,
 	)
 
-	let thicknessPathPair = new IRenderBezierPathPair(
+	let thicknessPathPair = new RenderBezierPathPair(
 		thicknessPath,
 		thicknessPath,
 	)
 	
-	let transform = new IRenderTransform(
+	let transform = new RenderTransform(
 		new Point(0, 0),
 		1,
 		0,
 		new Point(0, 0),
 	)
 
-	let stroke = new IRenderStroke(
+	let stroke = new RenderStroke(
 		colorStripPair,
 		curvePath,
 		thicknessPathPair,

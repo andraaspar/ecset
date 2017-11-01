@@ -21,31 +21,31 @@ import { addPoints, reverseVector, toUnitVector } from '../data/PointMethods'
 import { getSegmentOfPath, pathLength, pathSegmentCount, pathYForX } from '../data/PathMethods'
 import { segmentLength, segmentPointSide, segmentPointT, segmentToPointDistance, segmentToVector } from '../data/SegmentMethods'
 
-import { IColor } from '../data/IColor'
-import { IPath } from '../data/IPath'
-import { IRenderBezierPath } from '../data/IRenderBezierPath'
-import { IRenderColorField } from '../data/IRenderColorField'
-import { IRenderColorPath } from '../data/IRenderColorPath'
-import { IRenderView } from '../data/IRenderView'
-import { ISegment } from '../data/ISegment'
-import { ISegmentInfo } from '../data/ISegmentInfo'
+import { Color } from '../data/Color'
+import { Path } from '../data/Path'
+import { RenderBezierPath } from '../data/RenderBezierPath'
+import { RenderColorField } from '../data/RenderColorField'
+import { RenderColorPath } from '../data/RenderColorPath'
+import { RenderView } from '../data/RenderView'
+import { Segment } from '../data/Segment'
+import { SegmentInfo } from '../data/SegmentInfo'
 import { getBySide } from '../data/SideMethods'
 import { interpolateColors } from '../data/ColorMethods'
 import { interpolateValues } from '../data/ValueMethods'
 import { itemAndItemT } from '../data/TMethods'
-import { Point } from "../data/IPoint";
+import { Point } from "../data/Point";
 import { alphaMultiplierToColor, interpolateAlphaMultipliers } from "../data/AlphaMultiplierMethods";
 
 export class Renderer {
 
 	private segmentCount: number
-	private segmentInfos: ISegmentInfo[]
+	private segmentInfos: SegmentInfo[]
 	private pathLength: number
-	private path: IPath
+	private path: Path
 	private pixels: Uint8ClampedArray
 
 	constructor(
-		private view: IRenderView
+		private view: RenderView
 	) {
 		this.path = this.view.stroke.bezierPath.path
 	}
@@ -67,11 +67,11 @@ export class Renderer {
 		}
 	}
 
-	protected getColor(x: number, y: number): IColor {
+	protected getColor(x: number, y: number): Color {
 		// if (x == 1023 && y == 0) {
 		// 	console.log('.')
 		// }
-		let result: IColor = {
+		let result: Color = {
 			channelValues: [0, 0, 0, 0],
 		}
 		let currentLength = 0
@@ -81,7 +81,7 @@ export class Renderer {
 		let closestPathT: number = NaN
 		let closestThickness: number = NaN
 		let closestPathSide: number = 0
-		let closestSegment: ISegment
+		let closestSegment: Segment
 		for (let i = 0; i < this.segmentCount; i++) {
 			let isFirst = i == 0
 			let isLast = i + 1 == this.segmentCount
@@ -139,16 +139,16 @@ export class Renderer {
 		return result
 	}
 
-	protected calculateSegmentInfos(): ISegmentInfo[] {
-		let result: ISegmentInfo[] = []
+	protected calculateSegmentInfos(): SegmentInfo[] {
+		let result: SegmentInfo[] = []
 
-		let prevSegment: ISegment
-		let prevSegmentInfo: ISegmentInfo
+		let prevSegment: Segment
+		let prevSegmentInfo: SegmentInfo
 		let prevVector: Point
 		for (let i = 0, n = this.segmentCount = pathSegmentCount(this.path); i < n; i++) {
 			let segment = getSegmentOfPath(this.path, i)
 
-			let segmentInfo: ISegmentInfo = {
+			let segmentInfo: SegmentInfo = {
 				segment: segment,
 				length: segmentLength(segment),
 				tGain: { a: 0, b: 0 },
@@ -209,7 +209,7 @@ export class Renderer {
 		return result
 	}
 
-	calculateGain(prevSegmentInfo: ISegmentInfo, segmentInfo: ISegmentInfo, prevVector: Point, vector: Point, prevSegment: ISegment, segment: ISegment): void {
+	calculateGain(prevSegmentInfo: SegmentInfo, segmentInfo: SegmentInfo, prevVector: Point, vector: Point, prevSegment: Segment, segment: Segment): void {
 		prevVector = reverseVector(prevVector)
 
 		let normalVector = addPoints(prevVector, vector)
@@ -232,7 +232,7 @@ export class Renderer {
 		prevSegmentInfo.tGain.b = t
 	}
 
-	calculateFocus(info: ISegmentInfo): void {
+	calculateFocus(info: SegmentInfo): void {
 		let totalTGain = info.tGain.a + info.tGain.b
 		if (totalTGain > 0) {
 			info.focusSide = -1
@@ -242,8 +242,8 @@ export class Renderer {
 		info.focusDistance = totalTGain ? Math.abs(1 / totalTGain) : 0
 	}
 
-	getRenderColorPathAtT(colorField: IRenderColorField, t: number): IRenderColorPath {
-		let result: IRenderColorPath = {
+	getRenderColorPathAtT(colorField: RenderColorField, t: number): RenderColorPath {
+		let result: RenderColorPath = {
 			segments: [],
 		}
 		let segmentTs: number[] = []
@@ -264,7 +264,7 @@ export class Renderer {
 		return this.pixels
 	}
 	
-	getColorPathTsAtT(parallelPaths: IRenderBezierPath[], pathT: number) {
+	getColorPathTsAtT(parallelPaths: RenderBezierPath[], pathT: number) {
 		let result = parallelPaths.map(path => pathYForX(path.path, pathT))
 		let total = result.reduce((sum, value) => sum + value)
 		let lastValue = 0

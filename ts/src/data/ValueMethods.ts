@@ -17,10 +17,10 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IPath } from './IPath'
+import { Path } from './Path'
 import { pathYForX } from './PathMethods'
 
-export function interpolateValues(a: number, b: number, t: number, path?: IPath) {
+export function interpolateValues(a: number, b: number, t: number, path?: Path) {
 	let t2: number
 	if (path) {
 		t2 = pathYForX(path, t)

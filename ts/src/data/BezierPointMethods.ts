@@ -19,18 +19,18 @@
 
 import { clonePoint, scaleVector } from './PointMethods'
 
-import { IRenderBezierPoint } from './IRenderBezierPoint'
+import { RenderBezierPoint } from './RenderBezierPoint'
 
-export function scaleRenderBezierPoint(p: IRenderBezierPoint, scale: number): IRenderBezierPoint {
-	return new IRenderBezierPoint(
+export function scaleRenderBezierPoint(p: RenderBezierPoint, scale: number): RenderBezierPoint {
+	return new RenderBezierPoint(
 		scaleVector(p.handleIn, scale),
 		scaleVector(p.center, scale),
 		scaleVector(p.handleOut, scale),
 	)
 }
 
-export function cloneBezierPoint(p: IRenderBezierPoint): IRenderBezierPoint {
-	return new IRenderBezierPoint(
+export function cloneBezierPoint(p: RenderBezierPoint): RenderBezierPoint {
+	return new RenderBezierPoint(
 		clonePoint(p.center),
 		clonePoint(p.handleIn),
 		clonePoint(p.handleOut),

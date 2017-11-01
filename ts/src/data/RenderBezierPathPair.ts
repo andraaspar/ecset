@@ -17,21 +17,13 @@
  * along with Ecset.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IGainInfo } from './IGainInfo'
-import { ISegment } from './ISegment'
-import { Point } from './IPoint'
+import { RenderBezierPath } from './RenderBezierPath'
 
-export class ISegmentInfo {
+export class RenderBezierPathPair {
 	constructor(
-		public segment: ISegment,
-		public length: number,
-		public tGain: IGainInfo,
-		public originDistance: number,
-		public distanceChange: Point,
-		public originT: number,
-		public tChange: Point,
-		public focusDistance: number,
-		public focusSide: number,
+		public left: RenderBezierPath,
+		public right: RenderBezierPath,
+		public id?: string,
 	) {
 
 	}
